@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horario Escolar</title>
+    <style>
+        :root {
+            --bg-color: #f5f7fa;
+            --text-color: #333;
+            --container-bg: white;
+            --header-bg: #3498db;
+            --header-text: white;
+            --time-bg: #2c3e50;
+            --time-text: white;
+            --even-row: #f8f9fa;
+            --hover-row: #e9f7fe;
+            --border-color: #ddd;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --break-row: #ffeaa7;
+            --toggle-bg: #3498db;
+            --toggle-text: white;
+            --toggle-hover: #2980b9;
+            --switch-bg: #ccc;
+            --switch-circle: white;
+            --footer-text: #666;
+        }
+
+        .dark-mode {
+            --bg-color: #1a1a2e;
+            --text-color: #e6e6e6;
+            --container-bg: #16213e;
+            --header-bg: #0f3460;
+            --header-text: #e6e6e6;
+            --time-bg: #0f3460;
+            --time-text: #e6e6e6;
+            --even-row: #1e2a4a;
+            --hover-row: #2a3a5c;
+            --border-color: #2a3a5c;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --break-row: #3d2c1c;
+            --toggle-bg: #0f3460;
+            --toggle-text: #e6e6e6;
+            --toggle-hover: #1a4b8c;
+            --switch-bg: #0f3460;
+            --switch-circle: #e6e6e6;
+            --footer-text: #aaa;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--container-bg);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px var(--shadow);
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--header-bg);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+        }
+        
+        #toggleBtn, .theme-switch {
+            background-color: var(--toggle-bg);
+            color: var(--toggle-text);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+        
+        #toggleBtn:hover, .theme-switch:hover {
+            background-color: var(--toggle-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--switch-bg);
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: var(--switch-circle);
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--toggle-bg);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .theme-label {
+            margin-left: 10px;
+            font-weight: 500;
+        }
+        
+        #horarioTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            box-shadow: 0 2px 3px var(--shadow);
+        }
+        
+        #horarioTable th, #horarioTable td {
+            padding: 12px 15px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+        
+        #horarioTable th {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            font-weight: bold;
+        }
+        
+        #horarioTable tr:nth-child(even) {
+            background-color: var(--even-row);
+        }
+        
+        #horarioTable tr:hover {
+            background-color: var(--hover-row);
+        }
+        
+        .time-cell {
+            background-color: var(--time-bg);
+            color: var(--time-text);
+            font-weight: bold;
+        }
+        
+        .break-row {
+            background-color: var(--break-row) !important;
+            font-style: italic;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+            color: var(--footer-text);
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            #horarioTable {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            #toggleBtn, .theme-switch {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .theme-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Horario Escolar</h1>
+        
+        <div class="controls">
+            <div class="button-group">
+                <button onclick="toggleAbreviations()" id="toggleBtn">Mostrar Abreviaturas</button>
+            </div>
+            
+            <div class="theme-container">
+                <label class="switch">
+                    <input type="checkbox" id="themeSwitch">
+                    <span class="slider"></span>
+                </label>
+                <span class="theme-label">Modo Oscuro</span>
+            </div>
+        </div>
+        
+        <table id="horarioTable">
+            <tr>
+                <th>Horario</th>
+                <th>Lunes</th>
+                <th>Martes</th>
+                <th>Miércoles</th>
+                <th>Jueves</th>
+                <th>Viernes</th>
+            </tr>
+            <tr>
+                <td class="time-cell">8:30 - 9:30</td>
+                <td>Sistemas Operativos Monopuesto</td>
+                <td>Redes Locales</td>
+                <td>Digitalización Aplicada a los Sectores Productivos GM</td>
+                <td>Aplicaciones Ofimáticas<br>Aplicaciones Ofimáticas</td>
+                <td>Aplicaciones Ofimáticas</td>
+            </tr>
+            <tr>
+                <td class="time-cell">9:30 - 10:30</td>
+                <td>Sistemas Operativos Monopuesto</td>
+                <td>Redes Locales</td>
+                <td>Sistemas Operativos Monopuesto<br>Tutoría para tareas administrativas</td>
+                <td>Aplicaciones Ofimáticas<br>Aplicaciones Ofimáticas</td>
+                <td>Aplicaciones Ofimáticas</td>
+            </tr>
+            <tr>
+                <td class="time-cell">10:30 - 11:30</td>
+                <td>Aplicaciones Ofimáticas<br>Coordinación Dual<br>Aplicaciones Ofimáticas</td>
+                <td>Redes Locales<br>Redes Locales<br>Coordinación Dual</td>
+                <td>Sistemas Operativos Monopuesto</td>
+                <td>Itinerario Personal para la Empleabilidad I</td>
+                <td>Sistemas Operativos Monopuesto</td>
+            </tr>
+            <tr class="break-row">
+                <td class="time-cell">11:30 - 12:00</td>
+                <td>Tutoría con alumnado (Bachillerato/Formac. Profes.)</td>
+                <td></td>
+                <td>Tutoría con alumnado (Bachillerato/Formac. Profes.)</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="time-cell">12:00 - 13:00</td>
+                <td>Aplicaciones Ofimáticas<br>Aplicaciones Ofimáticas</td>
+                <td>Montaje y Mantenimiento de Equipo</td>
+                <td>Redes Locales</td>
+                <td>Redes Locales<br>Redes Locales</td>
+                <td>Montaje y Mantenimiento de Equipo<br>Montaje y Mantenimiento de Equipo</td>
+            </tr>
+            <tr>
+                <td class="time-cell">13:00 - 14:00</td>
+                <td>Montaje y Mantenimiento de Equipo<br>Montaje y Mantenimiento de Equipo</td>
+                <td>Montaje y Mantenimiento de Equipo</td>
+                <td>Coordinación Dual<br>Redes Locales</td>
+                <td>Redes Locales<br>Redes Locales</td>
+                <td>Itinerario Personal para la Empleabilidad I</td>
+            </tr>
+            <tr>
+                <td class="time-cell">14:00 - 14:55</td>
+                <td>Montaje y Mantenimiento de Equipo<br>Montaje y Mantenimiento de Equipo</td>
+                <td>Itinerario Personal para la Empleabilidad I</td>
+                <td>Aplicaciones Ofimáticas</td>
+                <td>Montaje y Mantenimiento de Equipo</td>
+                <td>Sostenibilidad Aplicada al Sistema Productivo</td>
+            </tr>
+        </table>
+
+        <div class="footer">
+            Desarrollado por Angelpro09_Dev y Claude
+        </div>
+    </div>
+
+    <script>
+        let showAbbreviations = false;
+        let darkMode = false;
+        
+        const materias = {
+            'Sistemas Operativos Monopuesto': 'SIOPM',
+            'Redes Locales': 'REDLO',
+            'Digitalización Aplicada a los Sectores Productivos GM': 'DASPGM',
+            'Aplicaciones Ofimáticas': 'APLOF',
+            'Itinerario Personal para la Empleabilidad I': 'IPE I',
+            'Montaje y Mantenimiento de Equipo': 'MOMAE',
+            'Sostenibilidad Aplicada al Sistema Productivo': 'SASP',
+            'Tutoría para tareas administrativas': 'Tutoría Adm.',
+            'Coordinación Dual': 'Coord. Dual',
+            'Tutoría con alumnado (Bachillerato/Formac. Profes.)': 'Tutoría'
+        };
+
+        const horarioData = [
+            ['8:30 - 9:30', 'Sistemas Operativos Monopuesto', 'Redes Locales', 'Digitalización Aplicada a los Sectores Productivos GM', 'Aplicaciones Ofimáticas<br>Aplicaciones Ofimáticas', 'Aplicaciones Ofimáticas'],
+            ['9:30 - 10:30', 'Sistemas Operativos Monopuesto', 'Redes Locales', 'Sistemas Operativos Monopuesto<br>Tutoría para tareas administrativas', 'Aplicaciones Ofimáticas<br>Aplicaciones Ofimáticas', 'Aplicaciones Ofimáticas'],
+            ['10:30 - 11:30', 'Aplicaciones Ofimáticas<br>Coordinación Dual<br>Aplicaciones Ofimáticas', 'Redes Locales<br>Redes Locales<br>Coordinación Dual', 'Sistemas Operativos Monopuesto', 'Itinerario Personal para la Empleabilidad I', 'Sistemas Operativos Monopuesto'],
+            ['11:30 - 12:00', 'Tutoría con alumnado (Bachillerato/Formac. Profes.)', '', 'Tutoría con alumnado (Bachillerato/Formac. Profes.)', '', ''],
+            ['12:00 - 13:00', 'Aplicaciones Ofimáticas<br>Aplicaciones Ofimáticas', 'Montaje y Mantenimiento de Equipo', 'Redes Locales', 'Redes Locales<br>Redes Locales', 'Montaje y Mantenimiento de Equipo<br>Montaje y Mantenimiento de Equipo'],
+            ['13:00 - 14:00', 'Montaje y Mantenimiento de Equipo<br>Montaje y Mantenimiento de Equipo', 'Montaje y Mantenimiento de Equipo', 'Coordinación Dual<br>Redes Locales', 'Redes Locales<br>Redes Locales', 'Itinerario Personal para la Empleabilidad I'],
+            ['14:00 - 14:55', 'Montaje y Mantenimiento de Equipo<br>Montaje y Mantenimiento de Equipo', 'Itinerario Personal para la Empleabilidad I', 'Aplicaciones Ofimáticas', 'Montaje y Mantenimiento de Equipo', 'Sostenibilidad Aplicada al Sistema Productivo']
+        ];
+
+        function convertText(text) {
+            if (!showAbbreviations) {
+                return text;
+            }
+            
+            let result = text;
+            for (let [full, abbrev] of Object.entries(materias)) {
+                result = result.replace(new RegExp(full, 'g'), abbrev);
+            }
+            return result;
+        }
+
+        function renderTable() {
+            const table = document.getElementById('horarioTable');
+            table.innerHTML = '';
+            
+            // Header
+            const headerRow = table.insertRow();
+            const headers = ['Horario', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+            headers.forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+            
+            // Data rows
+            horarioData.forEach((rowData, index) => {
+                const row = table.insertRow();
+                if (index === 3) row.classList.add('break-row');
+                
+                rowData.forEach((cellData, cellIndex) => {
+                    const cell = row.insertCell();
+                    if (cellIndex === 0) {
+                        cell.classList.add('time-cell');
+                    }
+                    cell.innerHTML = convertText(cellData);
+                });
+            });
+        }
+
+        function toggleAbreviations() {
+            showAbbreviations = !showAbbreviations;
+            const btn = document.getElementById('toggleBtn');
+            btn.textContent = showAbbreviations ? 'Mostrar Nombres Completos' : 'Mostrar Abreviaturas';
+            renderTable();
+        }
+
+        function toggleDarkMode() {
+            darkMode = !darkMode;
+            const themeLabel = document.querySelector('.theme-label');
+            
+            if (darkMode) {
+                document.body.classList.add('dark-mode');
+                themeLabel.textContent = 'Modo Claro';
+            } else {
+                document.body.classList.remove('dark-mode');
+                themeLabel.textContent = 'Modo Oscuro';
+            }
+            
+            // Guardar preferencia
+            localStorage.setItem('darkMode', darkMode);
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar preferencia guardada
+            const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+            const themeSwitch = document.getElementById('themeSwitch');
+            
+            if (savedDarkMode) {
+                darkMode = true;
+                document.body.classList.add('dark-mode');
+                themeSwitch.checked = true;
+                document.querySelector('.theme-label').textContent = 'Modo Claro';
+            }
+            
+            // Configurar evento para el interruptor
+            themeSwitch.addEventListener('change', toggleDarkMode);
+            
+            // Renderizar tabla inicial
+            renderTable();
+        });
+    </script>
+</body>
+</html>
