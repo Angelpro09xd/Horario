@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduSchedule Pro - Horario Inteligente</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700&family=Fira+Code:wght@300;400;500&display=swap');
 
         :root {
-            /* Tema Default - Futurista */
             --primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
@@ -62,6 +62,104 @@
             font-family: 'Fira Code', monospace !important;
         }
 
+        .theme-neon-glitch {
+            --primary: linear-gradient(135deg, #ff00ff 0%, #00ffff 100%);
+            --secondary: linear-gradient(135deg, #ffff00 0%, #ff00ff 100%);
+            --accent: linear-gradient(135deg, #00ff00 0%, #ffff00 100%);
+            --bg-main: #000000;
+            --bg-glass: rgba(255, 0, 255, 0.1);
+            --bg-card: rgba(0, 255, 255, 0.1);
+            --text-primary: #00ffff;
+            --text-secondary: #ff00ff;
+            --border-glass: rgba(255, 255, 0, 0.3);
+            --shadow-glow: 0 8px 32px rgba(255, 0, 255, 0.7);
+            animation: glitch-bg 5s infinite linear;
+        }
+
+        .theme-galaxy {
+            --primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --bg-main: #0a0a2f;
+            --bg-glass: rgba(255, 255, 255, 0.05);
+            --bg-card: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #b8c5d6;
+            --border-glass: rgba(255, 255, 255, 0.1);
+            --shadow-glow: 0 8px 32px rgba(102, 126, 234, 0.5);
+            background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 4px),
+                            radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 3px),
+                            radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 4px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            animation: stars 20s linear infinite;
+        }
+
+        .theme-synthwave {
+            --primary: linear-gradient(135deg, #ff00ff 0%, #ff0080 100%);
+            --secondary: linear-gradient(135deg, #00ffff 0%, #0080ff 100%);
+            --accent: linear-gradient(135deg, #ffff00 0%, #ff8000 100%);
+            --bg-main: #1a0033;
+            --bg-glass: rgba(255, 0, 255, 0.1);
+            --bg-card: rgba(0, 255, 255, 0.1);
+            --text-primary: #00ffff;
+            --text-secondary: #ff00ff;
+            --border-glass: rgba(255, 255, 0, 0.3);
+            --shadow-glow: 0 8px 32px rgba(255, 0, 255, 0.5);
+            background: linear-gradient(45deg, #1a0033, #33001a, #00331a);
+            background-size: 400% 400%;
+            animation: gradientShift 10s ease infinite;
+        }
+
+        .theme-rainbow {
+            --primary: linear-gradient(135deg, #ff0000, #ff8000, #ffff00, #00ff00, #0080ff, #0000ff, #8000ff);
+            --secondary: linear-gradient(135deg, #ff0080, #ff00ff, #8000ff, #0080ff, #00ffff, #00ff80, #80ff00);
+            --accent: linear-gradient(135deg, #ffff00, #ff8000, #ff0000, #ff0080, #ff00ff, #8000ff, #0080ff);
+            --bg-main: #000000;
+            --bg-glass: rgba(255, 255, 255, 0.1);
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --border-glass: rgba(255, 255, 255, 0.2);
+            --shadow-glow: 0 8px 32px rgba(255, 0, 0, 0.3);
+            animation: rainbow 10s infinite linear;
+        }
+
+        .reading-mode {
+            font-size: 1.2em;
+            --text-primary: #000000;
+            --bg-main: #f8f9fa;
+            --bg-card: #ffffff;
+            --bg-glass: rgba(0, 0, 0, 0.05);
+        }
+
+        @keyframes glitch-bg {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(180deg); }
+        }
+
+        @keyframes stars {
+            from { background-position: 0 0, 40px 60px, 130px 270px; }
+            to { background-position: 550px 550px, 390px 410px, 380px 520px; }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes rainbow {
+            0% { --primary: linear-gradient(135deg, #ff0000, #ff8000, #ffff00, #00ff00, #0080ff, #0000ff, #8000ff); }
+            14% { --primary: linear-gradient(135deg, #8000ff, #ff0000, #ff8000, #ffff00, #00ff00, #0080ff, #0000ff); }
+            28% { --primary: linear-gradient(135deg, #0000ff, #8000ff, #ff0000, #ff8000, #ffff00, #00ff00, #0080ff); }
+            42% { --primary: linear-gradient(135deg, #0080ff, #0000ff, #8000ff, #ff0000, #ff8000, #ffff00, #00ff00); }
+            57% { --primary: linear-gradient(135deg, #00ff00, #0080ff, #0000ff, #8000ff, #ff0000, #ff8000, #ffff00); }
+            71% { --primary: linear-gradient(135deg, #ffff00, #00ff00, #0080ff, #0000ff, #8000ff, #ff0000, #ff8000); }
+            85% { --primary: linear-gradient(135deg, #ff8000, #ffff00, #00ff00, #0080ff, #0000ff, #8000ff, #ff0000); }
+            100% { --primary: linear-gradient(135deg, #ff0000, #ff8000, #ffff00, #00ff00, #0080ff, #0000ff, #8000ff); }
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -75,9 +173,9 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+            transition: all 0.3s ease;
         }
 
-        /* Partículas de fondo */
         .particles {
             position: fixed;
             top: 0;
@@ -103,7 +201,6 @@
             to { transform: translateY(-100vh) rotate(360deg); }
         }
 
-        /* Navbar futurista */
         .navbar {
             position: fixed;
             top: 0;
@@ -141,7 +238,6 @@
             align-items: center;
         }
 
-        /* Controles principales */
         .main-container {
             margin-top: 100px;
             padding: 2rem;
@@ -150,276 +246,13 @@
             margin-right: auto;
         }
 
-        .control-panel {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 1px solid var(--border-glass);
-            box-shadow: var(--shadow-card);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .control-panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--primary);
-            opacity: 0.7;
-        }
-
-        .controls-grid {
+        .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .btn {
-            background: var(--bg-glass);
-            border: 1px solid var(--border-glass);
-            border-radius: 12px;
-            padding: 0.8rem 1.5rem;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: inherit;
-            font-weight: 500;
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .btn.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: var(--shadow-glow);
-        }
-
-        /* Botones especiales */
-        .btn-neon {
-            border: 2px solid;
-            border-image: var(--accent) 1;
-            position: relative;
-        }
-
-        .btn-neon::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--accent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .btn-neon:hover::before {
-            opacity: 0.1;
-        }
-
-        /* Tabla del horario */
-        .schedule-container {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 1px solid var(--border-glass);
-            box-shadow: var(--shadow-card);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .schedule-header {
-            background: var(--primary);
-            padding: 1.5rem;
-            text-align: center;
-            position: relative;
-        }
-
-        .schedule-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 2rem;
-            font-weight: 700;
-            color: white;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .table-container {
-            overflow-x: auto;
-            position: relative;
-        }
-
-        #scheduleTable {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-        }
-
-        #scheduleTable th {
-            background: var(--bg-glass);
-            color: var(--text-primary);
-            padding: 1rem;
-            font-weight: 600;
-            text-align: center;
-            border-bottom: 1px solid var(--border-glass);
-            position: sticky;
-            top: 0;
-            backdrop-filter: blur(10px);
-            z-index: 10;
-        }
-
-        #scheduleTable td {
-            padding: 1rem;
-            text-align: center;
-            border-bottom: 1px solid var(--border-glass);
-            border-right: 1px solid var(--border-glass);
-            transition: all 0.3s ease;
-            position: relative;
-            cursor: pointer;
-        }
-
-        #scheduleTable td:hover {
-            background: var(--bg-glass);
-            transform: scale(1.02);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .time-cell {
-            background: var(--secondary);
-            color: white !important;
-            font-weight: 600;
-            font-family: 'Orbitron', monospace;
-        }
-
-        .break-row td {
-            background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 87, 34, 0.2));
-            font-style: italic;
-        }
-
-        /* Celda actual resaltada */
-        .current-class {
-            position: relative;
-            z-index: 5;
-            animation: pulse-glow 2s infinite;
-            box-shadow: 0 0 20px rgba(76, 175, 80, 0.5) !important;
-            border: 2px solid #4CAF50 !important;
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(76, 175, 80, 0.5); }
-            50% { box-shadow: 0 0 30px rgba(76, 175, 80, 0.8); }
-        }
-
-        /* Colores por materia */
-        .subject-som { background: linear-gradient(135deg, rgba(74, 144, 226, 0.2), rgba(80, 170, 241, 0.2)); }
-        .subject-red { background: linear-gradient(135deg, rgba(225, 112, 85, 0.2), rgba(237, 117, 88, 0.2)); }
-        .subject-dig { background: linear-gradient(135deg, rgba(129, 236, 236, 0.2), rgba(116, 185, 255, 0.2)); }
-        .subject-ofi { background: linear-gradient(135deg, rgba(123, 239, 178, 0.2), rgba(77, 182, 172, 0.2)); }
-        .subject-ipe { background: linear-gradient(135deg, rgba(255, 154, 158, 0.2), rgba(250, 208, 196, 0.2)); }
-        .subject-mon { background: linear-gradient(135deg, rgba(186, 85, 211, 0.2), rgba(224, 130, 131, 0.2)); }
-        .subject-sos { background: linear-gradient(135deg, rgba(255, 218, 121, 0.2), rgba(254, 202, 87, 0.2)); }
-
-        /* Notas adhesivas */
-        .sticky-note {
-            position: absolute;
-            background: #ffeb3b;
-            color: #333;
-            padding: 0.5rem;
-            font-size: 0.8rem;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            max-width: 120px;
-            word-wrap: break-word;
-            z-index: 100;
-            transform: rotate(-2deg);
-            transition: transform 0.3s;
-        }
-
-        .sticky-note:hover {
-            transform: rotate(0deg) scale(1.1);
-        }
-
-        /* Modal para configuraciones */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-
-        .modal-content {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 500px;
-            width: 90%;
-            border: 1px solid var(--border-glass);
-            box-shadow: var(--shadow-card);
-        }
-
-        /* Efectos especiales */
-        .glitch {
-            animation: glitch 2s infinite;
-        }
-
-        @keyframes glitch {
-            0%, 100% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-        }
-
-        .glow {
-            box-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary), 0 0 80px var(--primary);
-        }
-
-        /* Estadísticas */
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
             margin-bottom: 2rem;
         }
 
-        .stat-card {
-            background: var(--bg-card);
-            border-radius: 15px;
-            padding: 1.5rem;
-            border: 1px solid var(--border-glass);
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            background: var(--primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Reloj inteligente */
         .clock-container {
             background: var(--bg-card);
             backdrop-filter: blur(20px);
@@ -427,7 +260,6 @@
             border: 1px solid var(--border-glass);
             box-shadow: var(--shadow-card);
             padding: 1.5rem;
-            margin-bottom: 2rem;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -508,40 +340,10 @@
             font-size: 1rem;
         }
 
-        /* Barra de progreso */
-        .progress-container {
-            margin: 1rem 0;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: var(--bg-glass);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 0.5rem;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--accent);
-            border-radius: 4px;
-            transition: width 0.5s ease;
-            width: 0%;
-        }
-
-        .progress-text {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            text-align: center;
-        }
-
-        /* Panel de herramientas */
-        .tools-panel {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        .sidebar {
+            display: flex;
+            flex-direction: column;
             gap: 1.5rem;
-            margin-bottom: 2rem;
         }
 
         .tool-card {
@@ -550,7 +352,6 @@
             border-radius: 15px;
             border: 1px solid var(--border-glass);
             padding: 1.5rem;
-            text-align: center;
         }
 
         .tool-title {
@@ -558,20 +359,9 @@
             font-weight: 600;
             margin-bottom: 1rem;
             color: var(--text-primary);
-        }
-
-        .pomodoro-timer {
-            font-family: 'Orbitron', monospace;
-            font-size: 2.5rem;
-            margin: 1rem 0;
-            color: var(--text-primary);
-        }
-
-        .pomodoro-controls {
             display: flex;
+            align-items: center;
             gap: 0.5rem;
-            justify-content: center;
-            margin-top: 1rem;
         }
 
         .weekend-countdown {
@@ -582,9 +372,277 @@
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-align: center;
         }
 
-        .mini-game {
+        .search-box {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-glass);
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-results {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .search-result {
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            background: var(--bg-glass);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-result:hover {
+            background: var(--border-glass);
+        }
+
+        .control-panel {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid var(--border-glass);
+            box-shadow: var(--shadow-card);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .control-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+            opacity: 0.7;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .btn {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 0.8rem 1.5rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .schedule-container {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid var(--border-glass);
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .schedule-header {
+            background: var(--primary);
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .schedule-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            position: relative;
+        }
+
+        #scheduleTable {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        #scheduleTable th {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            padding: 1rem;
+            font-weight: 600;
+            text-align: center;
+            border-bottom: 1px solid var(--border-glass);
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        #scheduleTable td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-glass);
+            border-right: 1px solid var(--border-glass);
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        #scheduleTable td:hover {
+            background: var(--bg-glass);
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .time-cell {
+            background: var(--secondary);
+            color: white !important;
+            font-weight: 600;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .break-row td {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 87, 34, 0.2));
+            font-style: italic;
+        }
+
+        .current-class {
+            position: relative;
+            z-index: 5;
+            animation: pulse-glow 2s infinite;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.5) !important;
+            border: 2px solid #4CAF50 !important;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(76, 175, 80, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(76, 175, 80, 0.8); }
+        }
+
+        .subject-som { background: linear-gradient(135deg, rgba(74, 144, 226, 0.2), rgba(80, 170, 241, 0.2)); }
+        .subject-red { background: linear-gradient(135deg, rgba(225, 112, 85, 0.2), rgba(237, 117, 88, 0.2)); }
+        .subject-dig { background: linear-gradient(135deg, rgba(129, 236, 236, 0.2), rgba(116, 185, 255, 0.2)); }
+        .subject-ofi { background: linear-gradient(135deg, rgba(123, 239, 178, 0.2), rgba(77, 182, 172, 0.2)); }
+        .subject-ipe { background: linear-gradient(135deg, rgba(255, 154, 158, 0.2), rgba(250, 208, 196, 0.2)); }
+        .subject-mon { background: linear-gradient(135deg, rgba(186, 85, 211, 0.2), rgba(224, 130, 131, 0.2)); }
+        .subject-sos { background: linear-gradient(135deg, rgba(255, 218, 121, 0.2), rgba(254, 202, 87, 0.2)); }
+
+        .achievement-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-glass);
+            border-radius: 20px;
+            margin: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .badge-locked {
+            opacity: 0.5;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--bg-glass);
+            border-radius: 10px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid var(--border-glass);
+            box-shadow: var(--shadow-card);
+        }
+
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 3000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Minijuegos */
+        .minigame-container {
             margin-top: 1rem;
             padding: 1rem;
             background: var(--bg-glass);
@@ -608,8 +666,80 @@
             min-height: 1.5rem;
         }
 
-        /* Responsive */
+        .quiz-timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 1rem 0;
+            color: var(--accent);
+        }
+
+        .puzzle-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .puzzle-piece {
+            padding: 1rem;
+            background: var(--bg-glass);
+            border-radius: 5px;
+            cursor: move;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+
+        .puzzle-piece.correct {
+            border-color: #4CAF50;
+        }
+
+        .race-track {
+            height: 100px;
+            background: var(--bg-glass);
+            border-radius: 10px;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .race-player {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            transition: left 0.5s ease;
+        }
+
+        .target-game {
+            height: 200px;
+            background: var(--bg-glass);
+            border-radius: 10px;
+            margin: 1rem 0;
+            position: relative;
+            cursor: crosshair;
+            overflow: hidden;
+        }
+
+        .target {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
         @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
             .main-container {
                 padding: 1rem;
             }
@@ -617,90 +747,12 @@
             .controls-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .navbar-content {
-                padding: 0 1rem;
-            }
-            
-            .schedule-title {
-                font-size: 1.5rem;
-            }
-            
-            #scheduleTable th, #scheduleTable td {
-                padding: 0.5rem;
-                font-size: 0.9rem;
-            }
-            
-            .clock-time {
-                font-size: 2rem;
-            }
-            
-            .class-status {
-                font-size: 1.1rem;
-            }
-            
-            .tools-panel {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Animaciones de entrada */
-        .fade-in {
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .slide-in {
-            animation: slideIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(-100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Modo desarrollador */
-        .dev-mode {
-            font-family: 'Fira Code', monospace;
-        }
-
-        .dev-mode .schedule-container {
-            border: 2px dashed #00ff41;
-            background: rgba(0, 0, 0, 0.9);
-        }
-
-        .dev-mode #scheduleTable td::before {
-            content: attr(data-debug);
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            font-size: 0.6rem;
-            color: #00ff41;
-            opacity: 0.7;
         }
     </style>
 </head>
 <body>
-    <!-- Partículas de fondo -->
     <div class="particles" id="particles"></div>
 
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="navbar-content">
             <div class="logo">EduSchedule Pro</div>
@@ -710,127 +762,154 @@
                     <option value="university">🏛️ Universidad</option>
                     <option value="cyberpunk">🌆 Cyberpunk</option>
                     <option value="retro">👾 Retro</option>
+                    <option value="neon-glitch">⚡ Neón Glitch</option>
+                    <option value="galaxy">🌌 Galaxia</option>
+                    <option value="synthwave">🎵 Synthwave</option>
+                    <option value="rainbow">🌈 Arcoíris</option>
                 </select>
-                <button class="btn btn-neon" onclick="toggleFullscreen()">⛶</button>
+                <button class="btn" onclick="toggleReadingMode()">👓 Modo Lectura</button>
+                <button class="btn" onclick="toggleFullscreen()">⛶ Pantalla Completa</button>
             </div>
         </div>
     </nav>
 
     <div class="main-container">
-        <!-- Reloj inteligente -->
-        <div class="clock-container fade-in" id="clockContainer">
-            <div class="clock-time" id="clockTime">--:--:--</div>
-            <div class="clock-date" id="clockDate">Cargando...</div>
-            <div class="class-status" id="classStatus">Verificando horario...</div>
-            <div class="countdown" id="countdown"></div>
-            <div class="funny-message" id="funnyMessage"></div>
-            
-            <!-- Barra de progreso de clase -->
-            <div class="progress-container" id="progressContainer" style="display: none;">
-                <div class="progress-text" id="progressText">Progreso de la clase: 0%</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
+        <!-- Dashboard Principal -->
+        <div class="dashboard-grid">
+            <!-- Sección Principal -->
+            <div>
+                <!-- Reloj y Estado -->
+                <div class="clock-container">
+                    <div class="clock-time" id="clockTime">--:--:--</div>
+                    <div class="clock-date" id="clockDate">Cargando...</div>
+                    <div class="class-status" id="classStatus">Verificando horario...</div>
+                    <div class="countdown" id="countdown"></div>
+                    <div class="funny-message" id="funnyMessage"></div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Panel de herramientas -->
-        <div class="tools-panel fade-in">
-            <!-- Temporizador Pomodoro -->
-            <div class="tool-card">
-                <div class="tool-title">🍅 Temporizador Pomodoro</div>
-                <div class="pomodoro-timer" id="pomodoroTimer">25:00</div>
-                <div class="pomodoro-controls">
-                    <button class="btn" onclick="startPomodoro()">▶️ Iniciar</button>
-                    <button class="btn" onclick="pausePomodoro()">⏸️ Pausar</button>
-                    <button class="btn" onclick="resetPomodoro()">🔄 Reiniciar</button>
-                </div>
-                <div class="progress-text" id="pomodoroStatus">Tiempo de estudio: 25 min</div>
-            </div>
-
-            <!-- Contador hasta el fin de semana -->
-            <div class="tool-card">
-                <div class="tool-title">📅 Días hasta el fin de semana</div>
-                <div class="weekend-countdown" id="weekendCountdown">--</div>
-                <div class="funny-message" id="weekendMessage">¡Tú puedes!</div>
-            </div>
-
-            <!-- Mini juego educativo -->
-            <div class="tool-card">
-                <div class="tool-title">🎮 Mini Juego Educativo</div>
-                <div class="mini-game">
-                    <div class="game-question" id="gameQuestion">¿Cuál es la capital de Francia?</div>
-                    <div class="game-options" id="gameOptions">
-                        <!-- Opciones generadas por JavaScript -->
+                <!-- Panel de Control -->
+                <div class="control-panel">
+                    <div class="controls-grid">
+                        <button class="btn" onclick="toggleAbbreviations()">
+                            <span>📝</span> Abreviaturas
+                        </button>
+                        <button class="btn" onclick="toggleColors()">
+                            <span>🎨</span> Colores
+                        </button>
+                        <button class="btn" onclick="showAchievements()">
+                            <span>🏆</span> Logros
+                        </button>
+                        <button class="btn" onclick="showGradeCalculator()">
+                            <span>📊</span> Calculadora
+                        </button>
+                        <button class="btn" onclick="exportAsPNG()">
+                            <span>🖼️</span> Exportar PNG
+                        </button>
+                        <button class="btn" onclick="generateWallpaper()">
+                            <span>🎨</span> Crear Wallpaper
+                        </button>
+                        <button class="btn" onclick="showMinigames()">
+                            <span>🎮</span> Minijuegos
+                        </button>
                     </div>
-                    <div class="game-result" id="gameResult"></div>
-                    <button class="btn" onclick="generateNewQuestion()" style="margin-top: 1rem; width: 100%;">Nueva Pregunta</button>
+                </div>
+
+                <!-- Horario -->
+                <div class="schedule-container" id="scheduleForExport">
+                    <div class="schedule-header">
+                        <h1 class="schedule-title">Horario Académico</h1>
+                    </div>
+                    <div class="table-container">
+                        <table id="scheduleTable"></table>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Panel de Control -->
-        <div class="control-panel fade-in">
-            <div class="controls-grid">
-                <button class="btn" onclick="toggleAbbreviations()">📝 Mostrar Abreviaturas</button>
-                <button class="btn" onclick="toggleColors()">🎨 Colores por Materia</button>
-                <button class="btn" onclick="toggleCompactView()">📱 Vista Compacta</button>
-                <button class="btn" onclick="showStats()">📊 Estadísticas</button>
-                <button class="btn" onclick="exportSchedule()">📥 Exportar</button>
-                <button class="btn" onclick="toggleDevMode()">💻 Modo Dev</button>
-                <button class="btn" onclick="generateQR()">📱 Código QR</button>
-                <button class="btn" onclick="shakeModeToggle()">🎲 Shake Mode</button>
-            </div>
-        </div>
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Búsqueda -->
+                <div class="tool-card">
+                    <div class="tool-title">🔍 Buscar en Horario</div>
+                    <input type="text" class="search-box" placeholder="Buscar materia..." oninput="searchSchedule(this.value)">
+                    <div class="search-results" id="searchResults"></div>
+                </div>
 
-        <!-- Estadísticas -->
-        <div class="stats-container" id="statsContainer" style="display: none;">
-            <div class="stat-card">
-                <div class="stat-number" id="totalHours">0</div>
-                <div>Horas Totales</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="totalSubjects">0</div>
-                <div>Materias</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="avgDaily">0</div>
-                <div>Promedio Diario</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="breakTime">0</div>
-                <div>Min. Descanso</div>
-            </div>
-        </div>
+                <!-- Fin de Semana -->
+                <div class="tool-card">
+                    <div class="tool-title">📅 Fin de Semana</div>
+                    <div class="weekend-countdown" id="weekendCountdown">--</div>
+                    <div class="funny-message" id="weekendMessage">¡Tú puedes!</div>
+                </div>
 
-        <!-- Contenedor del Horario -->
-        <div class="schedule-container slide-in" id="scheduleContainer">
-            <div class="schedule-header">
-                <h1 class="schedule-title">Horario Académico</h1>
-            </div>
-            
-            <div class="table-container">
-                <table id="scheduleTable">
-                    <!-- Contenido generado por JavaScript -->
-                </table>
+                <!-- Estadísticas Rápidas -->
+                <div class="tool-card">
+                    <div class="tool-title">📈 Estadísticas</div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalHours">0</div>
+                            <div>Horas/Semana</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalSubjects">0</div>
+                            <div>Materias</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Minijuegos Rápidos -->
+                <div class="tool-card">
+                    <div class="tool-title">🎮 Minijuegos</div>
+                    <div class="minigame-container">
+                        <button class="btn" onclick="startQuizRush()" style="width: 100%; margin-bottom: 0.5rem;">
+                            🎯 Quiz Rush
+                        </button>
+                        <button class="btn" onclick="startSchedulePuzzle()" style="width: 100%; margin-bottom: 0.5rem;">
+                            🧩 Ordena Horario
+                        </button>
+                        <button class="btn" onclick="startSubjectRace()" style="width: 100%; margin-bottom: 0.5rem;">
+                            🏆 Carrera Materias
+                        </button>
+                        <button class="btn" onclick="startTargetPractice()" style="width: 100%;">
+                            🎯 Target Practice
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal para configuraciones -->
-    <div class="modal" id="configModal">
+    <!-- Modal Logros -->
+    <div class="modal" id="achievementsModal">
         <div class="modal-content">
-            <h2>⚙️ Configuración Avanzada</h2>
-            <div style="margin: 1rem 0;">
-                <label>🎭 Tema personalizado:</label>
-                <input type="color" id="primaryColor" value="#667eea">
-                <input type="color" id="secondaryColor" value="#764ba2">
+            <h2>🏆 Logros Desbloqueados</h2>
+            <div id="achievementsList"></div>
+            <button class="btn" onclick="closeModal('achievementsModal')" style="margin-top: 1rem; width: 100%;">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Modal Calculadora -->
+    <div class="modal" id="calculatorModal">
+        <div class="modal-content">
+            <h2>📊 Calculadora de Promedio</h2>
+            <div id="calculatorContent">
+                <input type="number" class="search-box" placeholder="Nota actual" id="currentGrade">
+                <input type="number" class="search-box" placeholder="Ponderación (%)" id="weight">
+                <input type="number" class="search-box" placeholder="Nota deseada" id="desiredGrade">
+                <button class="btn" onclick="calculateRequiredGrade()" style="width: 100%; margin-top: 1rem;">Calcular</button>
+                <div id="calculationResult" style="margin-top: 1rem; text-align: center;"></div>
             </div>
-            <div style="margin: 1rem 0;">
-                <label>📱 Efectos visuales:</label>
-                <input type="range" id="particlesSlider" min="0" max="100" value="20">
+            <button class="btn" onclick="closeModal('calculatorModal')" style="margin-top: 1rem; width: 100%;">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Modal Minijuegos -->
+    <div class="modal" id="minigamesModal">
+        <div class="modal-content">
+            <h2>🎮 Minijuegos</h2>
+            <div id="minigamesContent">
+                <!-- Contenido dinámico de minijuegos -->
             </div>
-            <button class="btn" onclick="closeModal()">Cerrar</button>
+            <button class="btn" onclick="closeModal('minigamesModal')" style="margin-top: 1rem; width: 100%;">Cerrar</button>
         </div>
     </div>
 
@@ -876,26 +955,15 @@
             'Sostenibilidad Aplicada al Sistema Productivo': '🌱'
         };
 
-        // Frases graciosas para tiempo libre
-        const funnyMessages = [
-            "¡El café está listo para la próxima clase! ☕",
-            "¿Quizás es momento de un pequeño descanso? 😴",
-            "¡Aprovecha para repasar! O no... 😉",
-            "Tiempo para estirar las piernas 🦵",
-            "¿Alguien dijo merienda? 🍪",
-            "¡Respira hondo, la próxima clase llegará pronto! 🌬️",
-            "Momento perfecto para un meme educativo 📱",
-            "¡Tu cerebro te agradece este descanso! 🧠",
-            "¿Revisaste si hay tareas pendientes? 📚",
-            "¡Carga pilas para la siguiente sesión! 🔋",
-            "Hora de hidratarse 💧",
-            "¿Quizás un pequeño paseo virtual? 🚶‍♂️",
-            "¡El conocimiento espera pacientemente! 📖",
-            "Tiempo de planificar la conquista académica 🗺️",
-            "¡Aprovecha para organizar tus apuntes! 📝"
+        const achievements = [
+            { id: 'first_use', name: 'Primer Día', description: 'Usaste la app por primera vez', icon: '🎯', unlocked: false },
+            { id: 'week_complete', name: 'Semana Completa', description: 'Revisaste el horario toda la semana', icon: '📅', unlocked: false },
+            { id: 'night_owl', name: 'Búho Nocturno', description: 'Usaste la app después de las 10 PM', icon: '🦉', unlocked: false },
+            { id: 'early_bird', name: 'Madrugador', description: 'Usaste la app antes de las 7 AM', icon: '🐦', unlocked: false },
+            { id: 'theme_master', name: 'Maestro de Temas', description: 'Probaste todos los temas', icon: '🎨', unlocked: false }
         ];
 
-        // Preguntas para el mini juego
+        // Preguntas para minijuegos
         const quizQuestions = [
             {
                 question: "¿Qué protocolo se utiliza principalmente para la transmisión de correos electrónicos?",
@@ -911,33 +979,43 @@
                 question: "¿Qué lenguaje de programación se considera el 'padre' de muchos lenguajes modernos?",
                 options: ["Python", "C", "Java", "Assembly"],
                 answer: 1
-            },
-            {
-                question: "¿Qué es un sistema operativo?",
-                options: ["Un programa de edición de texto", "Una interfaz entre el hardware y el usuario", "Un tipo de memoria", "Un dispositivo de almacenamiento"],
-                answer: 1
-            },
-            {
-                question: "¿Qué significa HTML?",
-                options: ["HyperText Markup Language", "HighTech Modern Language", "Hyper Transfer Markup Language", "HighText Machine Language"],
-                answer: 0
             }
         ];
 
         // Estado de la aplicación
         let state = {
             showAbbreviations: false,
-            showColors: false,
-            compactView: false,
-            devMode: false,
-            shakeMode: false,
+            showColors: true,
+            readingMode: false,
+            presentationMode: false,
             currentTheme: '',
-            stickyNotes: new Map(),
             currentClassCell: null,
-            pomodoroInterval: null,
-            pomodoroTime: 25 * 60, // 25 minutos en segundos
-            pomodoroRunning: false
+            unlockedAchievements: new Set()
         };
+
+        // Variables para minijuegos
+        let quizTimer;
+        let quizTimeLeft = 30;
+        let quizScore = 0;
+        let currentQuizQuestion = 0;
+        let racePosition = 0;
+        let targetScore = 0;
+        let targetGameInterval;
+
+        // Función para crear partículas
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
 
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
@@ -945,18 +1023,16 @@
             renderSchedule();
             setupEventListeners();
             calculateStats();
-            updateClock(); // Iniciar el reloj
-            setInterval(updateClock, 1000); // Actualizar cada segundo
+            updateClock();
+            setInterval(updateClock, 1000);
             updateWeekendCountdown();
-            generateNewQuestion();
+            loadAchievements();
             
-            // Animación de entrada
-            setTimeout(() => {
-                document.querySelector('.schedule-container').classList.add('slide-in');
-            }, 300);
+            unlockAchievement('first_use');
         });
 
-        // Función del reloj inteligente
+        // ========== FUNCIONES PRINCIPALES ==========
+
         function updateClock() {
             const now = new Date();
             const timeString = now.toLocaleTimeString('es-ES');
@@ -970,37 +1046,31 @@
             document.getElementById('clockTime').textContent = timeString;
             document.getElementById('clockDate').textContent = dateString.charAt(0).toUpperCase() + dateString.slice(1);
             
-            // Determinar el estado actual según el horario
             const currentStatus = getCurrentClassStatus(now);
             updateClassStatus(currentStatus);
-            
-            // Actualizar marcador en la tabla
             updateTableMarker(now);
+
+            checkTimeBasedAchievements(now);
         }
 
-        // Determinar el estado actual de clase
         function getCurrentClassStatus(now) {
             const currentTime = now.getHours() * 60 + now.getMinutes();
-            const currentDay = now.getDay() - 1; // 0=Lunes, 4=Viernes
+            const currentDay = now.getDay() - 1;
             
-            // Si es fin de semana
             if (currentDay < 0 || currentDay > 4) {
                 return {
                     status: 'outside-hours',
                     message: '¡Es fin de semana! 🎉',
                     countdown: null,
-                    funnyMessage: getRandomFunnyMessage(),
-                    progress: 0
+                    funnyMessage: getRandomFunnyMessage()
                 };
             }
             
-            // Buscar en qué franja horaria estamos
             for (let i = 0; i < scheduleData.length; i++) {
                 const timeRange = scheduleData[i][0];
                 const [startTime, endTime] = parseTimeRange(timeRange);
                 
                 if (currentTime >= startTime && currentTime <= endTime) {
-                    // Estamos en esta franja horaria
                     const subject = scheduleData[i][currentDay + 1];
                     
                     if (subject === 'DESCANSO') {
@@ -1008,24 +1078,19 @@
                             status: 'break-time',
                             message: '¡Hora de descanso! ☕',
                             countdown: null,
-                            funnyMessage: 'Aprovecha para recargar energías',
-                            progress: 0
+                            funnyMessage: 'Aprovecha para recargar energías'
                         };
                     } else {
-                        // Calcular progreso de la clase
-                        const progress = ((currentTime - startTime) / (endTime - startTime)) * 100;
                         return {
                             status: 'in-class',
                             message: `En clase: ${subject}`,
                             countdown: null,
-                            funnyMessage: null,
-                            progress: Math.min(progress, 100)
+                            funnyMessage: null
                         };
                     }
                 }
             }
             
-            // Si no estamos en ninguna franja horaria, calcular cuánto falta para la siguiente
             let nextClassTime = null;
             let nextClassSubject = null;
             
@@ -1040,18 +1105,15 @@
                 }
             }
             
-            // Si no hay más clases hoy
             if (!nextClassTime) {
                 return {
                     status: 'outside-hours',
                     message: '¡No hay más clases hoy! 🎉',
                     countdown: null,
-                    funnyMessage: getRandomFunnyMessage(),
-                    progress: 0
+                    funnyMessage: getRandomFunnyMessage()
                 };
             }
             
-            // Calcular tiempo restante
             const timeRemaining = nextClassTime - currentTime;
             const hours = Math.floor(timeRemaining / 60);
             const minutes = timeRemaining % 60;
@@ -1067,66 +1129,37 @@
                 status: 'free-time',
                 message: `Próxima clase: ${nextClassSubject}`,
                 countdown: countdownText,
-                funnyMessage: getRandomFunnyMessage(),
-                progress: 0
+                funnyMessage: getRandomFunnyMessage()
             };
         }
 
-        // Actualizar la visualización del estado de clase
         function updateClassStatus(status) {
             const classStatusElement = document.getElementById('classStatus');
             const countdownElement = document.getElementById('countdown');
             const funnyMessageElement = document.getElementById('funnyMessage');
-            const progressContainer = document.getElementById('progressContainer');
-            const progressFill = document.getElementById('progressFill');
-            const progressText = document.getElementById('progressText');
             
             classStatusElement.textContent = status.message;
             classStatusElement.className = 'class-status ' + status.status;
-            
-            if (status.countdown) {
-                countdownElement.textContent = status.countdown;
-            } else {
-                countdownElement.textContent = '';
-            }
-            
-            if (status.funnyMessage) {
-                funnyMessageElement.textContent = status.funnyMessage;
-            } else {
-                funnyMessageElement.textContent = '';
-            }
-            
-            // Mostrar/ocultar barra de progreso
-            if (status.status === 'in-class' && status.progress > 0) {
-                progressContainer.style.display = 'block';
-                progressFill.style.width = status.progress + '%';
-                progressText.textContent = `Progreso de la clase: ${Math.round(status.progress)}%`;
-            } else {
-                progressContainer.style.display = 'none';
-            }
+            countdownElement.textContent = status.countdown || '';
+            funnyMessageElement.textContent = status.funnyMessage || '';
         }
 
-        // Actualizar marcador en la tabla
         function updateTableMarker(now) {
             const currentTime = now.getHours() * 60 + now.getMinutes();
-            const currentDay = now.getDay() - 1; // 0=Lunes, 4=Viernes
+            const currentDay = now.getDay() - 1;
             
-            // Remover marcador anterior
             if (state.currentClassCell) {
                 state.currentClassCell.classList.remove('current-class');
                 state.currentClassCell = null;
             }
             
-            // Si es fin de semana o fuera de horario, no marcar nada
             if (currentDay < 0 || currentDay > 4) return;
             
-            // Buscar la celda actual
             for (let i = 0; i < scheduleData.length; i++) {
                 const timeRange = scheduleData[i][0];
                 const [startTime, endTime] = parseTimeRange(timeRange);
                 
                 if (currentTime >= startTime && currentTime <= endTime) {
-                    // Encontrar la celda correspondiente en la tabla
                     const table = document.getElementById('scheduleTable');
                     if (table.rows.length > i + 1) {
                         const cell = table.rows[i + 1].cells[currentDay + 1];
@@ -1140,7 +1173,6 @@
             }
         }
 
-        // Convertir rango de tiempo a minutos
         function parseTimeRange(timeRange) {
             const [startStr, endStr] = timeRange.split(' - ');
             const [startHour, startMinute] = startStr.split(':').map(Number);
@@ -1152,61 +1184,468 @@
             ];
         }
 
-        // Obtener mensaje gracioso aleatorio
         function getRandomFunnyMessage() {
-            return funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+            const messages = [
+                "¡El café está listo para la próxima clase! ☕",
+                "¿Quizás es momento de un pequeño descanso? 😴",
+                "¡Aprovecha para repasar! O no... 😉",
+                "Tiempo para estirar las piernas 🦵",
+                "¿Alguien dijo merienda? 🍪"
+            ];
+            return messages[Math.floor(Math.random() * messages.length)];
         }
 
-        // Temporizador Pomodoro
-        function startPomodoro() {
-            if (state.pomodoroRunning) return;
-            
-            state.pomodoroRunning = true;
-            state.pomodoroInterval = setInterval(updatePomodoro, 1000);
-            document.getElementById('pomodoroStatus').textContent = '⏰ Estudiando...';
+        // ========== FUNCIONES DE CONTROL ==========
+
+        function toggleAbbreviations() {
+            state.showAbbreviations = !state.showAbbreviations;
+            renderSchedule();
+            showNotification(state.showAbbreviations ? '📝 Abreviaturas activadas' : '📝 Abreviaturas desactivadas');
         }
 
-        function pausePomodoro() {
-            if (!state.pomodoroRunning) return;
-            
-            state.pomodoroRunning = false;
-            clearInterval(state.pomodoroInterval);
-            document.getElementById('pomodoroStatus').textContent = '⏸️ En pausa';
+        function toggleColors() {
+            state.showColors = !state.showColors;
+            renderSchedule();
+            showNotification(state.showColors ? '🎨 Colores activados' : '🎨 Colores desactivados');
         }
 
-        function resetPomodoro() {
-            state.pomodoroRunning = false;
-            clearInterval(state.pomodoroInterval);
-            state.pomodoroTime = 25 * 60;
-            updatePomodoroDisplay();
-            document.getElementById('pomodoroStatus').textContent = 'Tiempo de estudio: 25 min';
+        function toggleReadingMode() {
+            state.readingMode = !state.readingMode;
+            document.body.classList.toggle('reading-mode', state.readingMode);
+            showNotification(state.readingMode ? '👓 Modo lectura activado' : '👓 Modo lectura desactivado');
         }
 
-        function updatePomodoro() {
-            if (state.pomodoroTime > 0) {
-                state.pomodoroTime--;
-                updatePomodoroDisplay();
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+                showNotification('⛶ Modo pantalla completa activado');
             } else {
-                // Tiempo completado
-                clearInterval(state.pomodoroInterval);
-                state.pomodoroRunning = false;
-                document.getElementById('pomodoroStatus').textContent = '✅ ¡Tiempo completado!';
-                showNotification('🍅 ¡Sesión Pomodoro completada! Toma un descanso.', 'success');
+                document.exitFullscreen();
+                showNotification('⛶ Modo pantalla completa desactivado');
             }
         }
 
-        function updatePomodoroDisplay() {
-            const minutes = Math.floor(state.pomodoroTime / 60);
-            const seconds = state.pomodoroTime % 60;
-            document.getElementById('pomodoroTimer').textContent = 
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        // ========== EXPORTACIÓN PNG ==========
+
+        function exportAsPNG() {
+            showNotification('📸 Capturando horario...', 'info');
+            
+            const element = document.getElementById('scheduleForExport');
+            
+            html2canvas(element, {
+                backgroundColor: getComputedStyle(document.body).getPropertyValue('--bg-main'),
+                scale: 2,
+                useCORS: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'mi-horario.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showNotification('✅ Horario exportado como PNG', 'success');
+            }).catch(error => {
+                console.error('Error al exportar:', error);
+                showNotification('❌ Error al exportar', 'error');
+            });
         }
 
-        // Contador hasta el fin de semana
+        function generateWallpaper() {
+            showNotification('🎨 Creando wallpaper personalizado...', 'info');
+            
+            // Simulación de generación de wallpaper
+            setTimeout(() => {
+                showNotification('✅ Wallpaper creado (simulación)', 'success');
+            }, 2000);
+        }
+
+        // ========== MINIJUEGOS ==========
+
+        function showMinigames() {
+            const modal = document.getElementById('minigamesModal');
+            const content = document.getElementById('minigamesContent');
+            
+            content.innerHTML = `
+                <div style="text-align: center; margin-bottom: 1rem;">
+                    <h3>🎮 Elige un Minijuego</h3>
+                    <p>Practica mientras esperas tu próxima clase</p>
+                </div>
+                <div class="controls-grid">
+                    <button class="btn" onclick="startQuizRush()">
+                        🎯 Quiz Rush
+                    </button>
+                    <button class="btn" onclick="startSchedulePuzzle()">
+                        🧩 Ordena Horario
+                    </button>
+                    <button class="btn" onclick="startSubjectRace()">
+                        🏆 Carrera Materias
+                    </button>
+                    <button class="btn" onclick="startTargetPractice()">
+                        🎯 Target Practice
+                    </button>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+        }
+
+        function startQuizRush() {
+            closeModal('minigamesModal');
+            quizScore = 0;
+            currentQuizQuestion = 0;
+            quizTimeLeft = 30;
+            
+            const modal = document.getElementById('minigamesModal');
+            const content = document.getElementById('minigamesContent');
+            
+            content.innerHTML = `
+                <div style="text-align: center;">
+                    <h3>🎯 Quiz Rush</h3>
+                    <div class="quiz-timer" id="quizTimer">⏱️ ${quizTimeLeft}s</div>
+                    <div class="game-question" id="quizQuestion"></div>
+                    <div class="game-options" id="quizOptions"></div>
+                    <div class="game-result" id="quizResult"></div>
+                    <div style="margin-top: 1rem;">
+                        <strong>Puntuación: <span id="quizScore">0</span></strong>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+            loadQuizQuestion();
+            startQuizTimer();
+        }
+
+        function startQuizTimer() {
+            quizTimer = setInterval(() => {
+                quizTimeLeft--;
+                document.getElementById('quizTimer').textContent = `⏱️ ${quizTimeLeft}s`;
+                
+                if (quizTimeLeft <= 0) {
+                    endQuizGame();
+                }
+            }, 1000);
+        }
+
+        function loadQuizQuestion() {
+            if (currentQuizQuestion >= quizQuestions.length) {
+                currentQuizQuestion = 0; // Reiniciar preguntas
+            }
+            
+            const question = quizQuestions[currentQuizQuestion];
+            document.getElementById('quizQuestion').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'btn';
+                button.textContent = option;
+                button.onclick = () => checkQuizAnswer(index, question.answer);
+                optionsContainer.appendChild(button);
+            });
+            
+            document.getElementById('quizResult').textContent = '';
+        }
+
+        function checkQuizAnswer(selectedIndex, correctIndex) {
+            const resultElement = document.getElementById('quizResult');
+            
+            if (selectedIndex === correctIndex) {
+                quizScore += 10;
+                resultElement.textContent = '✅ ¡Correcto! +10 puntos';
+                resultElement.style.color = '#4CAF50';
+            } else {
+                resultElement.textContent = '❌ Incorrecto';
+                resultElement.style.color = '#F44336';
+            }
+            
+            document.getElementById('quizScore').textContent = quizScore;
+            currentQuizQuestion++;
+            
+            setTimeout(() => {
+                if (currentQuizQuestion < quizQuestions.length) {
+                    loadQuizQuestion();
+                } else {
+                    currentQuizQuestion = 0;
+                    loadQuizQuestion();
+                }
+            }, 1500);
+        }
+
+        function endQuizGame() {
+            clearInterval(quizTimer);
+            document.getElementById('minigamesContent').innerHTML = `
+                <div style="text-align: center;">
+                    <h3>🎯 Quiz Rush - Fin del Juego</h3>
+                    <div style="font-size: 2rem; margin: 1rem 0;">Puntuación Final: ${quizScore}</div>
+                    <button class="btn" onclick="startQuizRush()" style="margin: 0.5rem;">Jugar Otra Vez</button>
+                    <button class="btn" onclick="showMinigames()" style="margin: 0.5rem;">Otros Juegos</button>
+                </div>
+            `;
+        }
+
+        function startSchedulePuzzle() {
+            closeModal('minigamesModal');
+            
+            const modal = document.getElementById('minigamesModal');
+            const content = document.getElementById('minigamesContent');
+            
+            // Crear piezas desordenadas del horario
+            const puzzlePieces = [
+                '8:30 - SIOPM',
+                '9:30 - REDLO', 
+                '10:30 - APLOF',
+                '12:00 - MOMAE',
+                '13:00 - IPE I',
+                '14:00 - SASP'
+            ].sort(() => Math.random() - 0.5);
+            
+            content.innerHTML = `
+                <div style="text-align: center;">
+                    <h3>🧩 Ordena el Horario</h3>
+                    <p>Arrastra las piezas para ordenarlas cronológicamente</p>
+                    <div class="puzzle-container" id="puzzleContainer"></div>
+                    <div class="game-result" id="puzzleResult"></div>
+                    <button class="btn" onclick="checkPuzzleOrder()" style="margin-top: 1rem;">Comprobar Orden</button>
+                </div>
+            `;
+            
+            const container = document.getElementById('puzzleContainer');
+            puzzlePieces.forEach((piece, index) => {
+                const div = document.createElement('div');
+                div.className = 'puzzle-piece';
+                div.textContent = piece;
+                div.draggable = true;
+                div.dataset.index = index;
+                div.dataset.correct = ['0','1','2','3','4','5'].indexOf(index.toString());
+                container.appendChild(div);
+            });
+            
+            modal.style.display = 'flex';
+        }
+
+        function checkPuzzleOrder() {
+            const pieces = document.querySelectorAll('.puzzle-piece');
+            let correct = true;
+            
+            pieces.forEach((piece, index) => {
+                if (parseInt(piece.dataset.index) !== parseInt(piece.dataset.correct)) {
+                    correct = false;
+                    piece.classList.remove('correct');
+                } else {
+                    piece.classList.add('correct');
+                }
+            });
+            
+            const resultElement = document.getElementById('puzzleResult');
+            if (correct) {
+                resultElement.textContent = '✅ ¡Perfecto! Horario ordenado correctamente';
+                resultElement.style.color = '#4CAF50';
+            } else {
+                resultElement.textContent = '❌ Sigue intentándolo';
+                resultElement.style.color = '#F44336';
+            }
+        }
+
+        function startSubjectRace() {
+            closeModal('minigamesModal');
+            racePosition = 0;
+            
+            const modal = document.getElementById('minigamesModal');
+            const content = document.getElementById('minigamesContent');
+            
+            content.innerHTML = `
+                <div style="text-align: center;">
+                    <h3>🏆 Carrera de Materias</h3>
+                    <p>Responde preguntas para avanzar en la carrera</p>
+                    <div class="race-track">
+                        <div class="race-player" id="racePlayer">🚀</div>
+                    </div>
+                    <div class="game-question" id="raceQuestion">¿Preparado para la carrera?</div>
+                    <div class="game-options" id="raceOptions"></div>
+                    <div class="game-result" id="raceResult"></div>
+                    <button class="btn" onclick="askRaceQuestion()" style="margin-top: 1rem;">Comenzar Carrera</button>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+        }
+
+        function askRaceQuestion() {
+            const randomQuestion = quizQuestions[Math.floor(Math.random() * quizQuestions.length)];
+            document.getElementById('raceQuestion').textContent = randomQuestion.question;
+            
+            const optionsContainer = document.getElementById('raceOptions');
+            optionsContainer.innerHTML = '';
+            
+            randomQuestion.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'btn';
+                button.textContent = option;
+                button.onclick = () => checkRaceAnswer(index, randomQuestion.answer);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkRaceAnswer(selectedIndex, correctIndex) {
+            const resultElement = document.getElementById('raceResult');
+            const player = document.getElementById('racePlayer');
+            
+            if (selectedIndex === correctIndex) {
+                racePosition += 20;
+                player.style.left = racePosition + 'px';
+                resultElement.textContent = '✅ ¡Correcto! Avanzas 20px';
+                resultElement.style.color = '#4CAF50';
+                
+                if (racePosition >= 250) {
+                    resultElement.textContent = '🎉 ¡Ganaste la carrera!';
+                    setTimeout(() => showMinigames(), 2000);
+                } else {
+                    setTimeout(askRaceQuestion, 1500);
+                }
+            } else {
+                resultElement.textContent = '❌ Incorrecto, pierdes turno';
+                resultElement.style.color = '#F44336';
+                setTimeout(askRaceQuestion, 1500);
+            }
+        }
+
+        function startTargetPractice() {
+            closeModal('minigamesModal');
+            targetScore = 0;
+            
+            const modal = document.getElementById('minigamesModal');
+            const content = document.getElementById('minigamesContent');
+            
+            content.innerHTML = `
+                <div style="text-align: center;">
+                    <h3>🎯 Target Practice</h3>
+                    <p>Haz clic en las respuestas correctas antes de que desaparezcan</p>
+                    <div style="margin: 1rem 0;">
+                        <strong>Puntuación: <span id="targetScore">0</span></strong>
+                    </div>
+                    <div class="target-game" id="targetGame"></div>
+                    <div class="game-result" id="targetResult"></div>
+                    <button class="btn" onclick="startTargetGame()" style="margin-top: 1rem;">Comenzar Juego</button>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+        }
+
+        function startTargetGame() {
+            const gameContainer = document.getElementById('targetGame');
+            const scoreElement = document.getElementById('targetScore');
+            const resultElement = document.getElementById('targetResult');
+            
+            gameContainer.innerHTML = '';
+            targetScore = 0;
+            scoreElement.textContent = '0';
+            resultElement.textContent = '';
+            
+            // Crear targets
+            targetGameInterval = setInterval(() => {
+                if (document.querySelectorAll('.target').length < 5) {
+                    createTarget();
+                }
+            }, 1000);
+            
+            // Terminar juego después de 30 segundos
+            setTimeout(() => {
+                endTargetGame();
+            }, 30000);
+        }
+
+        function createTarget() {
+            const gameContainer = document.getElementById('targetGame');
+            const target = document.createElement('div');
+            target.className = 'target';
+            
+            const isCorrect = Math.random() > 0.5;
+            const subjects = Object.keys(subjectAbbreviations);
+            const randomSubject = subjects[Math.floor(Math.random() * subjects.length)];
+            
+            target.textContent = isCorrect ? subjectAbbreviations[randomSubject] : 'XXXX';
+            target.dataset.correct = isCorrect;
+            
+            const x = Math.random() * (gameContainer.offsetWidth - 40);
+            const y = Math.random() * (gameContainer.offsetHeight - 40);
+            
+            target.style.left = x + 'px';
+            target.style.top = y + 'px';
+            
+            target.onclick = function() {
+                if (this.dataset.correct === 'true') {
+                    targetScore += 10;
+                    document.getElementById('targetScore').textContent = targetScore;
+                    this.remove();
+                } else {
+                    targetScore = Math.max(0, targetScore - 5);
+                    document.getElementById('targetScore').textContent = targetScore;
+                }
+            };
+            
+            gameContainer.appendChild(target);
+            
+            // Remover target después de 3 segundos
+            setTimeout(() => {
+                if (target.parentNode) {
+                    target.remove();
+                }
+            }, 3000);
+        }
+
+        function endTargetGame() {
+            clearInterval(targetGameInterval);
+            document.querySelectorAll('.target').forEach(target => target.remove());
+            
+            const resultElement = document.getElementById('targetResult');
+            resultElement.textContent = `🎯 Juego terminado! Puntuación final: ${targetScore}`;
+            resultElement.style.color = '#4CAF50';
+        }
+
+        // ========== FUNCIONES AUXILIARES ==========
+
+        function searchSchedule(query) {
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = '';
+            
+            if (!query.trim()) return;
+            
+            const results = [];
+            scheduleData.forEach((row, rowIndex) => {
+                row.forEach((cell, cellIndex) => {
+                    if (cellIndex > 0 && cell !== 'DESCANSO' && 
+                        cell.toLowerCase().includes(query.toLowerCase())) {
+                        results.push({
+                            subject: cell,
+                            time: scheduleData[rowIndex][0],
+                            day: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'][cellIndex - 1]
+                        });
+                    }
+                });
+            });
+            
+            results.forEach(result => {
+                const div = document.createElement('div');
+                div.className = 'search-result';
+                div.innerHTML = `
+                    <strong>${result.subject}</strong><br>
+                    <small>${result.day} - ${result.time}</small>
+                `;
+                div.onclick = () => highlightSearchResult(result);
+                resultsContainer.appendChild(div);
+            });
+        }
+
+        function highlightSearchResult(result) {
+            showNotification(`🔍 Encontrado: ${result.subject} - ${result.day} ${result.time}`);
+        }
+
         function updateWeekendCountdown() {
             const now = new Date();
-            const currentDay = now.getDay(); // 0=Dom, 1=Lun, ..., 6=Sab
-            let daysUntilWeekend = 5 - currentDay; // Viernes es el día 5
+            const currentDay = now.getDay();
+            let daysUntilWeekend = 5 - currentDay;
             
             if (currentDay === 0 || currentDay === 6) {
                 daysUntilWeekend = 0;
@@ -1220,68 +1659,33 @@
             if (daysUntilWeekend === 0) {
                 countdownElement.textContent = '¡Es fin de semana! 🎉';
                 messageElement.textContent = '¡Disfruta tu descanso!';
-            } else if (daysUntilWeekend === 1) {
-                countdownElement.textContent = '1 día';
-                messageElement.textContent = '¡Mañana es viernes! 💪';
             } else {
-                countdownElement.textContent = `${daysUntilWeekend} días`;
-                messageElement.textContent = '¡Tú puedes! 💪';
+                countdownElement.textContent = `${daysUntilWeekend} día${daysUntilWeekend > 1 ? 's' : ''}`;
+                messageElement.textContent = daysUntilWeekend === 1 ? '¡Mañana es viernes! 💪' : '¡Tú puedes! 💪';
             }
         }
 
-        // Mini juego educativo
-        function generateNewQuestion() {
-            const randomQuestion = quizQuestions[Math.floor(Math.random() * quizQuestions.length)];
-            const questionElement = document.getElementById('gameQuestion');
-            const optionsElement = document.getElementById('gameOptions');
-            const resultElement = document.getElementById('gameResult');
+        function calculateStats() {
+            const subjects = new Set();
+            let totalClasses = 0;
             
-            questionElement.textContent = randomQuestion.question;
-            optionsElement.innerHTML = '';
-            resultElement.textContent = '';
-            
-            randomQuestion.options.forEach((option, index) => {
-                const button = document.createElement('button');
-                button.className = 'btn';
-                button.textContent = option;
-                button.onclick = () => checkAnswer(index, randomQuestion.answer);
-                optionsElement.appendChild(button);
+            scheduleData.forEach(row => {
+                row.slice(1).forEach(cell => {
+                    if (cell && cell !== 'DESCANSO') {
+                        subjects.add(cell);
+                        totalClasses++;
+                    }
+                });
             });
-        }
-
-        function checkAnswer(selectedIndex, correctIndex) {
-            const resultElement = document.getElementById('gameResult');
             
-            if (selectedIndex === correctIndex) {
-                resultElement.textContent = '✅ ¡Correcto!';
-                resultElement.style.color = '#4CAF50';
-            } else {
-                resultElement.textContent = '❌ Incorrecto. Intenta de nuevo.';
-                resultElement.style.color = '#F44336';
-            }
+            document.getElementById('totalHours').textContent = Math.round(totalClasses * 0.9);
+            document.getElementById('totalSubjects').textContent = subjects.size;
         }
 
-        // Crear partículas de fondo
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 50;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                particlesContainer.appendChild(particle);
-            }
-        }
-
-        // Renderizar horario
         function renderSchedule() {
             const table = document.getElementById('scheduleTable');
             table.innerHTML = '';
 
-            // Crear encabezado
             const headerRow = table.insertRow();
             const days = ['⏰ Horario', '📅 Lunes', '📅 Martes', '📅 Miércoles', '📅 Jueves', '📅 Viernes'];
             
@@ -1291,7 +1695,6 @@
                 headerRow.appendChild(th);
             });
 
-            // Crear filas de datos
             scheduleData.forEach((rowData, index) => {
                 const row = table.insertRow();
                 if (index === 3) row.classList.add('break-row');
@@ -1318,119 +1721,17 @@
                         if (state.showColors && subjectColors[cellData]) {
                             cell.classList.add(subjectColors[cellData]);
                         }
-                        
-                        if (state.devMode) {
-                            cell.setAttribute('data-debug', `[${index},${cellIndex}]`);
-                        }
-                        
-                        // Event listener para notas adhesivas
-                        cell.addEventListener('dblclick', (e) => addStickyNote(e, cell));
                     }
                 });
             });
-
-            // Aplicar vista compacta si está activada
-            if (state.compactView) {
-                table.style.fontSize = '0.8rem';
-            } else {
-                table.style.fontSize = '';
-            }
         }
 
-        // Configurar event listeners
         function setupEventListeners() {
-            // Cambio de tema
             document.getElementById('themeSelector').addEventListener('change', function(e) {
                 changeTheme(e.target.value);
             });
-
-            // Shake detection
-            if (window.DeviceMotionEvent) {
-                let lastX, lastY, lastZ;
-                let moveCounter = 0;
-
-                window.addEventListener('devicemotion', function(e) {
-                    if (!state.shakeMode) return;
-
-                    const acceleration = e.accelerationIncludingGravity;
-                    const curX = acceleration.x;
-                    const curY = acceleration.y;
-                    const curZ = acceleration.z;
-
-                    if (lastX !== undefined) {
-                        const deltaX = Math.abs(lastX - curX);
-                        const deltaY = Math.abs(lastY - curY);
-                        const deltaZ = Math.abs(lastZ - curZ);
-
-                        if ((deltaX + deltaY + deltaZ) > 15) {
-                            moveCounter++;
-                            if (moveCounter > 2) {
-                                randomTheme();
-                                moveCounter = 0;
-                            }
-                        }
-                    }
-
-                    lastX = curX;
-                    lastY = curY;
-                    lastZ = curZ;
-                });
-            }
         }
 
-        // Funciones de control
-        function toggleAbbreviations() {
-            state.showAbbreviations = !state.showAbbreviations;
-            renderSchedule();
-            updateButtonState('toggleAbbreviations');
-        }
-
-        function toggleColors() {
-            state.showColors = !state.showColors;
-            renderSchedule();
-            updateButtonState('toggleColors');
-        }
-
-        function toggleCompactView() {
-            state.compactView = !state.compactView;
-            renderSchedule();
-            updateButtonState('toggleCompactView');
-        }
-
-        function toggleDevMode() {
-            state.devMode = !state.devMode;
-            document.body.classList.toggle('dev-mode', state.devMode);
-            renderSchedule();
-            updateButtonState('toggleDevMode');
-            
-            if (state.devMode) {
-                console.log('🚀 Developer Mode Activated');
-                console.log('Schedule State:', state);
-                console.log('Schedule Data:', scheduleData);
-            }
-        }
-
-        function shakeModeToggle() {
-            state.shakeMode = !state.shakeMode;
-            updateButtonState('shakeModeToggle');
-            
-            if (state.shakeMode) {
-                showNotification('🎲 Shake Mode activado - ¡Agita tu dispositivo!', 'info');
-            } else {
-                showNotification('🎲 Shake Mode desactivado', 'info');
-            }
-        }
-
-        function updateButtonState(functionName) {
-            const buttons = document.querySelectorAll('.btn');
-            buttons.forEach(btn => {
-                if (btn.onclick && btn.onclick.toString().includes(functionName)) {
-                    btn.classList.toggle('active');
-                }
-            });
-        }
-
-        // Cambiar tema
         function changeTheme(theme) {
             document.body.className = '';
             if (theme) {
@@ -1438,11 +1739,15 @@
             }
             state.currentTheme = theme;
             
-            // Recrear partículas con nuevo tema
-            document.getElementById('particles').innerHTML = '';
-            createParticles();
+            const themesTried = new Set(JSON.parse(localStorage.getItem('themesTried') || '[]'));
+            themesTried.add(theme);
+            localStorage.setItem('themesTried', JSON.stringify([...themesTried]));
             
-            showNotification(`🎨 Tema cambiado: ${getThemeName(theme)}`, 'success');
+            if (themesTried.size >= 4) {
+                unlockAchievement('theme_master');
+            }
+
+            showNotification(`🎨 Tema cambiado a: ${getThemeName(theme)}`);
         }
 
         function getThemeName(theme) {
@@ -1450,365 +1755,114 @@
                 '': 'Futurista',
                 'university': 'Universidad',
                 'cyberpunk': 'Cyberpunk',
-                'retro': 'Retro 8-bit'
+                'retro': 'Retro 8-bit',
+                'neon-glitch': 'Neón Glitch',
+                'galaxy': 'Galaxia',
+                'synthwave': 'Synthwave',
+                'rainbow': 'Arcoíris'
             };
             return names[theme] || 'Desconocido';
         }
 
-        function randomTheme() {
-            const themes = ['', 'university', 'cyberpunk', 'retro'];
-            const randomTheme = themes[Math.floor(Math.random() * themes.length)];
-            changeTheme(randomTheme);
-            document.getElementById('themeSelector').value = randomTheme;
-            
-            // Efecto glitch temporal
-            document.querySelector('.schedule-container').classList.add('glitch');
-            setTimeout(() => {
-                document.querySelector('.schedule-container').classList.remove('glitch');
-            }, 2000);
-        }
-
-        // Mostrar estadísticas
-        function showStats() {
-            const statsContainer = document.getElementById('statsContainer');
-            const isVisible = statsContainer.style.display !== 'none';
-            statsContainer.style.display = isVisible ? 'none' : 'grid';
-            
-            if (!isVisible) {
-                calculateStats();
-                animateStats();
-            }
-        }
-
-        function calculateStats() {
-            const subjects = new Set();
-            let totalClasses = 0;
-            
-            scheduleData.forEach(row => {
-                row.slice(1).forEach(cell => {
-                    if (cell && cell !== 'DESCANSO') {
-                        subjects.add(cell);
-                        totalClasses++;
-                    }
-                });
-            });
-            
-            document.getElementById('totalHours').textContent = Math.round(totalClasses * 0.9); // 55min por clase
-            document.getElementById('totalSubjects').textContent = subjects.size;
-            document.getElementById('avgDaily').textContent = Math.round(totalClasses / 5);
-            document.getElementById('breakTime').textContent = '30';
-        }
-
-        function animateStats() {
-            const statNumbers = document.querySelectorAll('.stat-number');
-            statNumbers.forEach((stat, index) => {
-                const finalValue = parseInt(stat.textContent);
-                stat.textContent = '0';
-                
-                setTimeout(() => {
-                    animateNumber(stat, 0, finalValue, 1000);
-                }, index * 200);
-            });
-        }
-
-        function animateNumber(element, start, end, duration) {
-            const startTime = performance.now();
-            
-            function update(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const current = Math.floor(start + (end - start) * easeOutCubic(progress));
-                
-                element.textContent = current;
-                
-                if (progress < 1) {
-                    requestAnimationFrame(update);
-                }
-            }
-            
-            requestAnimationFrame(update);
-        }
-
-        function easeOutCubic(t) {
-            return 1 - Math.pow(1 - t, 3);
-        }
-
-        // Notas adhesivas
-        function addStickyNote(event, cell) {
-            const noteText = prompt('📝 Añadir nota:');
-            if (!noteText) return;
-            
-            const note = document.createElement('div');
-            note.className = 'sticky-note';
-            note.textContent = noteText;
-            note.style.top = '5px';
-            note.style.right = '5px';
-            
-            // Botón para eliminar nota
-            const deleteBtn = document.createElement('span');
-            deleteBtn.textContent = '❌';
-            deleteBtn.style.position = 'absolute';
-            deleteBtn.style.top = '-5px';
-            deleteBtn.style.right = '-5px';
-            deleteBtn.style.cursor = 'pointer';
-            deleteBtn.style.fontSize = '0.7rem';
-            deleteBtn.onclick = (e) => {
-                e.stopPropagation();
-                note.remove();
-            };
-            
-            note.appendChild(deleteBtn);
-            cell.style.position = 'relative';
-            cell.appendChild(note);
-            
-            showNotification('📝 Nota añadida', 'success');
-        }
-
-        // Exportar horario
-        function exportSchedule() {
-            const scheduleHTML = document.getElementById('scheduleContainer').outerHTML;
-            const blob = new Blob([`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Mi Horario Escolar</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; margin: 20px; }
-                        table { border-collapse: collapse; width: 100%; }
-                        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
-                        th { background-color: #f2f2f2; }
-                        .time-cell { background-color: #4CAF50; color: white; }
-                        .break-row td { background-color: #FFC107; }
-                    </style>
-                </head>
-                <body>
-                    <h1>📅 Mi Horario Escolar</h1>
-                    ${scheduleHTML}
-                    <p><small>Generado con EduSchedule Pro</small></p>
-                </body>
-                </html>
-            `], { type: 'text/html' });
-            
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'mi-horario.html';
-            a.click();
-            URL.revokeObjectURL(url);
-            
-            showNotification('📥 Horario exportado', 'success');
-        }
-
-        // Generar código QR
-        function generateQR() {
-            const scheduleText = scheduleData.map(row => row.join(' | ')).join('\n');
-            const qrData = encodeURIComponent(scheduleText);
-            const qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${qrData}`;
-            
-            const modal = document.createElement('div');
-            modal.className = 'modal';
-            modal.style.display = 'flex';
-            modal.innerHTML = `
-                <div class="modal-content" style="text-align: center;">
-                    <h2>📱 Código QR del Horario</h2>
-                    <img src="${qrURL}" alt="QR Code" style="max-width: 100%; border-radius: 10px;">
-                    <p>Escanea con tu móvil para compartir</p>
-                    <button class="btn" onclick="this.closest('.modal').remove()">Cerrar</button>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) modal.remove();
-            });
-            
-            setTimeout(() => modal.remove(), 10000); // Auto-cerrar en 10s
-        }
-
-        // Modo pantalla completa
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().then(() => {
-                    showNotification('🖥️ Modo pantalla completa activado', 'info');
-                    document.querySelector('.navbar').style.display = 'none';
-                    document.querySelector('.main-container').style.marginTop = '0';
-                });
-            } else {
-                document.exitFullscreen().then(() => {
-                    showNotification('🖥️ Modo pantalla completa desactivado', 'info');
-                    document.querySelector('.navbar').style.display = 'block';
-                    document.querySelector('.main-container').style.marginTop = '100px';
-                });
-            }
-        }
-
-        // Sistema de notificaciones
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.className = 'notification';
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
-                color: white;
-                padding: 1rem 2rem;
-                border-radius: 10px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-                z-index: 3000;
-                transform: translateX(100%);
-                transition: transform 0.3s ease;
-                max-width: 300px;
-                backdrop-filter: blur(10px);
-            `;
+            notification.style.background = type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3';
             notification.textContent = message;
             
             document.body.appendChild(notification);
             
-            // Animación de entrada
             setTimeout(() => {
                 notification.style.transform = 'translateX(0)';
             }, 100);
             
-            // Auto-eliminar
             setTimeout(() => {
                 notification.style.transform = 'translateX(100%)';
                 setTimeout(() => notification.remove(), 300);
             }, 3000);
         }
 
-        // Modal de configuración
-        function openConfigModal() {
-            document.getElementById('configModal').style.display = 'flex';
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
         }
 
-        function closeModal() {
-            document.getElementById('configModal').style.display = 'none';
-        }
+        // ========== SISTEMA DE LOGROS ==========
 
-        // Efectos especiales para eventos
-        function triggerConfetti() {
-            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7'];
-            
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.style.cssText = `
-                    position: fixed;
-                    width: 10px;
-                    height: 10px;
-                    background: ${colors[Math.floor(Math.random() * colors.length)]};
-                    left: ${Math.random() * 100}%;
-                    top: -10px;
-                    z-index: 4000;
-                    border-radius: 50%;
-                    pointer-events: none;
-                    animation: confetti-fall ${Math.random() * 3 + 2}s linear forwards;
-                `;
-                
-                document.body.appendChild(confetti);
-                
-                setTimeout(() => confetti.remove(), 5000);
-            }
-        }
-
-        // Agregar estilos de animación para confetti
-        const confettiStyles = document.createElement('style');
-        confettiStyles.textContent = `
-            @keyframes confetti-fall {
-                to {
-                    transform: translateY(100vh) rotate(720deg);
-                }
-            }
-        `;
-        document.head.appendChild(confettiStyles);
-
-        // Easter eggs
-        let konamiCode = [];
-        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
-
-        document.addEventListener('keydown', function(e) {
-            konamiCode.push(e.code);
-            konamiCode = konamiCode.slice(-10);
-            
-            if (konamiCode.join(',') === konamiSequence.join(',')) {
-                triggerConfetti();
-                showNotification('🎉 ¡Código Konami activado!', 'success');
-                document.querySelector('.schedule-container').classList.add('glow');
-                setTimeout(() => {
-                    document.querySelector('.schedule-container').classList.remove('glow');
-                }, 3000);
-            }
-        });
-
-        // Detector de viernes para confetti automático
-        function checkFridayBonus() {
-            const today = new Date();
-            if (today.getDay() === 5 && today.getHours() > 14) { // Viernes después de las 2 PM
-                triggerConfetti();
-                showNotification('🎉 ¡Feliz viernes! Fin de semana a la vista', 'success');
-            }
-        }
-
-        // Auto-save de preferencias
-        function savePreferences() {
-            const preferences = {
-                theme: state.currentTheme,
-                showAbbreviations: state.showAbbreviations,
-                showColors: state.showColors,
-                compactView: state.compactView
-            };
-            localStorage.setItem('eduSchedulePrefs', JSON.stringify(preferences));
-        }
-
-        function loadPreferences() {
-            const saved = localStorage.getItem('eduSchedulePrefs');
+        function loadAchievements() {
+            const saved = localStorage.getItem('eduScheduleAchievements');
             if (saved) {
-                const prefs = JSON.parse(saved);
-                if (prefs.theme) changeTheme(prefs.theme);
-                if (prefs.showAbbreviations) toggleAbbreviations();
-                if (prefs.showColors) toggleColors();
-                if (prefs.compactView) toggleCompactView();
+                state.unlockedAchievements = new Set(JSON.parse(saved));
             }
         }
 
-        // Auto-guardar preferencias cuando cambie el estado
-        setInterval(savePreferences, 5000);
+        function saveAchievements() {
+            localStorage.setItem('eduScheduleAchievements', 
+                JSON.stringify([...state.unlockedAchievements]));
+        }
 
-        // Cargar preferencias al inicio
-        setTimeout(loadPreferences, 500);
-
-        // Check para bonus de viernes
-        setTimeout(checkFridayBonus, 2000);
-
-        // Efectos de hover mejorados con JavaScript
-        document.addEventListener('DOMContentLoaded', function() {
-            const scheduleTable = document.getElementById('scheduleTable');
-            
-            scheduleTable.addEventListener('mouseover', function(e) {
-                if (e.target.tagName === 'TD' && !e.target.classList.contains('time-cell')) {
-                    e.target.style.transform = 'scale(1.05)';
-                    e.target.style.zIndex = '100';
+        function unlockAchievement(achievementId) {
+            if (!state.unlockedAchievements.has(achievementId)) {
+                state.unlockedAchievements.add(achievementId);
+                saveAchievements();
+                
+                const achievement = achievements.find(a => a.id === achievementId);
+                if (achievement) {
+                    showNotification(`🏆 Logro desbloqueado: ${achievement.name}`, 'success');
                 }
-            });
-            
-            scheduleTable.addEventListener('mouseout', function(e) {
-                if (e.target.tagName === 'TD') {
-                    e.target.style.transform = '';
-                    e.target.style.zIndex = '';
-                }
-            });
-        });
+            }
+        }
 
-        console.log(`
-        ███████╗██████╗ ██╗   ██╗███████╗ ██████╗██╗  ██╗███████╗██████╗ ██╗   ██╗██╗     ███████╗
-        ██╔════╝██╔══██╗██║   ██║██╔════╝██╔════╝██║  ██║██╔════╝██╔══██╗██║   ██║██║     ██╔════╝
-        █████╗  ██║  ██║██║   ██║███████╗██║     ███████║█████╗  ██║  ██║██║   ██║██║     █████╗  
-        ██╔══╝  ██║  ██║██║   ██║╚════██║██║     ██╔══██║██╔══╝  ██║  ██║██║   ██║██║     ██╔══╝  
-        ███████╗██████╔╝╚██████╔╝███████║╚██████╗██║  ██║███████╗██████╔╝╚██████╔╝███████╗███████╗
-        ╚══════╝╚═════╝  ╚═════╝ ╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝ ╚══════╝╚══════╝
-                                         PRO v2.0 🚀
-        Desarrollado por Angelpro09_Dev & Claude
-        `);
+        function checkTimeBasedAchievements(now) {
+            const hour = now.getHours();
+            
+            if (hour < 7) {
+                unlockAchievement('early_bird');
+            }
+            
+            if (hour >= 22) {
+                unlockAchievement('night_owl');
+            }
+        }
+
+        function showAchievements() {
+            const modal = document.getElementById('achievementsModal');
+            const list = document.getElementById('achievementsList');
+            
+            list.innerHTML = achievements.map(achievement => `
+                <div class="achievement-badge ${state.unlockedAchievements.has(achievement.id) ? '' : 'badge-locked'}">
+                    <span>${achievement.icon}</span>
+                    <div>
+                        <strong>${achievement.name}</strong><br>
+                        <small>${achievement.description}</small>
+                    </div>
+                </div>
+            `).join('');
+            
+            modal.style.display = 'flex';
+        }
+
+        // ========== CALCULADORA ==========
+
+        function showGradeCalculator() {
+            document.getElementById('calculatorModal').style.display = 'flex';
+        }
+
+        function calculateRequiredGrade() {
+            const current = parseFloat(document.getElementById('currentGrade').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const desired = parseFloat(document.getElementById('desiredGrade').value);
+            
+            if (isNaN(current) || isNaN(weight) || isNaN(desired)) {
+                document.getElementById('calculationResult').textContent = 'Por favor, completa todos los campos';
+                return;
+            }
+            
+            const required = (desired - (current * (weight / 100))) / ((100 - weight) / 100);
+            document.getElementById('calculationResult').innerHTML = `
+                <strong>Necesitas: ${required.toFixed(2)}</strong><br>
+                <small>en el resto de la ponderación (${100 - weight}%)</small>
+            `;
+        }
     </script>
 </body>
 </html>
