@@ -308,6 +308,20 @@
             font-style: italic;
         }
 
+        /* Celda actual resaltada */
+        .current-class {
+            position: relative;
+            z-index: 5;
+            animation: pulse-glow 2s infinite;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.5) !important;
+            border: 2px solid #4CAF50 !important;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(76, 175, 80, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(76, 175, 80, 0.8); }
+        }
+
         /* Colores por materia */
         .subject-som { background: linear-gradient(135deg, rgba(74, 144, 226, 0.2), rgba(80, 170, 241, 0.2)); }
         .subject-red { background: linear-gradient(135deg, rgba(225, 112, 85, 0.2), rgba(237, 117, 88, 0.2)); }
@@ -494,6 +508,106 @@
             font-size: 1rem;
         }
 
+        /* Barra de progreso */
+        .progress-container {
+            margin: 1rem 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-glass);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Panel de herramientas */
+        .tools-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .tool-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            border: 1px solid var(--border-glass);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .tool-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .pomodoro-timer {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            margin: 1rem 0;
+            color: var(--text-primary);
+        }
+
+        .pomodoro-controls {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .weekend-countdown {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 1rem 0;
+            background: var(--secondary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .mini-game {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--bg-glass);
+            border-radius: 10px;
+        }
+
+        .game-question {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .game-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .game-result {
+            margin-top: 1rem;
+            font-weight: 600;
+            min-height: 1.5rem;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .main-container {
@@ -523,6 +637,10 @@
             
             .class-status {
                 font-size: 1.1rem;
+            }
+            
+            .tools-panel {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -606,6 +724,49 @@
             <div class="class-status" id="classStatus">Verificando horario...</div>
             <div class="countdown" id="countdown"></div>
             <div class="funny-message" id="funnyMessage"></div>
+            
+            <!-- Barra de progreso de clase -->
+            <div class="progress-container" id="progressContainer" style="display: none;">
+                <div class="progress-text" id="progressText">Progreso de la clase: 0%</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel de herramientas -->
+        <div class="tools-panel fade-in">
+            <!-- Temporizador Pomodoro -->
+            <div class="tool-card">
+                <div class="tool-title">🍅 Temporizador Pomodoro</div>
+                <div class="pomodoro-timer" id="pomodoroTimer">25:00</div>
+                <div class="pomodoro-controls">
+                    <button class="btn" onclick="startPomodoro()">▶️ Iniciar</button>
+                    <button class="btn" onclick="pausePomodoro()">⏸️ Pausar</button>
+                    <button class="btn" onclick="resetPomodoro()">🔄 Reiniciar</button>
+                </div>
+                <div class="progress-text" id="pomodoroStatus">Tiempo de estudio: 25 min</div>
+            </div>
+
+            <!-- Contador hasta el fin de semana -->
+            <div class="tool-card">
+                <div class="tool-title">📅 Días hasta el fin de semana</div>
+                <div class="weekend-countdown" id="weekendCountdown">--</div>
+                <div class="funny-message" id="weekendMessage">¡Tú puedes!</div>
+            </div>
+
+            <!-- Mini juego educativo -->
+            <div class="tool-card">
+                <div class="tool-title">🎮 Mini Juego Educativo</div>
+                <div class="mini-game">
+                    <div class="game-question" id="gameQuestion">¿Cuál es la capital de Francia?</div>
+                    <div class="game-options" id="gameOptions">
+                        <!-- Opciones generadas por JavaScript -->
+                    </div>
+                    <div class="game-result" id="gameResult"></div>
+                    <button class="btn" onclick="generateNewQuestion()" style="margin-top: 1rem; width: 100%;">Nueva Pregunta</button>
+                </div>
+            </div>
         </div>
 
         <!-- Panel de Control -->
@@ -734,6 +895,35 @@
             "¡Aprovecha para organizar tus apuntes! 📝"
         ];
 
+        // Preguntas para el mini juego
+        const quizQuestions = [
+            {
+                question: "¿Qué protocolo se utiliza principalmente para la transmisión de correos electrónicos?",
+                options: ["HTTP", "FTP", "SMTP", "TCP"],
+                answer: 2
+            },
+            {
+                question: "¿Qué significa la sigla RAM?",
+                options: ["Random Access Memory", "Read Access Memory", "Rapid Access Memory", "Random Allocation Memory"],
+                answer: 0
+            },
+            {
+                question: "¿Qué lenguaje de programación se considera el 'padre' de muchos lenguajes modernos?",
+                options: ["Python", "C", "Java", "Assembly"],
+                answer: 1
+            },
+            {
+                question: "¿Qué es un sistema operativo?",
+                options: ["Un programa de edición de texto", "Una interfaz entre el hardware y el usuario", "Un tipo de memoria", "Un dispositivo de almacenamiento"],
+                answer: 1
+            },
+            {
+                question: "¿Qué significa HTML?",
+                options: ["HyperText Markup Language", "HighTech Modern Language", "Hyper Transfer Markup Language", "HighText Machine Language"],
+                answer: 0
+            }
+        ];
+
         // Estado de la aplicación
         let state = {
             showAbbreviations: false,
@@ -742,7 +932,11 @@
             devMode: false,
             shakeMode: false,
             currentTheme: '',
-            stickyNotes: new Map()
+            stickyNotes: new Map(),
+            currentClassCell: null,
+            pomodoroInterval: null,
+            pomodoroTime: 25 * 60, // 25 minutos en segundos
+            pomodoroRunning: false
         };
 
         // Inicialización
@@ -753,6 +947,8 @@
             calculateStats();
             updateClock(); // Iniciar el reloj
             setInterval(updateClock, 1000); // Actualizar cada segundo
+            updateWeekendCountdown();
+            generateNewQuestion();
             
             // Animación de entrada
             setTimeout(() => {
@@ -777,6 +973,9 @@
             // Determinar el estado actual según el horario
             const currentStatus = getCurrentClassStatus(now);
             updateClassStatus(currentStatus);
+            
+            // Actualizar marcador en la tabla
+            updateTableMarker(now);
         }
 
         // Determinar el estado actual de clase
@@ -790,7 +989,8 @@
                     status: 'outside-hours',
                     message: '¡Es fin de semana! 🎉',
                     countdown: null,
-                    funnyMessage: getRandomFunnyMessage()
+                    funnyMessage: getRandomFunnyMessage(),
+                    progress: 0
                 };
             }
             
@@ -808,14 +1008,18 @@
                             status: 'break-time',
                             message: '¡Hora de descanso! ☕',
                             countdown: null,
-                            funnyMessage: 'Aprovecha para recargar energías'
+                            funnyMessage: 'Aprovecha para recargar energías',
+                            progress: 0
                         };
                     } else {
+                        // Calcular progreso de la clase
+                        const progress = ((currentTime - startTime) / (endTime - startTime)) * 100;
                         return {
                             status: 'in-class',
                             message: `En clase: ${subject}`,
                             countdown: null,
-                            funnyMessage: null
+                            funnyMessage: null,
+                            progress: Math.min(progress, 100)
                         };
                     }
                 }
@@ -842,7 +1046,8 @@
                     status: 'outside-hours',
                     message: '¡No hay más clases hoy! 🎉',
                     countdown: null,
-                    funnyMessage: getRandomFunnyMessage()
+                    funnyMessage: getRandomFunnyMessage(),
+                    progress: 0
                 };
             }
             
@@ -862,7 +1067,8 @@
                 status: 'free-time',
                 message: `Próxima clase: ${nextClassSubject}`,
                 countdown: countdownText,
-                funnyMessage: getRandomFunnyMessage()
+                funnyMessage: getRandomFunnyMessage(),
+                progress: 0
             };
         }
 
@@ -871,6 +1077,9 @@
             const classStatusElement = document.getElementById('classStatus');
             const countdownElement = document.getElementById('countdown');
             const funnyMessageElement = document.getElementById('funnyMessage');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
             
             classStatusElement.textContent = status.message;
             classStatusElement.className = 'class-status ' + status.status;
@@ -885,6 +1094,49 @@
                 funnyMessageElement.textContent = status.funnyMessage;
             } else {
                 funnyMessageElement.textContent = '';
+            }
+            
+            // Mostrar/ocultar barra de progreso
+            if (status.status === 'in-class' && status.progress > 0) {
+                progressContainer.style.display = 'block';
+                progressFill.style.width = status.progress + '%';
+                progressText.textContent = `Progreso de la clase: ${Math.round(status.progress)}%`;
+            } else {
+                progressContainer.style.display = 'none';
+            }
+        }
+
+        // Actualizar marcador en la tabla
+        function updateTableMarker(now) {
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+            const currentDay = now.getDay() - 1; // 0=Lunes, 4=Viernes
+            
+            // Remover marcador anterior
+            if (state.currentClassCell) {
+                state.currentClassCell.classList.remove('current-class');
+                state.currentClassCell = null;
+            }
+            
+            // Si es fin de semana o fuera de horario, no marcar nada
+            if (currentDay < 0 || currentDay > 4) return;
+            
+            // Buscar la celda actual
+            for (let i = 0; i < scheduleData.length; i++) {
+                const timeRange = scheduleData[i][0];
+                const [startTime, endTime] = parseTimeRange(timeRange);
+                
+                if (currentTime >= startTime && currentTime <= endTime) {
+                    // Encontrar la celda correspondiente en la tabla
+                    const table = document.getElementById('scheduleTable');
+                    if (table.rows.length > i + 1) {
+                        const cell = table.rows[i + 1].cells[currentDay + 1];
+                        if (cell) {
+                            cell.classList.add('current-class');
+                            state.currentClassCell = cell;
+                        }
+                    }
+                    break;
+                }
             }
         }
 
@@ -903,6 +1155,110 @@
         // Obtener mensaje gracioso aleatorio
         function getRandomFunnyMessage() {
             return funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+        }
+
+        // Temporizador Pomodoro
+        function startPomodoro() {
+            if (state.pomodoroRunning) return;
+            
+            state.pomodoroRunning = true;
+            state.pomodoroInterval = setInterval(updatePomodoro, 1000);
+            document.getElementById('pomodoroStatus').textContent = '⏰ Estudiando...';
+        }
+
+        function pausePomodoro() {
+            if (!state.pomodoroRunning) return;
+            
+            state.pomodoroRunning = false;
+            clearInterval(state.pomodoroInterval);
+            document.getElementById('pomodoroStatus').textContent = '⏸️ En pausa';
+        }
+
+        function resetPomodoro() {
+            state.pomodoroRunning = false;
+            clearInterval(state.pomodoroInterval);
+            state.pomodoroTime = 25 * 60;
+            updatePomodoroDisplay();
+            document.getElementById('pomodoroStatus').textContent = 'Tiempo de estudio: 25 min';
+        }
+
+        function updatePomodoro() {
+            if (state.pomodoroTime > 0) {
+                state.pomodoroTime--;
+                updatePomodoroDisplay();
+            } else {
+                // Tiempo completado
+                clearInterval(state.pomodoroInterval);
+                state.pomodoroRunning = false;
+                document.getElementById('pomodoroStatus').textContent = '✅ ¡Tiempo completado!';
+                showNotification('🍅 ¡Sesión Pomodoro completada! Toma un descanso.', 'success');
+            }
+        }
+
+        function updatePomodoroDisplay() {
+            const minutes = Math.floor(state.pomodoroTime / 60);
+            const seconds = state.pomodoroTime % 60;
+            document.getElementById('pomodoroTimer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Contador hasta el fin de semana
+        function updateWeekendCountdown() {
+            const now = new Date();
+            const currentDay = now.getDay(); // 0=Dom, 1=Lun, ..., 6=Sab
+            let daysUntilWeekend = 5 - currentDay; // Viernes es el día 5
+            
+            if (currentDay === 0 || currentDay === 6) {
+                daysUntilWeekend = 0;
+            } else if (daysUntilWeekend < 0) {
+                daysUntilWeekend = 0;
+            }
+            
+            const countdownElement = document.getElementById('weekendCountdown');
+            const messageElement = document.getElementById('weekendMessage');
+            
+            if (daysUntilWeekend === 0) {
+                countdownElement.textContent = '¡Es fin de semana! 🎉';
+                messageElement.textContent = '¡Disfruta tu descanso!';
+            } else if (daysUntilWeekend === 1) {
+                countdownElement.textContent = '1 día';
+                messageElement.textContent = '¡Mañana es viernes! 💪';
+            } else {
+                countdownElement.textContent = `${daysUntilWeekend} días`;
+                messageElement.textContent = '¡Tú puedes! 💪';
+            }
+        }
+
+        // Mini juego educativo
+        function generateNewQuestion() {
+            const randomQuestion = quizQuestions[Math.floor(Math.random() * quizQuestions.length)];
+            const questionElement = document.getElementById('gameQuestion');
+            const optionsElement = document.getElementById('gameOptions');
+            const resultElement = document.getElementById('gameResult');
+            
+            questionElement.textContent = randomQuestion.question;
+            optionsElement.innerHTML = '';
+            resultElement.textContent = '';
+            
+            randomQuestion.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'btn';
+                button.textContent = option;
+                button.onclick = () => checkAnswer(index, randomQuestion.answer);
+                optionsElement.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedIndex, correctIndex) {
+            const resultElement = document.getElementById('gameResult');
+            
+            if (selectedIndex === correctIndex) {
+                resultElement.textContent = '✅ ¡Correcto!';
+                resultElement.style.color = '#4CAF50';
+            } else {
+                resultElement.textContent = '❌ Incorrecto. Intenta de nuevo.';
+                resultElement.style.color = '#F44336';
+            }
         }
 
         // Crear partículas de fondo
