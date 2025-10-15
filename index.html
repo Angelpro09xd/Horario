@@ -8,7 +8,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700&family=Fira+Code:wght@300;400;500&display=swap');
 
         :root {
-            /* Tema Default - Futurista */
             --primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
@@ -59,7 +58,6 @@
             --text-secondary: #ff6b35;
             --border-glass: rgba(255, 107, 53, 0.3);
             --shadow-glow: 0 8px 32px rgba(255, 107, 53, 0.4);
-            font-family: 'Fira Code', monospace !important;
         }
 
         * {
@@ -77,7 +75,6 @@
             position: relative;
         }
 
-        /* Partículas de fondo */
         .particles {
             position: fixed;
             top: 0;
@@ -103,7 +100,6 @@
             to { transform: translateY(-100vh) rotate(360deg); }
         }
 
-        /* Navbar futurista */
         .navbar {
             position: fixed;
             top: 0;
@@ -132,7 +128,6 @@
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
         }
 
         .navbar-controls {
@@ -141,7 +136,149 @@
             align-items: center;
         }
 
-        /* Controles principales */
+        .smart-clock {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid var(--border-glass);
+            box-shadow: var(--shadow-card);
+            padding: 1.5rem;
+            min-width: 300px;
+            z-index: 999;
+            animation: slideInRight 0.6s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .clock-time {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            background: var(--primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .clock-date {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .clock-status {
+            background: var(--bg-glass);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-glass);
+        }
+
+        .current-class {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .class-icon {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .time-remaining {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .countdown {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 0.5rem 0;
+            background: var(--accent);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .funny-message {
+            text-align: center;
+            font-style: italic;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: var(--bg-glass);
+            border-radius: 8px;
+            border-left: 3px solid;
+            border-image: var(--accent) 1;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-glass);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+        }
+
+        .clock-toggle {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 998;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            font-size: 1.5rem;
+        }
+
+        .clock-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .clock-minimized .smart-clock {
+            display: none;
+        }
+
         .main-container {
             margin-top: 100px;
             padding: 2rem;
@@ -207,7 +344,6 @@
             box-shadow: var(--shadow-glow);
         }
 
-        /* Botones especiales */
         .btn-neon {
             border: 2px solid;
             border-image: var(--accent) 1;
@@ -230,7 +366,6 @@
             opacity: 0.1;
         }
 
-        /* Tabla del horario */
         .schedule-container {
             background: var(--bg-card);
             backdrop-filter: blur(20px);
@@ -308,7 +443,21 @@
             font-style: italic;
         }
 
-        /* Colores por materia */
+        .current-time-cell {
+            animation: pulseGlow 2s infinite;
+            border: 2px solid;
+            border-image: var(--accent) 1;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(102, 126, 234, 0.8);
+            }
+        }
+
         .subject-som { background: linear-gradient(135deg, rgba(74, 144, 226, 0.2), rgba(80, 170, 241, 0.2)); }
         .subject-red { background: linear-gradient(135deg, rgba(225, 112, 85, 0.2), rgba(237, 117, 88, 0.2)); }
         .subject-dig { background: linear-gradient(135deg, rgba(129, 236, 236, 0.2), rgba(116, 185, 255, 0.2)); }
@@ -317,7 +466,6 @@
         .subject-mon { background: linear-gradient(135deg, rgba(186, 85, 211, 0.2), rgba(224, 130, 131, 0.2)); }
         .subject-sos { background: linear-gradient(135deg, rgba(255, 218, 121, 0.2), rgba(254, 202, 87, 0.2)); }
 
-        /* Notas adhesivas */
         .sticky-note {
             position: absolute;
             background: #ffeb3b;
@@ -337,7 +485,6 @@
             transform: rotate(0deg) scale(1.1);
         }
 
-        /* Modal para configuraciones */
         .modal {
             position: fixed;
             top: 0;
@@ -362,7 +509,6 @@
             box-shadow: var(--shadow-card);
         }
 
-        /* Efectos especiales */
         .glitch {
             animation: glitch 2s infinite;
         }
@@ -379,7 +525,6 @@
             box-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary), 0 0 80px var(--primary);
         }
 
-        /* Estadísticas */
         .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -405,10 +550,10 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .main-container {
                 padding: 1rem;
+                margin-right: 0;
             }
             
             .controls-grid {
@@ -427,9 +572,26 @@
                 padding: 0.5rem;
                 font-size: 0.9rem;
             }
+
+            .smart-clock {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 1rem;
+                width: 100%;
+            }
+
+            .clock-toggle {
+                display: flex;
+            }
         }
 
-        /* Animaciones de entrada */
+        @media (min-width: 769px) {
+            .main-container {
+                margin-right: 340px;
+            }
+        }
+
         .fade-in {
             animation: fadeIn 0.6s ease-out;
         }
@@ -460,32 +622,35 @@
             }
         }
 
-        /* Modo desarrollador */
-        .dev-mode {
-            font-family: 'Fira Code', monospace;
-        }
-
-        .dev-mode .schedule-container {
-            border: 2px dashed #00ff41;
-            background: rgba(0, 0, 0, 0.9);
-        }
-
-        .dev-mode #scheduleTable td::before {
-            content: attr(data-debug);
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            font-size: 0.6rem;
-            color: #00ff41;
-            opacity: 0.7;
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Partículas de fondo -->
     <div class="particles" id="particles"></div>
 
-    <!-- Navbar -->
+    <div class="clock-toggle" onclick="toggleClock()">🕐</div>
+
+    <div class="smart-clock" id="smartClock">
+        <div class="clock-time" id="clockTime">--:--:--</div>
+        <div class="clock-date" id="clockDate">Cargando...</div>
+        
+        <div class="clock-status">
+            <div class="class-icon" id="classIcon">⏰</div>
+            <div class="current-class" id="currentClass">Cargando estado...</div>
+            <div class="countdown" id="countdown">--:--</div>
+            <div class="time-remaining" id="timeRemaining"></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+        </div>
+        
+        <div class="funny-message" id="funnyMessage"></div>
+    </div>
+
     <nav class="navbar">
         <div class="navbar-content">
             <div class="logo">EduSchedule Pro</div>
@@ -502,7 +667,6 @@
     </nav>
 
     <div class="main-container">
-        <!-- Panel de Control -->
         <div class="control-panel fade-in">
             <div class="controls-grid">
                 <button class="btn" onclick="toggleAbbreviations()">📝 Mostrar Abreviaturas</button>
@@ -516,7 +680,6 @@
             </div>
         </div>
 
-        <!-- Estadísticas -->
         <div class="stats-container" id="statsContainer" style="display: none;">
             <div class="stat-card">
                 <div class="stat-number" id="totalHours">0</div>
@@ -536,101 +699,100 @@
             </div>
         </div>
 
-        <!-- Contenedor del Horario -->
         <div class="schedule-container slide-in" id="scheduleContainer">
             <div class="schedule-header">
                 <h1 class="schedule-title">Horario Académico</h1>
             </div>
             
             <div class="table-container">
-                <table id="scheduleTable">
-                    <!-- Contenido generado por JavaScript -->
-                </table>
+                <table id="scheduleTable"></table>
             </div>
         </div>
     </div>
 
-    <!-- Modal para configuraciones -->
     <div class="modal" id="configModal">
         <div class="modal-content">
-            <h2>⚙️ Configuración Avanzada</h2>
-            <div style="margin: 1rem 0;">
-                <label>🎭 Tema personalizado:</label>
-                <input type="color" id="primaryColor" value="#667eea">
-                <input type="color" id="secondaryColor" value="#764ba2">
-            </div>
-            <div style="margin: 1rem 0;">
-                <label>📱 Efectos visuales:</label>
-                <input type="range" id="particlesSlider" min="0" max="100" value="20">
-            </div>
+            <h2>Configuración</h2>
+            <p>Funcionalidad en desarrollo...</p>
             <button class="btn" onclick="closeModal()">Cerrar</button>
         </div>
     </div>
 
     <script>
-        // Datos del horario
-        const scheduleData = [
-            ['8:30 - 9:30', 'Sistemas Operativos Monopuesto', 'Redes Locales', 'Digitalización Aplicada a los Sectores Productivos GM', 'Aplicaciones Ofimáticas', 'Aplicaciones Ofimáticas'],
-            ['9:30 - 10:30', 'Sistemas Operativos Monopuesto', 'Redes Locales', 'Sistemas Operativos Monopuesto', 'Aplicaciones Ofimáticas', 'Aplicaciones Ofimáticas'],
-            ['10:30 - 11:30', 'Aplicaciones Ofimáticas', 'Redes Locales', 'Sistemas Operativos Monopuesto', 'Itinerario Personal para la Empleabilidad I', 'Sistemas Operativos Monopuesto'],
-            ['11:30 - 12:00', 'DESCANSO', 'DESCANSO', 'DESCANSO', 'DESCANSO', 'DESCANSO'],
-            ['12:00 - 13:00', 'Aplicaciones Ofimáticas', 'Montaje y Mantenimiento de Equipo', 'Redes Locales', 'Redes Locales', 'Montaje y Mantenimiento de Equipo'],
-            ['13:00 - 14:00', 'Montaje y Mantenimiento de Equipo', 'Montaje y Mantenimiento de Equipo', 'Redes Locales', 'Redes Locales', 'Itinerario Personal para la Empleabilidad I'],
-            ['14:00 - 14:55', 'Montaje y Mantenimiento de Equipo', 'Itinerario Personal para la Empleabilidad I', 'Aplicaciones Ofimáticas', 'Montaje y Mantenimiento de Equipo', 'Sostenibilidad Aplicada al Sistema Productivo']
+        // Datos de horario de ejemplo
+        const scheduleData = {
+            days: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'],
+            timeSlots: [
+                '7:00 - 8:00',
+                '8:00 - 9:00',
+                '9:00 - 10:00',
+                '10:00 - 11:00',
+                '11:00 - 12:00',
+                '12:00 - 13:00',
+                '13:00 - 14:00',
+                '14:00 - 15:00',
+                '15:00 - 16:00'
+            ],
+            subjects: [
+                ['SOM', 'SOM', 'SOM', 'RED', 'RED', 'DESCANSO', 'DIG', 'DIG', 'LIBRE'],
+                ['SOM', 'SOM', 'SOM', 'RED', 'RED', 'DESCANSO', 'OFI', 'OFI', 'LIBRE'],
+                ['IPE', 'IPE', 'IPE', 'MON', 'MON', 'DESCANSO', 'SOS', 'SOS', 'LIBRE'],
+                ['IPE', 'IPE', 'IPE', 'MON', 'MON', 'DESCANSO', 'SOS', 'SOS', 'LIBRE'],
+                ['LIBRE', 'LIBRE', 'LIBRE', 'LIBRE', 'LIBRE', 'DESCANSO', 'LIBRE', 'LIBRE', 'LIBRE']
+            ],
+            subjectNames: {
+                'SOM': 'Sistemas Operativos y Máquinas Virtuales',
+                'RED': 'Redes de Área Local',
+                'DIG': 'Digitalización de Procesos',
+                'OFI': 'Ofimática y Proceso de la Información',
+                'IPE': 'Implantación de Aplicaciones Web',
+                'MON': 'Montaje y Mantenimiento de Equipos',
+                'SOS': 'Sistemas Operativos en Red',
+                'LIBRE': 'Libre',
+                'DESCANSO': 'Descanso'
+            },
+            subjectIcons: {
+                'SOM': '💻',
+                'RED': '🌐',
+                'DIG': '📊',
+                'OFI': '📝',
+                'IPE': '🖥️',
+                'MON': '🔧',
+                'SOS': '🖧',
+                'LIBRE': '☕',
+                'DESCANSO': '🍕'
+            }
+        };
+
+        // Mensajes divertidos para cuando no hay clase
+        const funnyMessages = [
+            "¡Tiempo para un café! ☕",
+            "¿Netflix o estudiar? 🤔",
+            "¡Momento de estirar las piernas! 🚶‍♂️",
+            "¿Alguien dijo siesta? 😴",
+            "¡Hora de revisar las redes sociales! 📱",
+            "¿Qué tal un pequeño descanso? 🧘‍♀️",
+            "¡Tiempo libre! ¿Qué harás con él? 🎉",
+            "Momento para repasar lo aprendido 📚",
+            "¡Hora de un snack saludable! 🍎",
+            "¿Quizás organizar tus apuntes? 📋"
         ];
-
-        const subjectAbbreviations = {
-            'Sistemas Operativos Monopuesto': 'SIOPM',
-            'Redes Locales': 'REDLO',
-            'Digitalización Aplicada a los Sectores Productivos GM': 'DASPGM',
-            'Aplicaciones Ofimáticas': 'APLOF',
-            'Itinerario Personal para la Empleabilidad I': 'IPE I',
-            'Montaje y Mantenimiento de Equipo': 'MOMAE',
-            'Sostenibilidad Aplicada al Sistema Productivo': 'SASP'
-        };
-
-        const subjectColors = {
-            'Sistemas Operativos Monopuesto': 'subject-som',
-            'Redes Locales': 'subject-red',
-            'Digitalización Aplicada a los Sectores Productivos GM': 'subject-dig',
-            'Aplicaciones Ofimáticas': 'subject-ofi',
-            'Itinerario Personal para la Empleabilidad I': 'subject-ipe',
-            'Montaje y Mantenimiento de Equipo': 'subject-mon',
-            'Sostenibilidad Aplicada al Sistema Productivo': 'subject-sos'
-        };
-
-        const subjectIcons = {
-            'Sistemas Operativos Monopuesto': '💻',
-            'Redes Locales': '🌐',
-            'Digitalización Aplicada a los Sectores Productivos GM': '📱',
-            'Aplicaciones Ofimáticas': '📄',
-            'Itinerario Personal para la Empleabilidad I': '🎯',
-            'Montaje y Mantenimiento de Equipo': '🔧',
-            'Sostenibilidad Aplicada al Sistema Productivo': '🌱'
-        };
-
-        // Estado de la aplicación
-        let state = {
-            showAbbreviations: false,
-            showColors: false,
-            compactView: false,
-            devMode: false,
-            shakeMode: false,
-            currentTheme: '',
-            stickyNotes: new Map()
-        };
 
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
             createParticles();
-            renderSchedule();
-            setupEventListeners();
-            calculateStats();
+            initializeSchedule();
+            updateClock();
+            setInterval(updateClock, 1000);
             
-            // Animación de entrada
-            setTimeout(() => {
-                document.querySelector('.schedule-container').classList.add('slide-in');
-            }, 300);
+            // Configurar selector de temas
+            document.getElementById('themeSelector').addEventListener('change', function() {
+                changeTheme(this.value);
+            });
+            
+            // Configurar responsividad del reloj
+            window.addEventListener('resize', handleResize);
+            handleResize();
         });
 
         // Crear partículas de fondo
@@ -640,166 +802,271 @@
             
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particle.classList.add('particle');
+                
+                // Posición aleatoria
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Tamaño aleatorio
+                const size = Math.random() * 3 + 1;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Retraso de animación aleatorio
+                particle.style.animationDelay = `${Math.random() * 20}s`;
+                
                 particlesContainer.appendChild(particle);
             }
         }
 
-        // Renderizar horario
-        function renderSchedule() {
+        // Inicializar horario
+        function initializeSchedule() {
             const table = document.getElementById('scheduleTable');
-            table.innerHTML = '';
-
+            
             // Crear encabezado
-            const headerRow = table.insertRow();
-            const days = ['⏰ Horario', '📅 Lunes', '📅 Martes', '📅 Miércoles', '📅 Jueves', '📅 Viernes'];
-            
-            days.forEach(day => {
-                const th = document.createElement('th');
-                th.textContent = day;
-                headerRow.appendChild(th);
+            let headerRow = '<tr><th>Hora</th>';
+            scheduleData.days.forEach(day => {
+                headerRow += `<th>${day}</th>`;
             });
-
-            // Crear filas de datos
-            scheduleData.forEach((rowData, index) => {
-                const row = table.insertRow();
-                if (index === 3) row.classList.add('break-row');
-
-                rowData.forEach((cellData, cellIndex) => {
-                    const cell = row.insertCell();
+            headerRow += '</tr>';
+            
+            // Crear filas de horario
+            let tableBody = '';
+            scheduleData.timeSlots.forEach((timeSlot, timeIndex) => {
+                let isBreak = timeSlot.includes('12:00');
+                let rowClass = isBreak ? 'break-row' : '';
+                
+                tableBody += `<tr class="${rowClass}">`;
+                tableBody += `<td class="time-cell">${timeSlot}</td>`;
+                
+                scheduleData.days.forEach((day, dayIndex) => {
+                    const subject = scheduleData.subjects[dayIndex][timeIndex];
+                    const subjectClass = `subject-${subject.toLowerCase()}`;
+                    const subjectName = scheduleData.subjectNames[subject] || subject;
                     
-                    if (cellIndex === 0) {
-                        cell.classList.add('time-cell');
-                        cell.textContent = cellData;
-                    } else {
-                        let displayText = cellData;
-                        
-                        if (state.showAbbreviations && subjectAbbreviations[cellData]) {
-                            displayText = subjectAbbreviations[cellData];
-                        }
-                        
-                        if (cellData !== 'DESCANSO' && subjectIcons[cellData]) {
-                            displayText = subjectIcons[cellData] + ' ' + displayText;
-                        }
-                        
-                        cell.innerHTML = displayText;
-                        
-                        if (state.showColors && subjectColors[cellData]) {
-                            cell.classList.add(subjectColors[cellData]);
-                        }
-                        
-                        if (state.devMode) {
-                            cell.setAttribute('data-debug', `[${index},${cellIndex}]`);
-                        }
-                        
-                        // Event listener para notas adhesivas
-                        cell.addEventListener('dblclick', (e) => addStickyNote(e, cell));
-                    }
+                    tableBody += `<td class="${subjectClass}" title="${subjectName}">${subject}</td>`;
                 });
+                
+                tableBody += '</tr>';
             });
-
-            // Aplicar vista compacta si está activada
-            if (state.compactView) {
-                table.style.fontSize = '0.8rem';
-            } else {
-                table.style.fontSize = '';
-            }
+            
+            table.innerHTML = headerRow + tableBody;
+            
+            // Actualizar estadísticas
+            updateStats();
         }
 
-        // Configurar event listeners
-        function setupEventListeners() {
-            // Cambio de tema
-            document.getElementById('themeSelector').addEventListener('change', function(e) {
-                changeTheme(e.target.value);
+        // Actualizar reloj
+        function updateClock() {
+            const now = new Date();
+            
+            // Actualizar hora y fecha
+            document.getElementById('clockTime').textContent = formatTime(now);
+            document.getElementById('clockDate').textContent = formatDate(now);
+            
+            // Obtener información de la clase actual
+            const currentClassInfo = getCurrentClassInfo(now);
+            
+            // Actualizar estado de la clase
+            document.getElementById('classIcon').textContent = currentClassInfo.icon;
+            document.getElementById('currentClass').textContent = currentClassInfo.status;
+            document.getElementById('countdown').textContent = currentClassInfo.countdown;
+            document.getElementById('timeRemaining').textContent = currentClassInfo.timeRemaining;
+            document.getElementById('funnyMessage').textContent = currentClassInfo.funnyMessage;
+            
+            // Actualizar barra de progreso
+            document.getElementById('progressFill').style.width = `${currentClassInfo.progress}%`;
+            
+            // Resaltar celda actual en la tabla
+            highlightCurrentTime(now);
+        }
+
+        // Formatear hora
+        function formatTime(date) {
+            return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+
+        // Formatear fecha
+        function formatDate(date) {
+            return date.toLocaleDateString('es-ES', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
             });
-
-            // Shake detection
-            if (window.DeviceMotionEvent) {
-                let lastX, lastY, lastZ;
-                let moveCounter = 0;
-
-                window.addEventListener('devicemotion', function(e) {
-                    if (!state.shakeMode) return;
-
-                    const acceleration = e.accelerationIncludingGravity;
-                    const curX = acceleration.x;
-                    const curY = acceleration.y;
-                    const curZ = acceleration.z;
-
-                    if (lastX !== undefined) {
-                        const deltaX = Math.abs(lastX - curX);
-                        const deltaY = Math.abs(lastY - curY);
-                        const deltaZ = Math.abs(lastZ - curZ);
-
-                        if ((deltaX + deltaY + deltaZ) > 15) {
-                            moveCounter++;
-                            if (moveCounter > 2) {
-                                randomTheme();
-                                moveCounter = 0;
-                            }
-                        }
-                    }
-
-                    lastX = curX;
-                    lastY = curY;
-                    lastZ = curZ;
-                });
-            }
         }
 
-        // Funciones de control
-        function toggleAbbreviations() {
-            state.showAbbreviations = !state.showAbbreviations;
-            renderSchedule();
-            updateButtonState('toggleAbbreviations');
-        }
-
-        function toggleColors() {
-            state.showColors = !state.showColors;
-            renderSchedule();
-            updateButtonState('toggleColors');
-        }
-
-        function toggleCompactView() {
-            state.compactView = !state.compactView;
-            renderSchedule();
-            updateButtonState('toggleCompactView');
-        }
-
-        function toggleDevMode() {
-            state.devMode = !state.devMode;
-            document.body.classList.toggle('dev-mode', state.devMode);
-            renderSchedule();
-            updateButtonState('toggleDevMode');
+        // Obtener información de la clase actual
+        function getCurrentClassInfo(now) {
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+            const currentDay = now.getDay() - 1; // 0 = Lunes, 4 = Viernes
             
-            if (state.devMode) {
-                console.log('🚀 Developer Mode Activated');
-                console.log('Schedule State:', state);
-                console.log('Schedule Data:', scheduleData);
+            // Si es fin de semana
+            if (currentDay < 0 || currentDay > 4) {
+                return {
+                    icon: '🎉',
+                    status: '¡Es fin de semana!',
+                    countdown: '--:--',
+                    timeRemaining: 'Disfruta tu tiempo libre',
+                    funnyMessage: getRandomFunnyMessage(),
+                    progress: 0
+                };
             }
-        }
-
-        function shakeModeToggle() {
-            state.shakeMode = !state.shakeMode;
-            updateButtonState('shakeModeToggle');
             
-            if (state.shakeMode) {
-                showNotification('🎲 Shake Mode activado - ¡Agita tu dispositivo!', 'info');
-            } else {
-                showNotification('🎲 Shake Mode desactivado', 'info');
-            }
-        }
-
-        function updateButtonState(functionName) {
-            const buttons = document.querySelectorAll('.btn');
-            buttons.forEach(btn => {
-                if (btn.onclick && btn.onclick.toString().includes(functionName)) {
-                    btn.classList.toggle('active');
+            // Buscar la clase actual o la siguiente
+            for (let i = 0; i < scheduleData.timeSlots.length; i++) {
+                const timeSlot = scheduleData.timeSlots[i];
+                const [startTime, endTime] = timeSlot.split(' - ');
+                
+                const startMinutes = timeToMinutes(startTime);
+                const endMinutes = timeToMinutes(endTime);
+                
+                // Si estamos en medio de una clase
+                if (currentTime >= startMinutes && currentTime < endMinutes) {
+                    const subject = scheduleData.subjects[currentDay][i];
+                    const subjectName = scheduleData.subjectNames[subject] || subject;
+                    const progress = ((currentTime - startMinutes) / (endMinutes - startMinutes)) * 100;
+                    
+                    return {
+                        icon: scheduleData.subjectIcons[subject] || '📚',
+                        status: `En clase: ${subjectName}`,
+                        countdown: formatCountdown(endMinutes - currentTime),
+                        timeRemaining: `Termina a las ${endTime}`,
+                        funnyMessage: getRandomFunnyMessage(),
+                        progress: progress
+                    };
                 }
+                
+                // Si es antes de la primera clase
+                if (i === 0 && currentTime < startMinutes) {
+                    return {
+                        icon: '🌅',
+                        status: 'Aún no empiezan las clases',
+                        countdown: formatCountdown(startMinutes - currentTime),
+                        timeRemaining: `Primera clase a las ${startTime}`,
+                        funnyMessage: getRandomFunnyMessage(),
+                        progress: 0
+                    };
+                }
+                
+                // Si es después de la última clase
+                if (i === scheduleData.timeSlots.length - 1 && currentTime >= endMinutes) {
+                    return {
+                        icon: '🏁',
+                        status: 'Clases terminadas por hoy',
+                        countdown: '--:--',
+                        timeRemaining: '¡Buen trabajo!',
+                        funnyMessage: getRandomFunnyMessage(),
+                        progress: 100
+                    };
+                }
+                
+                // Si estamos entre clases
+                if (i < scheduleData.timeSlots.length - 1 && currentTime >= endMinutes) {
+                    const nextStartTime = scheduleData.timeSlots[i + 1].split(' - ')[0];
+                    const nextStartMinutes = timeToMinutes(nextStartTime);
+                    
+                    return {
+                        icon: '⏳',
+                        status: 'Entre clases',
+                        countdown: formatCountdown(nextStartMinutes - currentTime),
+                        timeRemaining: `Siguiente clase a las ${nextStartTime}`,
+                        funnyMessage: getRandomFunnyMessage(),
+                        progress: 0
+                    };
+                }
+            }
+            
+            // Caso por defecto
+            return {
+                icon: '❓',
+                status: 'Estado desconocido',
+                countdown: '--:--',
+                timeRemaining: 'Consulta tu horario',
+                funnyMessage: getRandomFunnyMessage(),
+                progress: 0
+            };
+        }
+
+        // Convertir tiempo a minutos
+        function timeToMinutes(time) {
+            const [hours, minutes] = time.split(':').map(Number);
+            return hours * 60 + minutes;
+        }
+
+        // Formatear cuenta regresiva
+        function formatCountdown(minutes) {
+            if (minutes <= 0) return '00:00';
+            
+            const hours = Math.floor(minutes / 60);
+            const mins = Math.floor(minutes % 60);
+            
+            if (hours > 0) {
+                return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+            } else {
+                return `${mins.toString().padStart(2, '0')}:${Math.floor((minutes % 1) * 60).toString().padStart(2, '0')}`;
+            }
+        }
+
+        // Obtener mensaje divertido aleatorio
+        function getRandomFunnyMessage() {
+            return funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+        }
+
+        // Resaltar hora actual en la tabla
+        function highlightCurrentTime(now) {
+            // Quitar resaltado anterior
+            document.querySelectorAll('.current-time-cell').forEach(cell => {
+                cell.classList.remove('current-time-cell');
             });
+            
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+            const currentDay = now.getDay() - 1;
+            
+            // Si es fin de semana, no resaltar nada
+            if (currentDay < 0 || currentDay > 4) return;
+            
+            // Buscar la celda actual
+            for (let i = 0; i < scheduleData.timeSlots.length; i++) {
+                const timeSlot = scheduleData.timeSlots[i];
+                const [startTime, endTime] = timeSlot.split(' - ');
+                
+                const startMinutes = timeToMinutes(startTime);
+                const endMinutes = timeToMinutes(endTime);
+                
+                if (currentTime >= startMinutes && currentTime < endMinutes) {
+                    // Encontrar la celda correspondiente en la tabla
+                    const rows = document.querySelectorAll('#scheduleTable tr');
+                    if (rows.length > i + 1) {
+                        const cells = rows[i + 1].querySelectorAll('td');
+                        if (cells.length > currentDay + 1) {
+                            cells[currentDay + 1].classList.add('current-time-cell');
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        // Actualizar estadísticas
+        function updateStats() {
+            let totalHours = 0;
+            let totalSubjects = new Set();
+            
+            scheduleData.subjects.forEach(day => {
+                day.forEach(subject => {
+                    if (subject !== 'LIBRE' && subject !== 'DESCANSO') {
+                        totalHours++;
+                        totalSubjects.add(subject);
+                    }
+                });
+            });
+            
+            document.getElementById('totalHours').textContent = totalHours;
+            document.getElementById('totalSubjects').textContent = totalSubjects.size;
+            document.getElementById('avgDaily').textContent = (totalHours / 5).toFixed(1);
+            document.getElementById('breakTime').textContent = '60';
         }
 
         // Cambiar tema
@@ -808,379 +1075,67 @@
             if (theme) {
                 document.body.classList.add(`theme-${theme}`);
             }
-            state.currentTheme = theme;
-            
-            // Recrear partículas con nuevo tema
-            document.getElementById('particles').innerHTML = '';
-            createParticles();
-            
-            showNotification(`🎨 Tema cambiado: ${getThemeName(theme)}`, 'success');
         }
 
-        function getThemeName(theme) {
-            const names = {
-                '': 'Futurista',
-                'university': 'Universidad',
-                'cyberpunk': 'Cyberpunk',
-                'retro': 'Retro 8-bit'
-            };
-            return names[theme] || 'Desconocido';
+        // Alternar reloj
+        function toggleClock() {
+            document.body.classList.toggle('clock-minimized');
         }
 
-        function randomTheme() {
-            const themes = ['', 'university', 'cyberpunk', 'retro'];
-            const randomTheme = themes[Math.floor(Math.random() * themes.length)];
-            changeTheme(randomTheme);
-            document.getElementById('themeSelector').value = randomTheme;
-            
-            // Efecto glitch temporal
-            document.querySelector('.schedule-container').classList.add('glitch');
-            setTimeout(() => {
-                document.querySelector('.schedule-container').classList.remove('glitch');
-            }, 2000);
+        // Manejar cambio de tamaño de ventana
+        function handleResize() {
+            if (window.innerWidth <= 768) {
+                document.body.classList.add('clock-minimized');
+            } else {
+                document.body.classList.remove('clock-minimized');
+            }
         }
 
-        // Mostrar estadísticas
+        // Funciones de los botones (placeholders)
+        function toggleAbbreviations() {
+            alert('Función en desarrollo: Mostrar/Ocultar abreviaturas');
+        }
+
+        function toggleColors() {
+            alert('Función en desarrollo: Alternar colores por materia');
+        }
+
+        function toggleCompactView() {
+            alert('Función en desarrollo: Vista compacta');
+        }
+
         function showStats() {
             const statsContainer = document.getElementById('statsContainer');
-            const isVisible = statsContainer.style.display !== 'none';
-            statsContainer.style.display = isVisible ? 'none' : 'grid';
-            
-            if (!isVisible) {
-                calculateStats();
-                animateStats();
-            }
+            statsContainer.style.display = statsContainer.style.display === 'none' ? 'grid' : 'none';
         }
 
-        function calculateStats() {
-            const subjects = new Set();
-            let totalClasses = 0;
-            
-            scheduleData.forEach(row => {
-                row.slice(1).forEach(cell => {
-                    if (cell && cell !== 'DESCANSO') {
-                        subjects.add(cell);
-                        totalClasses++;
-                    }
-                });
-            });
-            
-            document.getElementById('totalHours').textContent = Math.round(totalClasses * 0.9); // 55min por clase
-            document.getElementById('totalSubjects').textContent = subjects.size;
-            document.getElementById('avgDaily').textContent = Math.round(totalClasses / 5);
-            document.getElementById('breakTime').textContent = '30';
-        }
-
-        function animateStats() {
-            const statNumbers = document.querySelectorAll('.stat-number');
-            statNumbers.forEach((stat, index) => {
-                const finalValue = parseInt(stat.textContent);
-                stat.textContent = '0';
-                
-                setTimeout(() => {
-                    animateNumber(stat, 0, finalValue, 1000);
-                }, index * 200);
-            });
-        }
-
-        function animateNumber(element, start, end, duration) {
-            const startTime = performance.now();
-            
-            function update(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const current = Math.floor(start + (end - start) * easeOutCubic(progress));
-                
-                element.textContent = current;
-                
-                if (progress < 1) {
-                    requestAnimationFrame(update);
-                }
-            }
-            
-            requestAnimationFrame(update);
-        }
-
-        function easeOutCubic(t) {
-            return 1 - Math.pow(1 - t, 3);
-        }
-
-        // Notas adhesivas
-        function addStickyNote(event, cell) {
-            const noteText = prompt('📝 Añadir nota:');
-            if (!noteText) return;
-            
-            const note = document.createElement('div');
-            note.className = 'sticky-note';
-            note.textContent = noteText;
-            note.style.top = '5px';
-            note.style.right = '5px';
-            
-            // Botón para eliminar nota
-            const deleteBtn = document.createElement('span');
-            deleteBtn.textContent = '❌';
-            deleteBtn.style.position = 'absolute';
-            deleteBtn.style.top = '-5px';
-            deleteBtn.style.right = '-5px';
-            deleteBtn.style.cursor = 'pointer';
-            deleteBtn.style.fontSize = '0.7rem';
-            deleteBtn.onclick = (e) => {
-                e.stopPropagation();
-                note.remove();
-            };
-            
-            note.appendChild(deleteBtn);
-            cell.style.position = 'relative';
-            cell.appendChild(note);
-            
-            showNotification('📝 Nota añadida', 'success');
-        }
-
-        // Exportar horario
         function exportSchedule() {
-            const scheduleHTML = document.getElementById('scheduleContainer').outerHTML;
-            const blob = new Blob([`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Mi Horario Escolar</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; margin: 20px; }
-                        table { border-collapse: collapse; width: 100%; }
-                        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
-                        th { background-color: #f2f2f2; }
-                        .time-cell { background-color: #4CAF50; color: white; }
-                        .break-row td { background-color: #FFC107; }
-                    </style>
-                </head>
-                <body>
-                    <h1>📅 Mi Horario Escolar</h1>
-                    ${scheduleHTML}
-                    <p><small>Generado con EduSchedule Pro</small></p>
-                </body>
-                </html>
-            `], { type: 'text/html' });
-            
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'mi-horario.html';
-            a.click();
-            URL.revokeObjectURL(url);
-            
-            showNotification('📥 Horario exportado', 'success');
+            alert('Función en desarrollo: Exportar horario');
         }
 
-        // Generar código QR
+        function toggleDevMode() {
+            alert('Función en desarrollo: Modo desarrollador');
+        }
+
         function generateQR() {
-            const scheduleText = scheduleData.map(row => row.join(' | ')).join('\n');
-            const qrData = encodeURIComponent(scheduleText);
-            const qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${qrData}`;
-            
-            const modal = document.createElement('div');
-            modal.className = 'modal';
-            modal.style.display = 'flex';
-            modal.innerHTML = `
-                <div class="modal-content" style="text-align: center;">
-                    <h2>📱 Código QR del Horario</h2>
-                    <img src="${qrURL}" alt="QR Code" style="max-width: 100%; border-radius: 10px;">
-                    <p>Escanea con tu móvil para compartir</p>
-                    <button class="btn" onclick="this.closest('.modal').remove()">Cerrar</button>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) modal.remove();
-            });
-            
-            setTimeout(() => modal.remove(), 10000); // Auto-cerrar en 10s
+            alert('Función en desarrollo: Generar código QR');
         }
 
-        // Modo pantalla completa
+        function shakeModeToggle() {
+            alert('Función en desarrollo: Modo Shake');
+        }
+
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().then(() => {
-                    showNotification('🖥️ Modo pantalla completa activado', 'info');
-                    document.querySelector('.navbar').style.display = 'none';
-                    document.querySelector('.main-container').style.marginTop = '0';
-                });
+                document.documentElement.requestFullscreen();
             } else {
-                document.exitFullscreen().then(() => {
-                    showNotification('🖥️ Modo pantalla completa desactivado', 'info');
-                    document.querySelector('.navbar').style.display = 'block';
-                    document.querySelector('.main-container').style.marginTop = '100px';
-                });
+                document.exitFullscreen();
             }
-        }
-
-        // Sistema de notificaciones
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
-                color: white;
-                padding: 1rem 2rem;
-                border-radius: 10px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-                z-index: 3000;
-                transform: translateX(100%);
-                transition: transform 0.3s ease;
-                max-width: 300px;
-                backdrop-filter: blur(10px);
-            `;
-            notification.textContent = message;
-            
-            document.body.appendChild(notification);
-            
-            // Animación de entrada
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 100);
-            
-            // Auto-eliminar
-            setTimeout(() => {
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
-
-        // Modal de configuración
-        function openConfigModal() {
-            document.getElementById('configModal').style.display = 'flex';
         }
 
         function closeModal() {
             document.getElementById('configModal').style.display = 'none';
         }
-
-        // Efectos especiales para eventos
-        function triggerConfetti() {
-            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7'];
-            
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.style.cssText = `
-                    position: fixed;
-                    width: 10px;
-                    height: 10px;
-                    background: ${colors[Math.floor(Math.random() * colors.length)]};
-                    left: ${Math.random() * 100}%;
-                    top: -10px;
-                    z-index: 4000;
-                    border-radius: 50%;
-                    pointer-events: none;
-                    animation: confetti-fall ${Math.random() * 3 + 2}s linear forwards;
-                `;
-                
-                document.body.appendChild(confetti);
-                
-                setTimeout(() => confetti.remove(), 5000);
-            }
-        }
-
-        // Agregar estilos de animación para confetti
-        const confettiStyles = document.createElement('style');
-        confettiStyles.textContent = `
-            @keyframes confetti-fall {
-                to {
-                    transform: translateY(100vh) rotate(720deg);
-                }
-            }
-        `;
-        document.head.appendChild(confettiStyles);
-
-        // Easter eggs
-        let konamiCode = [];
-        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
-
-        document.addEventListener('keydown', function(e) {
-            konamiCode.push(e.code);
-            konamiCode = konamiCode.slice(-10);
-            
-            if (konamiCode.join(',') === konamiSequence.join(',')) {
-                triggerConfetti();
-                showNotification('🎉 ¡Código Konami activado!', 'success');
-                document.querySelector('.schedule-container').classList.add('glow');
-                setTimeout(() => {
-                    document.querySelector('.schedule-container').classList.remove('glow');
-                }, 3000);
-            }
-        });
-
-        // Detector de viernes para confetti automático
-        function checkFridayBonus() {
-            const today = new Date();
-            if (today.getDay() === 5 && today.getHours() > 14) { // Viernes después de las 2 PM
-                triggerConfetti();
-                showNotification('🎉 ¡Feliz viernes! Fin de semana a la vista', 'success');
-            }
-        }
-
-        // Auto-save de preferencias
-        function savePreferences() {
-            const preferences = {
-                theme: state.currentTheme,
-                showAbbreviations: state.showAbbreviations,
-                showColors: state.showColors,
-                compactView: state.compactView
-            };
-            localStorage.setItem('eduSchedulePrefs', JSON.stringify(preferences));
-        }
-
-        function loadPreferences() {
-            const saved = localStorage.getItem('eduSchedulePrefs');
-            if (saved) {
-                const prefs = JSON.parse(saved);
-                if (prefs.theme) changeTheme(prefs.theme);
-                if (prefs.showAbbreviations) toggleAbbreviations();
-                if (prefs.showColors) toggleColors();
-                if (prefs.compactView) toggleCompactView();
-            }
-        }
-
-        // Auto-guardar preferencias cuando cambie el estado
-        setInterval(savePreferences, 5000);
-
-        // Cargar preferencias al inicio
-        setTimeout(loadPreferences, 500);
-
-        // Check para bonus de viernes
-        setTimeout(checkFridayBonus, 2000);
-
-        // Efectos de hover mejorados con JavaScript
-        document.addEventListener('DOMContentLoaded', function() {
-            const scheduleTable = document.getElementById('scheduleTable');
-            
-            scheduleTable.addEventListener('mouseover', function(e) {
-                if (e.target.tagName === 'TD' && !e.target.classList.contains('time-cell')) {
-                    e.target.style.transform = 'scale(1.05)';
-                    e.target.style.zIndex = '100';
-                }
-            });
-            
-            scheduleTable.addEventListener('mouseout', function(e) {
-                if (e.target.tagName === 'TD') {
-                    e.target.style.transform = '';
-                    e.target.style.zIndex = '';
-                }
-            });
-        });
-
-        console.log(`
-        ███████╗██████╗ ██╗   ██╗███████╗ ██████╗██╗  ██╗███████╗██████╗ ██╗   ██╗██╗     ███████╗
-        ██╔════╝██╔══██╗██║   ██║██╔════╝██╔════╝██║  ██║██╔════╝██╔══██╗██║   ██║██║     ██╔════╝
-        █████╗  ██║  ██║██║   ██║███████╗██║     ███████║█████╗  ██║  ██║██║   ██║██║     █████╗  
-        ██╔══╝  ██║  ██║██║   ██║╚════██║██║     ██╔══██║██╔══╝  ██║  ██║██║   ██║██║     ██╔══╝  
-        ███████╗██████╔╝╚██████╔╝███████║╚██████╗██║  ██║███████╗██████╔╝╚██████╔╝███████╗███████╗
-        ╚══════╝╚═════╝  ╚═════╝ ╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝ ╚══════╝╚══════╝
-                                         PRO v2.0 🚀
-        Desarrollado por Angelpro09_Dev & Claude
-        `);
     </script>
 </body>
 </html>
