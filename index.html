@@ -672,7 +672,7 @@
             margin-top: 1rem;
             flex-wrap: wrap;
         }
-        .add-exam-form select, .add-exam-form input, .add-exam-btn, .download-json-btn {
+        .add-exam-form select, .add-exam-form input, .add-exam-btn, .update-json-btn {
             padding: 0.5rem;
             border-radius: 5px;
             border: 1px solid var(--border-glass);
@@ -684,14 +684,14 @@
             flex: 1;
             min-width: 150px;
         }
-        .add-exam-btn, .download-json-btn {
+        .add-exam-btn, .update-json-btn {
             background: var(--secondary);
             color: white;
             border: none;
             cursor: pointer;
             white-space: nowrap;
         }
-        .add-exam-btn:hover, .download-json-btn:hover {
+        .add-exam-btn:hover, .update-json-btn:hover {
             background: var(--primary);
         }
     </style>
@@ -744,7 +744,7 @@
                 </select>
                 <input type="date" id="examDate">
                 <button class="btn add-exam-btn" onclick="addExam()">Agregar Examen</button>
-                <button class="btn download-json-btn" onclick="downloadExamsJSON()">Descargar exams.json</button>
+                <button class="btn update-json-btn" onclick="downloadExamsJSON()">Actualizar Exámenes</button>
             </div>
         </div>
 
@@ -944,7 +944,7 @@
             pomodoroInterval: null,
             pomodoroTime: 25 * 60, // 25 minutos en segundos
             pomodoroRunning: false,
-            exams: [] // Nuevo estado para almacenar exámenes
+            exams: [] // Estado para almacenar exámenes en memoria
         };
 
         // Inicialización
@@ -972,45 +972,25 @@
                 const response = await fetch('exams.json');
                 if (!response.ok) {
                     console.warn('No se encontró el archivo exams.json o hubo un error:', response.status);
-                    loadExamsFromLocalStorage(); // Si falla, carga desde localStorage
+                    // Si no existe o hay error, inicializa con array vacío
+                    state.exams = [];
+                    console.log('Inicializando con lista de exámenes vacía.');
                     return;
                 }
                 const examsData = await response.json();
                 if (Array.isArray(examsData)) {
-                    state.exams = examsData;
-                    saveExamsToLocalStorage(); // Guarda en localStorage para persistencia
+                    state.exams = examsData; // Carga los exámenes en el estado
                     console.log('Exámenes cargados desde exams.json');
                 } else {
-                    console.error('El archivo exams.json no contiene un array válido.');
-                    loadExamsFromLocalStorage(); // Carga respaldo
+                    console.error('El archivo exams.json no contiene un array válido. Inicializando vacío.');
+                    state.exams = [];
                 }
             } catch (error) {
                 console.error('Error al cargar exams.json:', error);
-                loadExamsFromLocalStorage(); // Si falla por cualquier otro motivo, carga desde localStorage
+                state.exams = []; // Inicializa con array vacío en caso de error
             }
             renderExamList(); // Actualiza la UI
             updateNextExamCountdown(); // Actualiza el contador de exámenes
-        }
-
-        // Función para cargar exámenes desde localStorage (respaldo)
-        function loadExamsFromLocalStorage() {
-            const saved = localStorage.getItem('eduScheduleExams');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    if (Array.isArray(parsed)) {
-                        state.exams = parsed;
-                        console.log('Exámenes cargados desde localStorage.');
-                    }
-                } catch (e) {
-                    console.error('Error al parsear exámenes de localStorage:', e);
-                }
-            }
-        }
-
-        // Función para guardar exámenes en localStorage
-        function saveExamsToLocalStorage() {
-            localStorage.setItem('eduScheduleExams', JSON.stringify(state.exams));
         }
 
         // Función para renderizar la lista de exámenes en la UI
@@ -1053,11 +1033,10 @@
             }
 
             const newExam = { subject, date };
-            state.exams.push(newExam);
-            saveExamsToLocalStorage(); // Actualiza localStorage
+            state.exams.push(newExam); // Añade al array en memoria
             renderExamList(); // Actualiza la UI
             updateNextExamCountdown(); // Actualiza el contador
-            showNotification('✅ Examen añadido correctamente.', 'success');
+            showNotification('✅ Examen añadido a la lista actual.', 'success');
 
             // Limpiar formulario
             subjectSelect.value = '';
@@ -1066,17 +1045,17 @@
 
         // Función para eliminar un examen
         function deleteExam(index) {
-            state.exams.splice(index, 1); // Elimina el examen del array
-            saveExamsToLocalStorage(); // Actualiza localStorage
+            state.exams.splice(index, 1); // Elimina del array en memoria
             renderExamList(); // Actualiza la UI
             updateNextExamCountdown(); // Actualiza el contador
-            showNotification('🗑️ Examen eliminado.', 'info');
+            showNotification('🗑️ Examen eliminado de la lista actual.', 'info');
         }
 
         // Función para descargar el archivo exams.json con los exámenes actuales
+        // Ahora se llama "Actualizar Exámenes" pero sigue descargando el archivo
         function downloadExamsJSON() {
             const dataStr = JSON.stringify(state.exams, null, 2); // Formato legible
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            const dataUri = 'application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
 
             const exportFileDefaultName = 'exams.json';
 
@@ -1084,7 +1063,7 @@
             linkElement.setAttribute('href', dataUri);
             linkElement.setAttribute('download', exportFileDefaultName);
             linkElement.click();
-            showNotification('📥 Archivo exams.json descargado.', 'info');
+            showNotification('📥 Archivo exams.json actualizado descargado.', 'info');
         }
 
         // Función para rellenar el selector de materias
@@ -1862,7 +1841,7 @@
             }
         }
 
-        // Auto-save de preferencias
+        // Auto-save de preferencias (solo tema, abreviaturas, etc., NO exámenes)
         function savePreferences() {
             const preferences = {
                 theme: state.currentTheme,
@@ -1884,7 +1863,7 @@
             }
         }
 
-        // Auto-guardar preferencias cuando cambie el estado
+        // Auto-guardar preferencias cuando cambie el estado (solo preferencias, no exámenes)
         setInterval(savePreferences, 5000);
         // Cargar preferencias al inicio
         setTimeout(loadPreferences, 500);
@@ -1915,7 +1894,7 @@
         ██╔══╝  ██║  ██║██║   ██║╚════██║██║     ██╔══██║██╔══╝  ██║  ██║██║   ██║██║     ██╔══╝  
         ███████╗██████╔╝╚██████╔╝███████║╚██████╗██║  ██║███████╗██████╔╝╚██████╔╝███████╗███████╗
         ╚══════╝╚═════╝  ╚═════╝ ╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝ ╚══════╝╚══════╝
-                                         PRO v2.5 🚀
+                                         PRO v2.0 🚀
         Desarrollado por Angelpro09_Dev & Claude
         `);
     </script>
