@@ -57,42 +57,6 @@
             --shadow-glow: 0 8px 32px rgba(255, 107, 53, 0.4);
             font-family: 'Fira Code', monospace !important;
         }
-        .theme-forest {
-            --primary: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
-            --secondary: linear-gradient(135deg, #8bc34a 0%, #2e7d32 100%);
-            --accent: linear-gradient(135deg, #cddc39 0%, #8bc34a 100%);
-            --bg-main: #1b5e20;
-            --bg-glass: rgba(46, 125, 50, 0.2);
-            --bg-card: rgba(139, 195, 74, 0.15);
-            --text-primary: #e8f5e9;
-            --text-secondary: #a5d6a7;
-            --border-glass: rgba(139, 195, 74, 0.3);
-            --shadow-glow: 0 8px 32px rgba(76, 175, 80, 0.4);
-        }
-        .theme-ocean {
-            --primary: linear-gradient(135deg, #0288d1 0%, #00bcd4 100%);
-            --secondary: linear-gradient(135deg, #00acc1 0%, #0288d1 100%);
-            --accent: linear-gradient(135deg, #26c6da 0%, #00acc1 100%);
-            --bg-main: #006064;
-            --bg-glass: rgba(2, 136, 209, 0.2);
-            --bg-card: rgba(0, 188, 212, 0.15);
-            --text-primary: #e0f7fa;
-            --text-secondary: #80deea;
-            --border-glass: rgba(0, 188, 212, 0.3);
-            --shadow-glow: 0 8px 32px rgba(0, 188, 212, 0.4);
-        }
-        .theme-sunset {
-            --primary: linear-gradient(135deg, #f57c00 0%, #ff9800 100%);
-            --secondary: linear-gradient(135deg, #ffa726 0%, #f57c00 100%);
-            --accent: linear-gradient(135deg, #ffb74d 0%, #ffa726 100%);
-            --bg-main: #ff6f00;
-            --bg-glass: rgba(245, 124, 0, 0.2);
-            --bg-card: rgba(255, 152, 0, 0.15);
-            --text-primary: #fff3e0;
-            --text-secondary: #ffcc80;
-            --border-glass: rgba(255, 152, 0, 0.3);
-            --shadow-glow: 0 8px 32px rgba(255, 152, 0, 0.4);
-        }
         * {
             margin: 0;
             padding: 0;
@@ -644,7 +608,8 @@
             color: #00ff41;
             opacity: 0.7;
         }
-        /* Sección de Exámenes */
+
+        /* Estilo para la sección de exámenes */
         .exams-container {
             background: var(--bg-card);
             backdrop-filter: blur(20px);
@@ -676,6 +641,7 @@
         .exam-list {
             list-style-type: none;
             padding: 0;
+            margin-bottom: 1rem;
         }
         .exam-item {
             background: var(--bg-glass);
@@ -704,24 +670,28 @@
             display: flex;
             gap: 0.5rem;
             margin-top: 1rem;
+            flex-wrap: wrap;
         }
-        .add-exam-form input, .add-exam-form select {
-            flex: 1;
+        .add-exam-form select, .add-exam-form input, .add-exam-btn, .download-json-btn {
             padding: 0.5rem;
             border-radius: 5px;
             border: 1px solid var(--border-glass);
             background: var(--bg-glass);
             color: var(--text-primary);
+            font-family: inherit;
         }
-        .add-exam-btn {
+        .add-exam-form select, .add-exam-form input {
+            flex: 1;
+            min-width: 150px;
+        }
+        .add-exam-btn, .download-json-btn {
             background: var(--secondary);
             color: white;
             border: none;
-            border-radius: 5px;
-            padding: 0.5rem 1rem;
             cursor: pointer;
+            white-space: nowrap;
         }
-        .add-exam-btn:hover {
+        .add-exam-btn:hover, .download-json-btn:hover {
             background: var(--primary);
         }
     </style>
@@ -739,9 +709,6 @@
                     <option value="university">🏛️ Universidad</option>
                     <option value="cyberpunk">🌆 Cyberpunk</option>
                     <option value="retro">👾 Retro</option>
-                    <option value="forest">🌲 Bosque</option>
-                    <option value="ocean">🌊 Océano</option>
-                    <option value="sunset">🌅 Atardecer</option>
                 </select>
                 <button class="btn btn-neon" onclick="toggleFullscreen()">⛶</button>
             </div>
@@ -763,7 +730,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Sección de Exámenes -->
         <div class="exams-container fade-in" id="examsContainer">
             <div class="exams-title">📝 Próximos Exámenes</div>
@@ -776,12 +743,24 @@
                     <!-- Opciones generadas por JS -->
                 </select>
                 <input type="date" id="examDate">
-                <button class="btn add-exam-btn" onclick="addExam()">Agregar</button>
+                <button class="btn add-exam-btn" onclick="addExam()">Agregar Examen</button>
+                <button class="btn download-json-btn" onclick="downloadExamsJSON()">Descargar exams.json</button>
             </div>
         </div>
 
         <!-- Panel de herramientas -->
         <div class="tools-panel fade-in">
+            <!-- Temporizador Pomodoro -->
+            <div class="tool-card">
+                <div class="tool-title">🍅 Temporizador Pomodoro</div>
+                <div class="pomodoro-timer" id="pomodoroTimer">25:00</div>
+                <div class="pomodoro-controls">
+                    <button class="btn" onclick="startPomodoro()">▶️ Iniciar</button>
+                    <button class="btn" onclick="pausePomodoro()">⏸️ Pausar</button>
+                    <button class="btn" onclick="resetPomodoro()">🔄 Reiniciar</button>
+                </div>
+                <div class="progress-text" id="pomodoroStatus">Tiempo de estudio: 25 min</div>
+            </div>
             <!-- Contador hasta el fin de semana -->
             <div class="tool-card">
                 <div class="tool-title">📅 Días hasta el fin de semana</div>
@@ -800,14 +779,7 @@
                     <button class="btn" onclick="generateNewQuestion()" style="margin-top: 1rem; width: 100%;">Nueva Pregunta</button>
                 </div>
             </div>
-            <!-- Contador de tiempo hasta el próximo examen -->
-            <div class="tool-card">
-                <div class="tool-title">⏱️ Tiempo hasta el próximo examen</div>
-                <div class="weekend-countdown" id="nextExamCountdown">No hay exámenes registrados</div>
-                <div class="funny-message" id="nextExamSubject"></div>
-            </div>
         </div>
-        
         <!-- Panel de Control -->
         <div class="control-panel fade-in">
             <div class="controls-grid">
@@ -924,111 +896,32 @@
             "Tiempo de planificar la conquista académica 🗺️",
             "¡Aprovecha para organizar tus apuntes! 📝"
         ];
-        // Preguntas para los mini juegos
+        // Preguntas para el mini juego
         const quizQuestions = [
-            // Preguntas de Programación
             {
-                question: "¿Cuál de los siguientes NO es un lenguaje de programación de bajo nivel?",
-                options: ["Assembly", "C", "Python", "Firmware"],
+                question: "¿Qué protocolo se utiliza principalmente para la transmisión de correos electrónicos?",
+                options: ["HTTP", "FTP", "SMTP", "TCP"],
                 answer: 2
             },
             {
-                question: "¿Qué estructura de datos sigue el principio FIFO (First In, First Out)?",
-                options: ["Pila (Stack)", "Cola (Queue)", "Árbol", "Grafo"],
+                question: "¿Qué significa la sigla RAM?",
+                options: ["Random Access Memory", "Read Access Memory", "Rapid Access Memory", "Random Allocation Memory"],
+                answer: 0
+            },
+            {
+                question: "¿Qué lenguaje de programación se considera el 'padre' de muchos lenguajes modernos?",
+                options: ["Python", "C", "Java", "Assembly"],
+                answer: 1
+            },
+            {
+                question: "¿Qué es un sistema operativo?",
+                options: ["Un programa de edición de texto", "Una interfaz entre el hardware y el usuario", "Un tipo de memoria", "Un dispositivo de almacenamiento"],
                 answer: 1
             },
             {
                 question: "¿Qué significa HTML?",
                 options: ["HyperText Markup Language", "HighTech Modern Language", "Hyper Transfer Markup Language", "HighText Machine Language"],
                 answer: 0
-            },
-            {
-                question: "¿Qué protocolo se utiliza para la transmisión segura de datos en la web (HTTPS)?",
-                options: ["FTP", "SSL/TLS", "SMTP", "POP3"],
-                answer: 1
-            },
-            {
-                question: "¿Qué es un 'bug' en programación?",
-                options: ["Un error en el código", "Un tipo de hardware", "Un lenguaje de programación", "Un tipo de red"],
-                answer: 0
-            },
-            // Preguntas de Redes
-            {
-                question: "¿Cuál es la máscara de subred por defecto para una red de clase C?",
-                options: ["255.0.0.0", "255.255.0.0", "255.255.255.0", "255.255.255.255"],
-                answer: 2
-            },
-            {
-                question: "¿Qué dispositivo opera en la capa 3 del modelo OSI?",
-                options: ["Hub", "Switch", "Router", "Repetidor"],
-                answer: 2
-            },
-            {
-                question: "¿Cuál es el puerto por defecto para el protocolo HTTP?",
-                options: ["21", "22", "80", "443"],
-                answer: 2
-            },
-            {
-                question: "¿Qué comando se usa para probar la conectividad de red en Windows?",
-                options: ["ping", "ls", "cd", "dir"],
-                answer: 0
-            },
-            {
-                question: "¿Qué significa IP en redes?",
-                options: ["Internet Protocol", "Internal Processing", "Information Processing", "Integrated Platform"],
-                answer: 0
-            },
-            // Preguntas de Hardware
-            {
-                question: "¿Qué componente del PC se encarga de procesar los datos?",
-                options: ["RAM", "CPU", "GPU", "SSD"],
-                answer: 1
-            },
-            {
-                question: "¿Qué tipo de memoria es volátil?",
-                options: ["ROM", "SSD", "HDD", "RAM"],
-                answer: 3
-            },
-            {
-                question: "¿Cuál es la unidad de medida de la velocidad del procesador?",
-                options: ["Bytes", "Hertz (Hz)", "Bits", "Amperios"],
-                answer: 1
-            },
-            {
-                question: "¿Qué significa SSD?",
-                options: ["Solid State Drive", "Super Speed Drive", "Simple Storage Device", "Serial System Disk"],
-                answer: 0
-            },
-            {
-                question: "¿Qué conector se usa comúnmente para conectar discos duros internos?",
-                options: ["USB", "HDMI", "SATA", "PS/2"],
-                answer: 2
-            },
-            // Preguntas de Ofimática
-            {
-                question: "¿Qué función de Excel suma un rango de celdas?",
-                options: ["SUMA", "SUM", "ADD", "TOTAL"],
-                answer: 1
-            },
-            {
-                question: "¿En qué pestaña de Microsoft Word se encuentra la opción para insertar tablas?",
-                options: ["Inicio", "Insertar", "Diseño", "Referencias"],
-                answer: 1
-            },
-            {
-                question: "¿Qué es PowerPoint?",
-                options: ["Un procesador de textos", "Una hoja de cálculo", "Una herramienta de presentaciones", "Un editor de imágenes"],
-                answer: 2
-            },
-            {
-                question: "¿Qué atajo de teclado se usa para guardar un documento en la mayoría de programas?",
-                options: ["Ctrl + N", "Ctrl + S", "Ctrl + O", "Ctrl + P"],
-                answer: 1
-            },
-            {
-                question: "¿Qué extensión tiene un archivo de Excel?",
-                options: [".docx", ".pptx", ".xlsx", ".pdf"],
-                answer: 2
             }
         ];
 
@@ -1044,7 +937,8 @@
             currentClassCell: null,
             pomodoroInterval: null,
             pomodoroTime: 25 * 60, // 25 minutos en segundos
-            pomodoroRunning: false
+            pomodoroRunning: false,
+            exams: [] // Nuevo estado para almacenar exámenes
         };
 
         // Inicialización
@@ -1056,15 +950,168 @@
             updateClock(); // Iniciar el reloj
             setInterval(updateClock, 1000); // Actualizar cada segundo
             updateWeekendCountdown();
-            loadExamsFromStorage(); // Cargar exámenes
-            populateSubjectSelector(); // Rellenar el selector de materias para exámenes
-            updateNextExamCountdown(); // Iniciar contador de exámenes
             generateNewQuestion();
+            loadExamsFromJSON(); // <-- Carga los exámenes desde exams.json
+            populateSubjectSelector(); // Rellena el selector para añadir exámenes
             // Animación de entrada
             setTimeout(() => {
                 document.querySelector('.schedule-container').classList.add('slide-in');
             }, 300);
         });
+
+        // Función para cargar exámenes desde un archivo exams.json local
+        async function loadExamsFromJSON() {
+            try {
+                // Intenta leer el archivo exams.json
+                const response = await fetch('exams.json');
+                if (!response.ok) {
+                    console.warn('No se encontró el archivo exams.json o hubo un error:', response.status);
+                    loadExamsFromLocalStorage(); // Si falla, carga desde localStorage
+                    return;
+                }
+                const examsData = await response.json();
+                if (Array.isArray(examsData)) {
+                    state.exams = examsData;
+                    saveExamsToLocalStorage(); // Guarda en localStorage para persistencia
+                    console.log('Exámenes cargados desde exams.json');
+                } else {
+                    console.error('El archivo exams.json no contiene un array válido.');
+                    loadExamsFromLocalStorage(); // Carga respaldo
+                }
+            } catch (error) {
+                console.error('Error al cargar exams.json:', error);
+                loadExamsFromLocalStorage(); // Si falla por cualquier otro motivo, carga desde localStorage
+            }
+            renderExamList(); // Actualiza la UI
+            updateNextExamCountdown(); // Actualiza el contador de exámenes
+        }
+
+        // Función para cargar exámenes desde localStorage (respaldo)
+        function loadExamsFromLocalStorage() {
+            const saved = localStorage.getItem('eduScheduleExams');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed)) {
+                        state.exams = parsed;
+                        console.log('Exámenes cargados desde localStorage.');
+                    }
+                } catch (e) {
+                    console.error('Error al parsear exámenes de localStorage:', e);
+                }
+            }
+        }
+
+        // Función para guardar exámenes en localStorage
+        function saveExamsToLocalStorage() {
+            localStorage.setItem('eduScheduleExams', JSON.stringify(state.exams));
+        }
+
+        // Función para renderizar la lista de exámenes en la UI
+        function renderExamList() {
+            const examListElement = document.getElementById('examList');
+            examListElement.innerHTML = '';
+
+            if (state.exams.length === 0) {
+                examListElement.innerHTML = '<li class="exam-item"><span>No hay exámenes próximos</span></li>';
+                return;
+            }
+
+            // Ordenar exámenes por fecha antes de renderizar
+            const sortedExams = [...state.exams].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            sortedExams.forEach((exam, index) => {
+                const examItem = document.createElement('li');
+                examItem.className = 'exam-item';
+                examItem.innerHTML = `
+                    <div>
+                        <span class="subject">${subjectIcons[exam.subject] || '📚'} ${exam.subject}</span>
+                        <span class="date"> - ${new Date(exam.date).toLocaleDateString('es-ES')}</span>
+                    </div>
+                    <button class="delete-exam" onclick="deleteExam(${index})">❌</button>
+                `;
+                examListElement.appendChild(examItem);
+            });
+        }
+
+        // Función para añadir un examen
+        function addExam() {
+            const subjectSelect = document.getElementById('examSubject');
+            const dateInput = document.getElementById('examDate');
+            const subject = subjectSelect.value;
+            const date = dateInput.value;
+
+            if (!subject || !date) {
+                showNotification('⚠️ Por favor, selecciona una materia y una fecha.', 'error');
+                return;
+            }
+
+            const newExam = { subject, date };
+            state.exams.push(newExam);
+            saveExamsToLocalStorage(); // Actualiza localStorage
+            renderExamList(); // Actualiza la UI
+            updateNextExamCountdown(); // Actualiza el contador
+            showNotification('✅ Examen añadido correctamente.', 'success');
+
+            // Limpiar formulario
+            subjectSelect.value = '';
+            dateInput.value = '';
+        }
+
+        // Función para eliminar un examen
+        function deleteExam(index) {
+            state.exams.splice(index, 1); // Elimina el examen del array
+            saveExamsToLocalStorage(); // Actualiza localStorage
+            renderExamList(); // Actualiza la UI
+            updateNextExamCountdown(); // Actualiza el contador
+            showNotification('🗑️ Examen eliminado.', 'info');
+        }
+
+        // Función para descargar el archivo exams.json con los exámenes actuales
+        function downloadExamsJSON() {
+            const dataStr = JSON.stringify(state.exams, null, 2); // Formato legible
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+
+            const exportFileDefaultName = 'exams.json';
+
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            showNotification('📥 Archivo exams.json descargado.', 'info');
+        }
+
+        // Función para rellenar el selector de materias
+        function populateSubjectSelector() {
+            const subjectSelect = document.getElementById('examSubject');
+            Object.keys(subjectAbbreviations).forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subjectSelect.appendChild(option);
+            });
+        }
+
+        // Contador de tiempo hasta el próximo examen (usando los exámenes cargados)
+        function updateNextExamCountdown() {
+            const now = new Date();
+            const futureExams = state.exams.filter(exam => new Date(exam.date) > now);
+            if (futureExams.length === 0) {
+                document.getElementById('nextExamCountdown').textContent = 'No hay exámenes próximos';
+                document.getElementById('nextExamSubject').textContent = '';
+                return;
+            }
+
+            // Encontrar el examen más próximo
+            futureExams.sort((a, b) => new Date(a.date) - new Date(b.date));
+            const nextExam = futureExams[0];
+            const examDate = new Date(nextExam.date);
+            const timeDiff = examDate - now;
+            const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+            document.getElementById('nextExamCountdown').textContent = `Faltan ${days} días`;
+            document.getElementById('nextExamSubject').textContent = `Próximo examen: ${nextExam.subject}`;
+        }
 
         // Función del reloj inteligente
         function updateClock() {
@@ -1254,6 +1301,45 @@
         // Obtener mensaje gracioso aleatorio
         function getRandomFunnyMessage() {
             return funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+        }
+
+        // Temporizador Pomodoro
+        function startPomodoro() {
+            if (state.pomodoroRunning) return;
+            state.pomodoroRunning = true;
+            state.pomodoroInterval = setInterval(updatePomodoro, 1000);
+            document.getElementById('pomodoroStatus').textContent = '⏰ Estudiando...';
+        }
+        function pausePomodoro() {
+            if (!state.pomodoroRunning) return;
+            state.pomodoroRunning = false;
+            clearInterval(state.pomodoroInterval);
+            document.getElementById('pomodoroStatus').textContent = '⏸️ En pausa';
+        }
+        function resetPomodoro() {
+            state.pomodoroRunning = false;
+            clearInterval(state.pomodoroInterval);
+            state.pomodoroTime = 25 * 60;
+            updatePomodoroDisplay();
+            document.getElementById('pomodoroStatus').textContent = 'Tiempo de estudio: 25 min';
+        }
+        function updatePomodoro() {
+            if (state.pomodoroTime > 0) {
+                state.pomodoroTime--;
+                updatePomodoroDisplay();
+            } else {
+                // Tiempo completado
+                clearInterval(state.pomodoroInterval);
+                state.pomodoroRunning = false;
+                document.getElementById('pomodoroStatus').textContent = '✅ ¡Tiempo completado!';
+                showNotification('🍅 ¡Sesión Pomodoro completada! Toma un descanso.', 'success');
+            }
+        }
+        function updatePomodoroDisplay() {
+            const minutes = Math.floor(state.pomodoroTime / 60);
+            const seconds = state.pomodoroTime % 60;
+            document.getElementById('pomodoroTimer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
 
         // Contador hasta el fin de semana
@@ -1481,16 +1567,13 @@
                 '': 'Futurista',
                 'university': 'Universidad',
                 'cyberpunk': 'Cyberpunk',
-                'retro': 'Retro 8-bit',
-                'forest': 'Bosque',
-                'ocean': 'Océano',
-                'sunset': 'Atardecer'
+                'retro': 'Retro 8-bit'
             };
             return names[theme] || 'Desconocido';
         }
 
         function randomTheme() {
-            const themes = ['', 'university', 'cyberpunk', 'retro', 'forest', 'ocean', 'sunset'];
+            const themes = ['', 'university', 'cyberpunk', 'retro'];
             const randomTheme = themes[Math.floor(Math.random() * themes.length)];
             changeTheme(randomTheme);
             document.getElementById('themeSelector').value = randomTheme;
@@ -1585,10 +1668,16 @@
             showNotification('📝 Nota añadida', 'success');
         }
 
-        // Exportar horario
+        // Exportar horario - CORREGIDA
         function exportSchedule() {
             const scheduleHTML = document.getElementById('scheduleContainer').outerHTML;
-            const blob = new Blob([`
+            // Escapar caracteres problemáticos para que sean seguros dentro de la plantilla de cadena de JS
+            const safeScheduleHTML = scheduleHTML
+                .replace(/"/g, '&quot;') // Escapa comillas dobles
+                .replace(/\n/g, ' ')    // Reemplaza saltos de línea por espacios
+                .replace(/\r/g, '');    // Elimina retornos de carro si existen
+
+            const fullHTML = `
                 <!DOCTYPE html>
                 <html>
                 <head>
@@ -1604,11 +1693,13 @@
                 </head>
                 <body>
                     <h1>📅 Mi Horario Escolar</h1>
-                    ${scheduleHTML}
+                    ${safeScheduleHTML}
                     <p><small>Generado con EduSchedule Pro</small></p>
                 </body>
                 </html>
-            `], { type: 'text/html' });
+            `;
+
+            const blob = new Blob([fullHTML], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -1802,113 +1893,6 @@
             });
         });
 
-        // --- NUEVAS FUNCIONALIDADES ---
-
-        // Funciones para manejar exámenes
-        function addExam() {
-            const subjectSelect = document.getElementById('examSubject');
-            const dateInput = document.getElementById('examDate');
-            const subject = subjectSelect.value;
-            const date = dateInput.value;
-
-            if (!subject || !date) {
-                showNotification('⚠️ Por favor, selecciona una materia y una fecha.', 'error');
-                return;
-            }
-
-            const exams = getExamsFromStorage();
-            const newExam = { subject, date };
-            exams.push(newExam);
-            saveExamsToStorage(exams);
-
-            loadExamsFromStorage(); // Recargar la lista
-            updateNextExamCountdown(); // Actualizar contador
-            showNotification('✅ Examen añadido correctamente.', 'success');
-
-            // Limpiar formulario
-            subjectSelect.value = '';
-            dateInput.value = '';
-        }
-
-        function deleteExam(index) {
-            const exams = getExamsFromStorage();
-            exams.splice(index, 1);
-            saveExamsToStorage(exams);
-            loadExamsFromStorage(); // Recargar la lista
-            updateNextExamCountdown(); // Actualizar contador
-            showNotification('🗑️ Examen eliminado.', 'info');
-        }
-
-        function getExamsFromStorage() {
-            const exams = localStorage.getItem('eduScheduleExams');
-            return exams ? JSON.parse(exams) : [];
-        }
-
-        function saveExamsToStorage(exams) {
-            localStorage.setItem('eduScheduleExams', JSON.stringify(exams));
-        }
-
-        function loadExamsFromStorage() {
-            const exams = getExamsFromStorage();
-            const examListElement = document.getElementById('examList');
-            examListElement.innerHTML = '';
-
-            if (exams.length === 0) {
-                examListElement.innerHTML = '<li class="exam-item"><span>No hay exámenes próximos</span></li>';
-                return;
-            }
-
-            exams.forEach((exam, index) => {
-                const examItem = document.createElement('li');
-                examItem.className = 'exam-item';
-                examItem.innerHTML = `
-                    <div>
-                        <span class="subject">${subjectIcons[exam.subject] || '📚'} ${exam.subject}</span>
-                        <span class="date"> - ${new Date(exam.date).toLocaleDateString('es-ES')}</span>
-                    </div>
-                    <button class="delete-exam" onclick="deleteExam(${index})">❌</button>
-                `;
-                examListElement.appendChild(examItem);
-            });
-        }
-
-        function populateSubjectSelector() {
-            const subjectSelect = document.getElementById('examSubject');
-            Object.keys(subjectAbbreviations).forEach(subject => {
-                const option = document.createElement('option');
-                option.value = subject;
-                option.textContent = subject;
-                subjectSelect.appendChild(option);
-            });
-        }
-
-        function updateNextExamCountdown() {
-            const exams = getExamsFromStorage();
-            if (exams.length === 0) {
-                document.getElementById('nextExamCountdown').textContent = 'No hay exámenes registrados';
-                document.getElementById('nextExamSubject').textContent = '';
-                return;
-            }
-
-            const now = new Date();
-            const futureExams = exams.filter(exam => new Date(exam.date) > now);
-            if (futureExams.length === 0) {
-                document.getElementById('nextExamCountdown').textContent = 'No hay más exámenes';
-                document.getElementById('nextExamSubject').textContent = 'por esta semana.';
-                return;
-            }
-
-            // Encontrar el examen más próximo
-            futureExams.sort((a, b) => new Date(a.date) - new Date(b.date));
-            const nextExam = futureExams[0];
-            const examDate = new Date(nextExam.date);
-            const timeDiff = examDate - now;
-            const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-
-            document.getElementById('nextExamCountdown').textContent = `Faltan ${days} días`;
-            document.getElementById('nextExamSubject').textContent = `Próximo examen: ${nextExam.subject}`;
-        }
-
         console.log(`
         ███████╗██████╗ ██╗   ██╗███████╗ ██████╗██╗  ██╗███████╗██████╗ ██╗   ██╗██╗     ███████╗
         ██╔════╝██╔══██╗██║   ██║██╔════╝██╔════╝██║  ██║██╔════╝██╔══██╗██║   ██║██║     ██╔════╝
@@ -1922,3 +1906,4 @@
     </script>
 </body>
 </html>
+
