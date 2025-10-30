@@ -779,6 +779,12 @@
                     <button class="btn" onclick="generateNewQuestion()" style="margin-top: 1rem; width: 100%;">Nueva Pregunta</button>
                 </div>
             </div>
+            <!-- Contador de próximo examen -->
+            <div class="tool-card">
+                <div class="tool-title">⏱️ Tiempo hasta el próximo examen</div>
+                <div class="weekend-countdown" id="nextExamCountdown">Cargando...</div>
+                <div class="funny-message" id="nextExamSubject">...</div>
+            </div>
         </div>
         <!-- Panel de Control -->
         <div class="control-panel fade-in">
@@ -1094,11 +1100,19 @@
 
         // Contador de tiempo hasta el próximo examen (usando los exámenes cargados)
         function updateNextExamCountdown() {
+            // Verificar si los elementos del DOM existen antes de intentar acceder a ellos
+            const countdownElement = document.getElementById('nextExamCountdown');
+            const subjectElement = document.getElementById('nextExamSubject');
+            if (!countdownElement || !subjectElement) {
+                console.warn("Elementos del contador de exámenes no encontrados en el DOM.");
+                return; // Salir si no existen los elementos
+            }
+
             const now = new Date();
             const futureExams = state.exams.filter(exam => new Date(exam.date) > now);
             if (futureExams.length === 0) {
-                document.getElementById('nextExamCountdown').textContent = 'No hay exámenes próximos';
-                document.getElementById('nextExamSubject').textContent = '';
+                countdownElement.textContent = 'No hay exámenes próximos';
+                subjectElement.textContent = '';
                 return;
             }
 
@@ -1109,9 +1123,10 @@
             const timeDiff = examDate - now;
             const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 
-            document.getElementById('nextExamCountdown').textContent = `Faltan ${days} días`;
-            document.getElementById('nextExamSubject').textContent = `Próximo examen: ${nextExam.subject}`;
+            countdownElement.textContent = `Faltan ${days} días`;
+            subjectElement.textContent = `Próximo examen: ${nextExam.subject}`;
         }
+
 
         // Función del reloj inteligente
         function updateClock() {
