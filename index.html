@@ -608,7 +608,6 @@
             color: #00ff41;
             opacity: 0.7;
         }
-
         /* Estilo para la sección de exámenes */
         .exams-container {
             background: var(--bg-card);
@@ -637,6 +636,16 @@
             font-weight: 700;
             margin-bottom: 1rem;
             color: var(--text-primary);
+        }
+        .next-exam-banner {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.4);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.2rem;
+            text-align: center;
+            font-weight: 600;
+            color: #4CAF50;
         }
         .exam-list {
             list-style-type: none;
@@ -730,24 +739,32 @@
                 </div>
             </div>
         </div>
-
         <!-- Sección de Exámenes -->
         <div class="exams-container fade-in" id="examsContainer">
             <div class="exams-title">📝 Próximos Exámenes</div>
+            
+            <!-- Banner del próximo examen -->
+            <div class="next-exam-banner" id="nextExamBanner" style="display: none;"></div>
+
+            <!-- Lista de exámenes -->
             <ul class="exam-list" id="examList">
                 <!-- Exámenes cargados dinámicamente -->
             </ul>
-            <div class="add-exam-form">
-                <select id="examSubject">
-                    <option value="">Seleccionar Materia</option>
-                    <!-- Opciones generadas por JS -->
-                </select>
-                <input type="date" id="examDate">
-                <button class="btn add-exam-btn" onclick="addExam()">Agregar Examen</button>
-                <button class="btn update-json-btn" onclick="downloadExamsJSON()">Actualizar Exámenes</button>
-            </div>
-        </div>
 
+            <!-- Panel de edición (solo para previsualización) -->
+            <details class="exam-management" style="margin-top: 1rem; background: var(--bg-glass); padding: 1rem; border-radius: 12px;">
+                <summary style="font-weight: 600; cursor: pointer; list-style: none;">➕ Añadir o editar exámenes (vista previa)</summary>
+                <div class="add-exam-form">
+                    <select id="examSubject">
+                        <option value="">Seleccionar Materia</option>
+                    </select>
+                    <input type="date" id="examDate">
+                    <button class="btn add-exam-btn" onclick="addExam()">Agregar</button>
+                    <button class="btn update-json-btn" onclick="downloadExamsJSON()">💾 Descargar JSON</button>
+                </div>
+            </details>
+        </div>
+        
         <!-- Panel de herramientas -->
         <div class="tools-panel fade-in">
             <!-- Temporizador Pomodoro -->
@@ -779,14 +796,15 @@
                     <button class="btn" onclick="generateNewQuestion()" style="margin-top: 1rem; width: 100%;">Nueva Pregunta</button>
                 </div>
             </div>
-            <!-- Contador de próximo examen -->
-            <div class="tool-card">
+            <!-- Contador de próximo examen (redundante pero conservado por compatibilidad) -->
+            <div class="tool-card" style="display:none;">
                 <div class="tool-title">⏱️ Tiempo hasta el próximo examen</div>
                 <div class="weekend-countdown" id="nextExamCountdown">Cargando...</div>
                 <div class="funny-message" id="nextExamSubject">...</div>
             </div>
         </div>
-        <!-- Panel de Control -->
+        
+        <!-- Resto del contenido (igual que antes) -->
         <div class="control-panel fade-in">
             <div class="controls-grid">
                 <button class="btn" onclick="toggleAbbreviations()">📝 Mostrar Abreviaturas</button>
@@ -799,7 +817,6 @@
                 <button class="btn" onclick="shakeModeToggle()">🎲 Shake Mode</button>
             </div>
         </div>
-        <!-- Estadísticas -->
         <div class="stats-container" id="statsContainer" style="display: none;">
             <div class="stat-card">
                 <div class="stat-number" id="totalHours">0</div>
@@ -818,7 +835,6 @@
                 <div>Min. Descanso</div>
             </div>
         </div>
-        <!-- Contenedor del Horario -->
         <div class="schedule-container slide-in" id="scheduleContainer">
             <div class="schedule-header">
                 <h1 class="schedule-title">Horario Académico</h1>
@@ -930,7 +946,6 @@
                 answer: 0
             }
         ];
-
         // Estado de la aplicación
         let state = {
             showAbbreviations: false,
@@ -990,23 +1005,24 @@
                 state.exams = []; // Inicializa con array vacío en caso de error
             }
             renderExamList(); // Actualiza la UI
-            updateNextExamCountdown(); // Actualiza el contador de exámenes
+            updateNextExamBanner(); // Actualiza el banner de próximo examen
         }
 
         // Función para renderizar la lista de exámenes en la UI
         function renderExamList() {
             const examListElement = document.getElementById('examList');
             examListElement.innerHTML = '';
+            const now = new Date();
 
-            if (state.exams.length === 0) {
+            // Filtrar solo exámenes futuros y ordenarlos
+            const futureExams = state.exams.filter(exam => new Date(exam.date) > now).sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            if (futureExams.length === 0) {
                 examListElement.innerHTML = '<li class="exam-item"><span>No hay exámenes próximos</span></li>';
                 return;
             }
 
-            // Ordenar exámenes por fecha antes de renderizar
-            const sortedExams = [...state.exams].sort((a, b) => new Date(a.date) - new Date(b.date));
-
-            sortedExams.forEach((exam, index) => {
+            futureExams.forEach((exam, index) => {
                 const examItem = document.createElement('li');
                 examItem.className = 'exam-item';
                 examItem.innerHTML = `
@@ -1014,7 +1030,7 @@
                         <span class="subject">${subjectIcons[exam.subject] || '📚'} ${exam.subject}</span>
                         <span class="date"> - ${new Date(exam.date).toLocaleDateString('es-ES')}</span>
                     </div>
-                    <button class="delete-exam" onclick="deleteExam(${index})">❌</button>
+                    <button class="delete-exam" onclick="tempDeleteExam(${index})">❌</button>
                 `;
                 examListElement.appendChild(examItem);
             });
@@ -1026,39 +1042,41 @@
             const dateInput = document.getElementById('examDate');
             const subject = subjectSelect.value;
             const date = dateInput.value;
-
             if (!subject || !date) {
                 showNotification('⚠️ Por favor, selecciona una materia y una fecha.', 'error');
                 return;
             }
-
             const newExam = { subject, date };
             state.exams.push(newExam); // Añade al array en memoria
             renderExamList(); // Actualiza la UI
-            updateNextExamCountdown(); // Actualiza el contador
+            updateNextExamBanner(); // Actualiza el banner
             showNotification('✅ Examen añadido a la lista actual.', 'success');
-
             // Limpiar formulario
             subjectSelect.value = '';
             dateInput.value = '';
         }
 
-        // Función para eliminar un examen
-        function deleteExam(index) {
-            state.exams.splice(index, 1); // Elimina del array en memoria
-            renderExamList(); // Actualiza la UI
-            updateNextExamCountdown(); // Actualiza el contador
-            showNotification('🗑️ Examen eliminado de la lista actual.', 'info');
+        // Función para eliminar un examen temporalmente (solo en memoria)
+        function tempDeleteExam(index) {
+            const now = new Date();
+            const futureExams = state.exams.filter(exam => new Date(exam.date) > now);
+            const examToDelete = futureExams[index];
+            const globalIndex = state.exams.findIndex(e => 
+                e.subject === examToDelete.subject && e.date === examToDelete.date
+            );
+            if (globalIndex !== -1) {
+                state.exams.splice(globalIndex, 1);
+                renderExamList(); // Actualiza la UI
+                updateNextExamBanner(); // Actualiza el banner
+                showNotification('🗑️ Examen eliminado de la lista actual.', 'info');
+            }
         }
 
         // Función para descargar el archivo exams.json con los exámenes actuales
-        // Ahora se llama "Actualizar Exámenes" pero sigue descargando el archivo
         function downloadExamsJSON() {
             const dataStr = JSON.stringify(state.exams, null, 2); // Formato legible
             const dataUri = 'application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-
             const exportFileDefaultName = 'exams.json';
-
             const linkElement = document.createElement('a');
             linkElement.setAttribute('href', dataUri);
             linkElement.setAttribute('download', exportFileDefaultName);
@@ -1077,21 +1095,14 @@
             });
         }
 
-        // Contador de tiempo hasta el próximo examen (usando los exámenes cargados)
-        function updateNextExamCountdown() {
-            // Verificar si los elementos del DOM existen antes de intentar acceder a ellos
-            const countdownElement = document.getElementById('nextExamCountdown');
-            const subjectElement = document.getElementById('nextExamSubject');
-            if (!countdownElement || !subjectElement) {
-                console.warn("Elementos del contador de exámenes no encontrados en el DOM.");
-                return; // Salir si no existen los elementos
-            }
-
+        // Función para actualizar el banner del próximo examen
+        function updateNextExamBanner() {
+            const bannerElement = document.getElementById('nextExamBanner');
             const now = new Date();
             const futureExams = state.exams.filter(exam => new Date(exam.date) > now);
+
             if (futureExams.length === 0) {
-                countdownElement.textContent = 'No hay exámenes próximos';
-                subjectElement.textContent = '';
+                bannerElement.style.display = 'none';
                 return;
             }
 
@@ -1102,10 +1113,9 @@
             const timeDiff = examDate - now;
             const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 
-            countdownElement.textContent = `Faltan ${days} días`;
-            subjectElement.textContent = `Próximo examen: ${nextExam.subject}`;
+            bannerElement.innerHTML = `🗓️ <strong>${nextExam.subject}</strong><br>Faltan <strong>${days} día${days !== 1 ? 's' : ''}</strong>`;
+            bannerElement.style.display = 'block';
         }
-
 
         // Función del reloj inteligente
         function updateClock() {
@@ -1130,7 +1140,6 @@
         function getCurrentClassStatus(now) {
             const currentTime = now.getHours() * 60 + now.getMinutes();
             const currentDay = now.getDay() - 1; // 0=Lunes, 4=Viernes
-
             // Si es fin de semana
             if (currentDay < 0 || currentDay > 4) {
                 return {
@@ -1141,7 +1150,6 @@
                     progress: 0
                 };
             }
-
             // Buscar en qué franja horaria estamos
             for (let i = 0; i < scheduleData.length; i++) {
                 const timeRange = scheduleData[i][0];
@@ -1170,7 +1178,6 @@
                     }
                 }
             }
-
             // Si no estamos en ninguna franja horaria, calcular cuánto falta para la siguiente
             let nextClassTime = null;
             let nextClassSubject = null;
@@ -1183,7 +1190,6 @@
                     break;
                 }
             }
-
             // Si no hay más clases hoy
             if (!nextClassTime) {
                 return {
@@ -1194,7 +1200,6 @@
                     progress: 0
                 };
             }
-
             // Calcular tiempo restante
             const timeRemaining = nextClassTime - currentTime;
             const hours = Math.floor(timeRemaining / 60);
@@ -1205,7 +1210,6 @@
             } else {
                 countdownText = `Faltan ${minutes} minutos`;
             }
-
             return {
                 status: 'free-time',
                 message: `Próxima clase: ${nextClassSubject}`,
@@ -1223,10 +1227,8 @@
             const progressContainer = document.getElementById('progressContainer');
             const progressFill = document.getElementById('progressFill');
             const progressText = document.getElementById('progressText');
-
             classStatusElement.textContent = status.message;
             classStatusElement.className = 'class-status ' + status.status;
-
             if (status.countdown) {
                 countdownElement.textContent = status.countdown;
             } else {
@@ -1237,7 +1239,6 @@
             } else {
                 funnyMessageElement.textContent = '';
             }
-
             // Mostrar/ocultar barra de progreso
             if (status.status === 'in-class' && status.progress > 0) {
                 progressContainer.style.display = 'block';
@@ -1252,16 +1253,13 @@
         function updateTableMarker(now) {
             const currentTime = now.getHours() * 60 + now.getMinutes();
             const currentDay = now.getDay() - 1; // 0=Lunes, 4=Viernes
-
             // Remover marcador anterior
             if (state.currentClassCell) {
                 state.currentClassCell.classList.remove('current-class');
                 state.currentClassCell = null;
             }
-
             // Si es fin de semana o fuera de horario, no marcar nada
             if (currentDay < 0 || currentDay > 4) return;
-
             // Buscar la celda actual
             for (let i = 0; i < scheduleData.length; i++) {
                 const timeRange = scheduleData[i][0];
@@ -1346,10 +1344,8 @@
             } else if (daysUntilWeekend < 0) {
                 daysUntilWeekend = 0;
             }
-
             const countdownElement = document.getElementById('weekendCountdown');
             const messageElement = document.getElementById('weekendMessage');
-
             if (daysUntilWeekend === 0) {
                 countdownElement.textContent = '¡Es fin de semana! 🎉';
                 messageElement.textContent = '¡Disfruta tu descanso!';
@@ -1368,11 +1364,9 @@
             const questionElement = document.getElementById('gameQuestion');
             const optionsElement = document.getElementById('gameOptions');
             const resultElement = document.getElementById('gameResult');
-
             questionElement.textContent = randomQuestion.question;
             optionsElement.innerHTML = '';
             resultElement.textContent = '';
-
             randomQuestion.options.forEach((option, index) => {
                 const button = document.createElement('button');
                 button.className = 'btn';
@@ -1381,7 +1375,6 @@
                 optionsElement.appendChild(button);
             });
         }
-
         function checkAnswer(selectedIndex, correctIndex) {
             const resultElement = document.getElementById('gameResult');
             if (selectedIndex === correctIndex) {
@@ -1472,12 +1465,10 @@
                     const curX = acceleration.x;
                     const curY = acceleration.y;
                     const curZ = acceleration.z;
-
                     if (lastX !== undefined) {
                         const deltaX = Math.abs(lastX - curX);
                         const deltaY = Math.abs(lastY - curY);
                         const deltaZ = Math.abs(lastZ - curZ);
-
                         if ((deltaX + deltaY + deltaZ) > 15) {
                             moveCounter++;
                             if (moveCounter > 2) {
@@ -1499,19 +1490,16 @@
             renderSchedule();
             updateButtonState('toggleAbbreviations');
         }
-
         function toggleColors() {
             state.showColors = !state.showColors;
             renderSchedule();
             updateButtonState('toggleColors');
         }
-
         function toggleCompactView() {
             state.compactView = !state.compactView;
             renderSchedule();
             updateButtonState('toggleCompactView');
         }
-
         function toggleDevMode() {
             state.devMode = !state.devMode;
             document.body.classList.toggle('dev-mode', state.devMode);
@@ -1523,7 +1511,6 @@
                 console.log('Schedule Data:', scheduleData);
             }
         }
-
         function shakeModeToggle() {
             state.shakeMode = !state.shakeMode;
             updateButtonState('shakeModeToggle');
@@ -1533,7 +1520,6 @@
                 showNotification('🎲 Shake Mode desactivado', 'info');
             }
         }
-
         function updateButtonState(functionName) {
             const buttons = document.querySelectorAll('.btn');
             buttons.forEach(btn => {
@@ -1555,7 +1541,6 @@
             createParticles();
             showNotification(`🎨 Tema cambiado: ${getThemeName(theme)}`, 'success');
         }
-
         function getThemeName(theme) {
             const names = {
                 '': 'Futurista',
@@ -1565,7 +1550,6 @@
             };
             return names[theme] || 'Desconocido';
         }
-
         function randomTheme() {
             const themes = ['', 'university', 'cyberpunk', 'retro'];
             const randomTheme = themes[Math.floor(Math.random() * themes.length)];
@@ -1588,7 +1572,6 @@
                 animateStats();
             }
         }
-
         function calculateStats() {
             const subjects = new Set();
             let totalClasses = 0;
@@ -1605,7 +1588,6 @@
             document.getElementById('avgDaily').textContent = Math.round(totalClasses / 5);
             document.getElementById('breakTime').textContent = '30';
         }
-
         function animateStats() {
             const statNumbers = document.querySelectorAll('.stat-number');
             statNumbers.forEach((stat, index) => {
@@ -1616,7 +1598,6 @@
                 }, index * 200);
             });
         }
-
         function animateNumber(element, start, end, duration) {
             const startTime = performance.now();
             function update(currentTime) {
@@ -1630,7 +1611,6 @@
             }
             requestAnimationFrame(update);
         }
-
         function easeOutCubic(t) {
             return 1 - Math.pow(1 - t, 3);
         }
@@ -1670,7 +1650,6 @@
                 .replace(/"/g, '&quot;') // Escapa comillas dobles
                 .replace(/\n/g, ' ')    // Reemplaza saltos de línea por espacios
                 .replace(/\r/g, '');    // Elimina retornos de carro si existen
-
             const fullHTML = `
                 <!DOCTYPE html>
                 <html>
@@ -1692,7 +1671,6 @@
                 </body>
                 </html>
             `;
-
             const blob = new Blob([fullHTML], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1804,7 +1782,6 @@
                 setTimeout(() => confetti.remove(), 5000);
             }
         }
-
         // Agregar estilos de animación para confetti
         const confettiStyles = document.createElement('style');
         confettiStyles.textContent = `
@@ -1851,7 +1828,6 @@
             };
             localStorage.setItem('eduSchedulePrefs', JSON.stringify(preferences));
         }
-
         function loadPreferences() {
             const saved = localStorage.getItem('eduSchedulePrefs');
             if (saved) {
@@ -1867,6 +1843,7 @@
         setInterval(savePreferences, 5000);
         // Cargar preferencias al inicio
         setTimeout(loadPreferences, 500);
+
         // Check para bonus de viernes
         setTimeout(checkFridayBonus, 2000);
 
@@ -1900,4 +1877,3 @@
     </script>
 </body>
 </html>
-
