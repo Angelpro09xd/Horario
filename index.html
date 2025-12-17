@@ -3,867 +3,783 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduSchedule Pro - Horario Inteligente</title>
+    <title>EduSchedule Pro - Nueva Generación</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700&family=Fira+Code:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Orbitron:wght@400;700;900&display=swap');
+
         :root {
-            /* Tema Default - Futurista */
-            --primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --bg-main: #0a0a0f;
-            --bg-glass: rgba(255, 255, 255, 0.05);
-            --bg-card: rgba(255, 255, 255, 0.08);
-            --text-primary: #ffffff;
-            --text-secondary: #b8c5d6;
-            --border-glass: rgba(255, 255, 255, 0.1);
-            --shadow-glow: 0 8px 32px rgba(102, 126, 234, 0.3);
-            --shadow-card: 0 15px 35px rgba(0, 0, 0, 0.5);
+            --primary-hue: 220;
+            --primary-sat: 85%;
+            --primary-light: 55%;
+            --bg-dark: #0a0a14;
+            --bg-darker: #05050a;
+            --bg-card: rgba(20, 20, 40, 0.7);
+            --text-light: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.7);
+            --accent-1: #00d9ff;
+            --accent-2: #9d4edd;
+            --accent-3: #ff6d00;
+            --success: #00ff88;
+            --warning: #ffaa00;
+            --danger: #ff375f;
+            
+            --gradient-primary: linear-gradient(135deg, 
+                hsl(var(--primary-hue), var(--primary-sat), var(--primary-light)) 0%,
+                hsl(calc(var(--primary-hue) + 30), var(--primary-sat), calc(var(--primary-light) - 10%)) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            --gradient-warning: linear-gradient(135deg, var(--warning), var(--danger));
+            
+            --shadow-glow: 0 0 40px rgba(0, 217, 255, 0.3);
+            --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.4);
+            --border-radius: 16px;
+            --border-radius-sm: 8px;
+            
+            --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
-        .theme-university {
-            --primary: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            --secondary: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
-            --accent: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            --bg-main: #ecf0f1;
-            --bg-glass: rgba(52, 73, 94, 0.1);
-            --bg-card: rgba(255, 255, 255, 0.9);
-            --text-primary: #2c3e50;
-            --text-secondary: #34495e;
-            --border-glass: rgba(52, 73, 94, 0.2);
-            --shadow-glow: 0 8px 32px rgba(52, 152, 219, 0.2);
-        }
-        .theme-cyberpunk {
-            --primary: linear-gradient(135deg, #ff006e 0%, #8338ec 100%);
-            --secondary: linear-gradient(135deg, #00f5ff 0%, #ff006e 100%);
-            --accent: linear-gradient(135deg, #39ff14 0%, #00f5ff 100%);
-            --bg-main: #0d001a;
-            --bg-glass: rgba(255, 0, 110, 0.1);
-            --bg-card: rgba(131, 56, 236, 0.1);
-            --text-primary: #00f5ff;
-            --text-secondary: #ff006e;
-            --border-glass: rgba(255, 0, 110, 0.3);
-            --shadow-glow: 0 8px 32px rgba(255, 0, 110, 0.5);
-        }
-        .theme-retro {
-            --primary: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-            --secondary: linear-gradient(135deg, #ffd23f 0%, #ff6b35 100%);
-            --accent: linear-gradient(135deg, #06ffa5 0%, #ffd23f 100%);
-            --bg-main: #2d1b69;
-            --bg-glass: rgba(255, 107, 53, 0.1);
-            --bg-card: rgba(247, 147, 30, 0.1);
-            --text-primary: #ffd23f;
-            --text-secondary: #ff6b35;
-            --border-glass: rgba(255, 107, 53, 0.3);
-            --shadow-glow: 0 8px 32px rgba(255, 107, 53, 0.4);
-            font-family: 'Fira Code', monospace !important;
-        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--bg-main);
-            color: var(--text-primary);
+            font-family: 'Montserrat', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
         }
-        /* Partículas de fondo */
-        .particles {
+
+        /* Fondo dinámico con gradientes animados */
+        .dynamic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .gradient-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .blob-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--accent-1);
+            top: -200px;
+            left: -200px;
+            animation-delay: 0s;
+        }
+
+        .blob-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--accent-2);
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -5s;
+        }
+
+        .blob-3 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent-3);
+            top: 50%;
+            left: 80%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(100px, -100px) scale(1.1); }
+            50% { transform: translate(-50px, 150px) scale(0.9); }
+            75% { transform: translate(-150px, -50px) scale(1.05); }
+        }
+
+        /* Grid de partículas */
+        .particle-grid {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
-            pointer-events: none;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at center, black 30%, transparent 70%);
+            animation: grid-pulse 20s infinite alternate;
         }
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: var(--text-secondary);
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: float 20s infinite linear;
+
+        @keyframes grid-pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
         }
-        @keyframes float {
-            from { transform: translateY(100vh) rotate(0deg); }
-            to { transform: translateY(-100vh) rotate(360deg); }
+
+        /* Contenedor principal */
+        .main-app {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
         }
-        /* Navbar futurista */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-glass);
-            z-index: 1000;
-            padding: 1rem 2rem;
-        }
-        .navbar-content {
+
+        /* Header futurista */
+        .app-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
+            padding: 30px 0;
+            margin-bottom: 40px;
+            position: relative;
         }
-        .logo {
+
+        .header-title {
             font-family: 'Orbitron', monospace;
-            font-size: 1.5rem;
+            font-size: 3.5rem;
             font-weight: 900;
-            background: var(--primary);
+            background: var(--gradient-primary);
             -webkit-background-clip: text;
             background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
-        }
-        .navbar-controls {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-        /* Controles principales */
-        .main-container {
-            margin-top: 100px;
-            padding: 2rem;
-            max-width: 1400px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .control-panel {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 1px solid var(--border-glass);
-            box-shadow: var(--shadow-card);
-            padding: 2rem;
-            margin-bottom: 2rem;
+            color: transparent;
+            text-shadow: var(--shadow-glow);
+            letter-spacing: 1px;
             position: relative;
-            overflow: hidden;
+            display: inline-block;
         }
-        .control-panel::before {
+
+        .header-title::after {
             content: '';
             position: absolute;
-            top: 0;
+            bottom: -10px;
             left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--primary);
-            opacity: 0.7;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.6s ease;
         }
-        .controls-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
+
+        .header-title:hover::after {
+            transform: scaleX(1);
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 15px;
             align-items: center;
         }
-        .btn {
-            background: var(--bg-glass);
-            border: 1px solid var(--border-glass);
-            border-radius: 12px;
-            padding: 0.8rem 1.5rem;
-            color: var(--text-primary);
+
+        /* Botones mejorados */
+        .cyber-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid transparent;
+            border-image: var(--gradient-primary) 1;
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: inherit;
-            font-weight: 500;
+            transition: var(--transition-smooth);
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(10px);
+            border-radius: var(--border-radius-sm);
         }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
-            border-color: rgba(255, 255, 255, 0.3);
+
+        .cyber-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s;
         }
-        .btn.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: var(--shadow-glow);
+
+        .cyber-btn:hover::before {
+            left: 100%;
         }
-        /* Botones especiales */
-        .btn-neon {
-            border: 2px solid;
-            border-image: var(--accent) 1;
+
+        .cyber-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+        }
+
+        .cyber-btn.primary {
+            background: var(--gradient-primary);
+            border: none;
+        }
+
+        /* Panel de estado */
+        .status-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .status-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition-smooth);
             position: relative;
+            overflow: hidden;
         }
-        .btn-neon::before {
+
+        .status-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--accent-1);
+        }
+
+        .status-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--accent);
-            opacity: 0;
-            transition: opacity 0.3s;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
         }
-        .btn-neon:hover::before {
-            opacity: 0.1;
+
+        .status-title {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        /* Tabla del horario */
-        .schedule-container {
+
+        .status-content {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .status-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Horario principal - NUEVO DISEÑO */
+        .schedule-interface {
             background: var(--bg-card);
             backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 1px solid var(--border-glass);
-            box-shadow: var(--shadow-card);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
-            position: relative;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow-card);
         }
+
         .schedule-header {
-            background: var(--primary);
-            padding: 1.5rem;
-            text-align: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
         }
+
         .schedule-title {
             font-family: 'Orbitron', monospace;
             font-size: 2rem;
             font-weight: 700;
-            color: white;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-        .table-container {
-            overflow-x: auto;
+
+        .schedule-subtitle {
+            color: var(--text-dim);
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+
+        /* Tabla de horario 3D */
+        .schedule-table-3d {
             position: relative;
+            padding: 20px;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
-        #scheduleTable {
+
+        .table-container {
+            transform: rotateX(5deg);
+            transform-origin: top center;
+            transition: transform 0.6s ease;
+        }
+
+        .schedule-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-        }
-        #scheduleTable th {
-            background: var(--bg-glass);
-            color: var(--text-primary);
-            padding: 1rem;
-            font-weight: 600;
-            text-align: center;
-            border-bottom: 1px solid var(--border-glass);
-            position: sticky;
-            top: 0;
-            backdrop-filter: blur(10px);
-            z-index: 10;
-        }
-        #scheduleTable td {
-            padding: 1rem;
-            text-align: center;
-            border-bottom: 1px solid var(--border-glass);
-            border-right: 1px solid var(--border-glass);
-            transition: all 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.3);
             position: relative;
-            cursor: pointer;
         }
-        #scheduleTable td:hover {
-            background: var(--bg-glass);
-            transform: scale(1.02);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-        }
-        .time-cell {
-            background: var(--secondary);
-            color: white !important;
-            font-weight: 600;
-            font-family: 'Orbitron', monospace;
-        }
-        .break-row td {
-            background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 87, 34, 0.2));
-            font-style: italic;
-        }
-        /* Celda actual resaltada */
-        .current-class {
-            position: relative;
-            z-index: 5;
-            animation: pulse-glow 2s infinite;
-            box-shadow: 0 0 20px rgba(76, 175, 80, 0.5) !important;
-            border: 2px solid #4CAF50 !important;
-        }
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(76, 175, 80, 0.5); }
-            50% { box-shadow: 0 0 30px rgba(76, 175, 80, 0.8); }
-        }
-        /* Colores por materia */
-        .subject-som { background: linear-gradient(135deg, rgba(74, 144, 226, 0.2), rgba(80, 170, 241, 0.2)); }
-        .subject-red { background: linear-gradient(135deg, rgba(225, 112, 85, 0.2), rgba(237, 117, 88, 0.2)); }
-        .subject-dig { background: linear-gradient(135deg, rgba(129, 236, 236, 0.2), rgba(116, 185, 255, 0.2)); }
-        .subject-ofi { background: linear-gradient(135deg, rgba(123, 239, 178, 0.2), rgba(77, 182, 172, 0.2)); }
-        .subject-ipe { background: linear-gradient(135deg, rgba(255, 154, 158, 0.2), rgba(250, 208, 196, 0.2)); }
-        .subject-mon { background: linear-gradient(135deg, rgba(186, 85, 211, 0.2), rgba(224, 130, 131, 0.2)); }
-        .subject-sos { background: linear-gradient(135deg, rgba(255, 218, 121, 0.2), rgba(254, 202, 87, 0.2)); }
-        /* Notas adhesivas */
-        .sticky-note {
-            position: absolute;
-            background: #ffeb3b;
-            color: #333;
-            padding: 0.5rem;
-            font-size: 0.8rem;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            max-width: 120px;
-            word-wrap: break-word;
-            z-index: 100;
-            transform: rotate(-2deg);
-            transition: transform 0.3s;
-        }
-        .sticky-note:hover {
-            transform: rotate(0deg) scale(1.1);
-        }
-        /* Modal para configuraciones */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-        .modal-content {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 500px;
-            width: 90%;
-            border: 1px solid var(--border-glass);
-            box-shadow: var(--shadow-card);
-        }
-        /* Efectos especiales */
-        .glitch {
-            animation: glitch 2s infinite;
-        }
-        @keyframes glitch {
-            0%, 100% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-        }
-        .glow {
-            box-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary), 0 0 80px var(--primary);
-        }
-        /* Estadísticas */
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .stat-card {
-            background: var(--bg-card);
-            border-radius: 15px;
-            padding: 1.5rem;
-            border: 1px solid var(--border-glass);
+
+        .schedule-table th {
+            padding: 25px 15px;
             text-align: center;
-            backdrop-filter: blur(10px);
-        }
-        .stat-number {
-            font-size: 2rem;
             font-weight: 700;
-            background: var(--primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        /* Reloj inteligente */
-        .clock-container {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 1px solid var(--border-glass);
-            box-shadow: var(--shadow-card);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(157, 78, 221, 0.1));
+            color: var(--text-light);
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            border-bottom: 2px solid var(--accent-1);
             position: relative;
             overflow: hidden;
         }
-        .clock-container::before {
+
+        .schedule-table th::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(0, 217, 255, 0.1));
+            pointer-events: none;
+        }
+
+        .schedule-table td {
+            padding: 25px 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .schedule-table td:hover {
+            background: rgba(0, 217, 255, 0.05);
+            transform: scale(1.02);
+            z-index: 10;
+        }
+
+        .time-slot {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(20, 20, 40, 0.6));
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--accent-1);
+            border-right: 2px solid var(--accent-1);
+        }
+
+        .subject-cell {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subject-cell::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--accent);
-            opacity: 0.7;
-        }
-        .clock-time {
-            font-family: 'Orbitron', monospace;
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: var(--primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
-        }
-        .clock-date {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-        }
-        .class-status {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            padding: 0.5rem 1rem;
-            border-radius: 10px;
-            display: inline-block;
-        }
-        .class-status.in-class {
-            background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(56, 142, 60, 0.2));
-            color: #4CAF50;
-            border: 1px solid rgba(76, 175, 80, 0.3);
-        }
-        .class-status.break-time {
-            background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 152, 0, 0.2));
-            color: #FFC107;
-            border: 1px solid rgba(255, 193, 7, 0.3);
-        }
-        .class-status.free-time {
-            background: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(30, 136, 229, 0.2));
-            color: #2196F3;
-            border: 1px solid rgba(33, 150, 243, 0.3);
-        }
-        .class-status.outside-hours {
-            background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(229, 57, 53, 0.2));
-            color: #F44336;
-            border: 1px solid rgba(244, 67, 54, 0.3);
-        }
-        .countdown {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-top: 0.5rem;
-        }
-        .funny-message {
-            font-style: italic;
-            margin-top: 0.5rem;
-            color: var(--text-secondary);
-            font-size: 1rem;
-        }
-        /* Barra de progreso */
-        .progress-container {
-            margin: 1rem 0;
-        }
-        .progress-bar {
+            left: -100%;
             width: 100%;
-            height: 8px;
-            background: var(--bg-glass);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 0.5rem;
-        }
-        .progress-fill {
             height: 100%;
-            background: var(--accent);
-            border-radius: 4px;
-            transition: width 0.5s ease;
-            width: 0%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: left 0.6s ease;
         }
-        .progress-text {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            text-align: center;
+
+        .subject-cell:hover::before {
+            left: 100%;
         }
-        /* Panel de herramientas */
-        .tools-panel {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+
+        /* Estilos de materias por colores */
+        .subject-som {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.15), rgba(0, 150, 255, 0.1));
+            border-left: 4px solid var(--accent-1);
         }
-        .tool-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border-radius: 15px;
-            border: 1px solid var(--border-glass);
-            padding: 1.5rem;
-            text-align: center;
+
+        .subject-red {
+            background: linear-gradient(135deg, rgba(255, 109, 0, 0.15), rgba(255, 50, 50, 0.1));
+            border-left: 4px solid var(--accent-3);
         }
-        .tool-title {
-            font-size: 1.2rem;
+
+        .subject-dig {
+            background: linear-gradient(135deg, rgba(157, 78, 221, 0.15), rgba(128, 0, 255, 0.1));
+            border-left: 4px solid var(--accent-2);
+        }
+
+        .subject-ofi {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 200, 100, 0.1));
+            border-left: 4px solid var(--success);
+        }
+
+        .subject-ipe {
+            background: linear-gradient(135deg, rgba(255, 170, 0, 0.15), rgba(255, 100, 0, 0.1));
+            border-left: 4px solid var(--warning);
+        }
+
+        .subject-mon {
+            background: linear-gradient(135deg, rgba(255, 55, 95, 0.15), rgba(255, 0, 60, 0.1));
+            border-left: 4px solid var(--danger);
+        }
+
+        .subject-sos {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 175, 0, 0.1));
+            border-left: 4px solid #ffd700;
+        }
+
+        .break-cell {
+            background: linear-gradient(135deg, rgba(255, 170, 0, 0.2), rgba(255, 100, 0, 0.1));
+            font-style: italic;
+            color: var(--warning);
             font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
         }
-        .pomodoro-timer {
-            font-family: 'Orbitron', monospace;
-            font-size: 2.5rem;
-            margin: 1rem 0;
-            color: var(--text-primary);
+
+        /* Efecto de clase actual */
+        .current-class {
+            animation: pulse-border 2s infinite;
+            position: relative;
+            z-index: 5;
         }
-        .pomodoro-controls {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: center;
-            margin-top: 1rem;
+
+        .current-class::after {
+            content: '🟢 AHORA';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 0.7rem;
+            color: var(--success);
+            font-weight: bold;
+            animation: blink 1s infinite;
         }
-        .weekend-countdown {
+
+        @keyframes pulse-border {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(0, 255, 136, 0); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Panel lateral de detalles */
+        .detail-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100vh;
+            background: var(--bg-card);
+            backdrop-filter: blur(30px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            z-index: 1000;
+            transition: right 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            overflow-y: auto;
+        }
+
+        .detail-panel.active {
+            right: 0;
+            box-shadow: -20px 0 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .panel-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-light);
             font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .panel-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .subject-detail-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .subject-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .subject-name {
+            font-size: 1.8rem;
             font-weight: 700;
-            margin: 1rem 0;
-            background: var(--secondary);
+            margin-bottom: 10px;
+            background: var(--gradient-primary);
             -webkit-background-clip: text;
             background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: transparent;
         }
-        .mini-game {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: var(--bg-glass);
-            border-radius: 10px;
-        }
-        .game-question {
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-        .game-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-        }
-        .game-result {
-            margin-top: 1rem;
-            font-weight: 600;
-            min-height: 1.5rem;
-        }
-        /* Responsive */
-        @media (max-width: 768px) {
-            .main-container {
-                padding: 1rem;
-            }
-            .controls-grid {
-                grid-template-columns: 1fr;
-            }
-            .navbar-content {
-                padding: 0 1rem;
-            }
-            .schedule-title {
-                font-size: 1.5rem;
-            }
-            #scheduleTable th, #scheduleTable td {
-                padding: 0.5rem;
-                font-size: 0.9rem;
-            }
-            .clock-time {
-                font-size: 2rem;
-            }
-            .class-status {
-                font-size: 1.1rem;
-            }
-            .tools-panel {
-                grid-template-columns: 1fr;
-            }
-        }
-        /* Animaciones de entrada */
-        .fade-in {
-            animation: fadeIn 0.6s ease-out;
-        }
-        @keyframes fadeIn {
+
+        /* Animaciones avanzadas */
+        @keyframes slideInUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-        .slide-in {
-            animation: slideIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
-        @keyframes slideIn {
-            from {
-                transform: translateX(-100px);
-                opacity: 0;
+
+        .animate-in {
+            animation: slideInUp 0.6s ease-out forwards;
+        }
+
+        /* Selector de vista */
+        .view-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .view-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid transparent;
+            color: var(--text-light);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-weight: 600;
+        }
+
+        .view-btn.active {
+            background: var(--gradient-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .header-title {
+                font-size: 2.5rem;
             }
-            to {
-                transform: translateX(0);
-                opacity: 1;
+            
+            .schedule-table th,
+            .schedule-table td {
+                padding: 15px 10px;
+            }
+            
+            .detail-panel {
+                width: 320px;
             }
         }
-        /* Modo desarrollador */
-        .dev-mode {
-            font-family: 'Fira Code', monospace;
+
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2rem;
+            }
+            
+            .app-header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .schedule-table th,
+            .schedule-table td {
+                padding: 10px 5px;
+                font-size: 0.9rem;
+            }
+            
+            .status-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            .detail-panel {
+                width: 100%;
+                right: -100%;
+            }
         }
-        .dev-mode .schedule-container {
-            border: 2px dashed #00ff41;
-            background: rgba(0, 0, 0, 0.9);
-        }
-        .dev-mode #scheduleTable td::before {
-            content: attr(data-debug);
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            font-size: 0.6rem;
-            color: #00ff41;
+
+        /* Efectos de cursor */
+        .cursor-trail {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: var(--accent-1);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
             opacity: 0.7;
+            transition: transform 0.1s;
         }
-        /* Estilo para la sección de exámenes */
-        .exams-container {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 1px solid var(--border-glass);
-            box-shadow: var(--shadow-card);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
+
+        /* Modo focus */
+        .focus-mode .subject-cell:not(.focus-subject) {
+            opacity: 0.3;
+            filter: blur(2px);
+            transition: all 0.4s ease;
         }
-        .exams-container::before {
-            content: '';
+
+        /* Líneas de conexión */
+        .connection-line {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            background: linear-gradient(90deg, var(--accent-1), transparent);
             height: 2px;
-            background: var(--secondary);
-            opacity: 0.7;
+            pointer-events: none;
+            z-index: 1;
         }
-        .exams-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-        .next-exam-banner {
-            background: rgba(76, 175, 80, 0.2);
-            border: 1px solid rgba(76, 175, 80, 0.4);
-            border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: 1.2rem;
-            text-align: center;
-            font-weight: 600;
-            color: #4CAF50;
-        }
-        .exam-list {
-            list-style-type: none;
-            padding: 0;
-            margin-bottom: 1rem;
-        }
-        .exam-item {
-            background: var(--bg-glass);
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .exam-item .subject {
-            font-weight: 600;
-        }
-        .exam-item .date {
-            font-style: italic;
-            color: var(--text-secondary);
-        }
-        .exam-item .delete-exam {
-            background: none;
-            border: none;
-            color: #f44336;
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
-        .add-exam-form {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-        .add-exam-form select, .add-exam-form input, .add-exam-btn, .update-json-btn {
-            padding: 0.5rem;
-            border-radius: 5px;
-            border: 1px solid var(--border-glass);
-            background: var(--bg-glass);
-            color: var(--text-primary);
-            font-family: inherit;
-        }
-        .add-exam-form select, .add-exam-form input {
-            flex: 1;
-            min-width: 150px;
-        }
-        .add-exam-btn, .update-json-btn {
-            background: var(--secondary);
-            color: white;
-            border: none;
-            cursor: pointer;
+
+        /* Tooltips mejorados */
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: var(--text-light);
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            pointer-events: none;
+            z-index: 1000;
+            border: 1px solid var(--accent-1);
+            backdrop-filter: blur(10px);
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: all 0.3s ease;
             white-space: nowrap;
         }
-        .add-exam-btn:hover, .update-json-btn:hover {
-            background: var(--primary);
+
+        .tooltip.active {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
-    <!-- Partículas de fondo -->
-    <div class="particles" id="particles"></div>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="navbar-content">
-            <div class="logo">EduSchedule Pro</div>
-            <div class="navbar-controls">
-                <select id="themeSelector" class="btn">
-                    <option value="">🎨 Futurista</option>
-                    <option value="university">🏛️ Universidad</option>
-                    <option value="cyberpunk">🌆 Cyberpunk</option>
-                    <option value="retro">👾 Retro</option>
-                </select>
-                <button class="btn btn-neon" onclick="toggleFullscreen()">⛶</button>
+    <!-- Fondo dinámico -->
+    <div class="dynamic-bg">
+        <div class="gradient-blob blob-1"></div>
+        <div class="gradient-blob blob-2"></div>
+        <div class="gradient-blob blob-3"></div>
+    </div>
+    
+    <!-- Grid de partículas -->
+    <div class="particle-grid"></div>
+    
+    <!-- Rastro del cursor -->
+    <div class="cursor-trail"></div>
+    
+    <div class="main-app">
+        <!-- Header principal -->
+        <header class="app-header">
+            <div>
+                <h1 class="header-title">EDUSCHEDULE PRO v3.0</h1>
+                <p class="schedule-subtitle">Horario académico inteligente con realidad aumentada</p>
             </div>
-        </div>
-    </nav>
-    <div class="main-container">
-        <!-- Reloj inteligente -->
-        <div class="clock-container fade-in" id="clockContainer">
-            <div class="clock-time" id="clockTime">--:--:--</div>
-            <div class="clock-date" id="clockDate">Cargando...</div>
-            <div class="class-status" id="classStatus">Verificando horario...</div>
-            <div class="countdown" id="countdown"></div>
-            <div class="funny-message" id="funnyMessage"></div>
-            <!-- Barra de progreso de clase -->
-            <div class="progress-container" id="progressContainer" style="display: none;">
-                <div class="progress-text" id="progressText">Progreso de la clase: 0%</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
+            <div class="header-controls">
+                <button class="cyber-btn" onclick="toggleTheme()">🌓 Tema</button>
+                <button class="cyber-btn primary" onclick="toggleDetailPanel()">📊 Detalles</button>
+                <button class="cyber-btn" onclick="exportSchedule()">📤 Exportar</button>
             </div>
-        </div>
-        <!-- Sección de Exámenes -->
-        <div class="exams-container fade-in" id="examsContainer">
-            <div class="exams-title">📝 Próximos Exámenes</div>
+        </header>
+        
+        <!-- Panel de estado -->
+        <div class="status-panel">
+            <div class="status-card">
+                <div class="status-title">⏰ HORA ACTUAL</div>
+                <div class="status-content" id="currentTime">--:--:--</div>
+                <div class="status-subtitle" id="currentDate">Cargando...</div>
+            </div>
             
-            <!-- Banner del próximo examen -->
-            <div class="next-exam-banner" id="nextExamBanner" style="display: none;"></div>
-
-            <!-- Lista de exámenes -->
-            <ul class="exam-list" id="examList">
-                <!-- Exámenes cargados dinámicamente -->
-            </ul>
-
-            <!-- Panel de edición (solo para previsualización) -->
-            <details class="exam-management" style="margin-top: 1rem; background: var(--bg-glass); padding: 1rem; border-radius: 12px;">
-                <summary style="font-weight: 600; cursor: pointer; list-style: none;">➕ Añadir o editar exámenes (vista previa)</summary>
-                <div class="add-exam-form">
-                    <select id="examSubject">
-                        <option value="">Seleccionar Materia</option>
-                    </select>
-                    <input type="date" id="examDate">
-                    <button class="btn add-exam-btn" onclick="addExam()">Agregar</button>
-                    <button class="btn update-json-btn" onclick="downloadExamsJSON()">💾 Descargar JSON</button>
-                </div>
-            </details>
-        </div>
-        
-        <!-- Panel de herramientas -->
-        <div class="tools-panel fade-in">
-            <!-- Temporizador Pomodoro -->
-            <div class="tool-card">
-                <div class="tool-title">🍅 Temporizador Pomodoro</div>
-                <div class="pomodoro-timer" id="pomodoroTimer">25:00</div>
-                <div class="pomodoro-controls">
-                    <button class="btn" onclick="startPomodoro()">▶️ Iniciar</button>
-                    <button class="btn" onclick="pausePomodoro()">⏸️ Pausar</button>
-                    <button class="btn" onclick="resetPomodoro()">🔄 Reiniciar</button>
-                </div>
-                <div class="progress-text" id="pomodoroStatus">Tiempo de estudio: 25 min</div>
+            <div class="status-card">
+                <div class="status-title">📚 CLASE ACTUAL</div>
+                <div class="status-content" id="currentClass">---</div>
+                <div class="status-subtitle" id="classTimeLeft"></div>
             </div>
-            <!-- Contador hasta el fin de semana -->
-            <div class="tool-card">
-                <div class="tool-title">📅 Días hasta el fin de semana</div>
-                <div class="weekend-countdown" id="weekendCountdown">--</div>
-                <div class="funny-message" id="weekendMessage">¡Tú puedes!</div>
+            
+            <div class="status-card">
+                <div class="status-title">🎯 PROGRESO DIARIO</div>
+                <div class="status-content" id="dailyProgress">0%</div>
+                <div class="status-subtitle" id="progressText">Sin clases</div>
             </div>
-            <!-- Mini juego educativo -->
-            <div class="tool-card">
-                <div class="tool-title">🎮 Mini Juego Educativo</div>
-                <div class="mini-game">
-                    <div class="game-question" id="gameQuestion">¿Cuál es la capital de Francia?</div>
-                    <div class="game-options" id="gameOptions">
-                        <!-- Opciones generadas por JavaScript -->
-                    </div>
-                    <div class="game-result" id="gameResult"></div>
-                    <button class="btn" onclick="generateNewQuestion()" style="margin-top: 1rem; width: 100%;">Nueva Pregunta</button>
-                </div>
-            </div>
-            <!-- Contador de próximo examen (redundante pero conservado por compatibilidad) -->
-            <div class="tool-card" style="display:none;">
-                <div class="tool-title">⏱️ Tiempo hasta el próximo examen</div>
-                <div class="weekend-countdown" id="nextExamCountdown">Cargando...</div>
-                <div class="funny-message" id="nextExamSubject">...</div>
+            
+            <div class="status-card">
+                <div class="status-title">⚡ ENERGÍA</div>
+                <div class="status-content" id="energyLevel">100%</div>
+                <div class="status-subtitle">Recomendación: <span id="energyTip"></span></div>
             </div>
         </div>
         
-        <!-- Resto del contenido (igual que antes) -->
-        <div class="control-panel fade-in">
-            <div class="controls-grid">
-                <button class="btn" onclick="toggleAbbreviations()">📝 Mostrar Abreviaturas</button>
-                <button class="btn" onclick="toggleColors()">🎨 Colores por Materia</button>
-                <button class="btn" onclick="toggleCompactView()">📱 Vista Compacta</button>
-                <button class="btn" onclick="showStats()">📊 Estadísticas</button>
-                <button class="btn" onclick="exportSchedule()">📥 Exportar</button>
-                <button class="btn" onclick="toggleDevMode()">💻 Modo Dev</button>
-                <button class="btn" onclick="generateQR()">📱 Código QR</button>
-                <button class="btn" onclick="shakeModeToggle()">🎲 Shake Mode</button>
-            </div>
+        <!-- Selector de vista -->
+        <div class="view-selector">
+            <button class="view-btn active" onclick="changeView('normal')">📋 Normal</button>
+            <button class="view-btn" onclick="changeView('compact')">📱 Compacto</button>
+            <button class="view-btn" onclick="changeView('focus')">🎯 Enfoque</button>
+            <button class="view-btn" onclick="changeView('timeline')">⏳ Línea de tiempo</button>
         </div>
-        <div class="stats-container" id="statsContainer" style="display: none;">
-            <div class="stat-card">
-                <div class="stat-number" id="totalHours">0</div>
-                <div>Horas Totales</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="totalSubjects">0</div>
-                <div>Materias</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="avgDaily">0</div>
-                <div>Promedio Diario</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="breakTime">0</div>
-                <div>Min. Descanso</div>
-            </div>
-        </div>
-        <div class="schedule-container slide-in" id="scheduleContainer">
+        
+        <!-- Interface de horario principal -->
+        <div class="schedule-interface">
             <div class="schedule-header">
-                <h1 class="schedule-title">Horario Académico</h1>
+                <h2 class="schedule-title">HORARIO ACADÉMICO 3D</h2>
+                <p class="schedule-subtitle">Semana del 8 de Abril - Interactivo y Dinámico</p>
             </div>
-            <div class="table-container">
-                <table id="scheduleTable">
-                    <!-- Contenido generado por JavaScript -->
-                </table>
+            
+            <div class="schedule-table-3d">
+                <div class="table-container">
+                    <table class="schedule-table" id="scheduleTable">
+                        <!-- Generado dinámicamente por JavaScript -->
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Panel de detalles lateral -->
+        <div class="detail-panel" id="detailPanel">
+            <button class="panel-close" onclick="toggleDetailPanel()">✕</button>
+            <div class="subject-detail-header" id="detailHeader">
+                <div class="subject-icon" id="detailIcon">📚</div>
+                <h3 class="subject-name" id="detailName">Selecciona una materia</h3>
+                <p class="status-subtitle" id="detailInfo">Haz clic en cualquier celda para ver detalles</p>
+            </div>
+            
+            <div class="detail-content" id="detailContent">
+                <!-- Contenido dinámico -->
             </div>
         </div>
     </div>
-    <!-- Modal para configuraciones -->
-    <div class="modal" id="configModal">
-        <div class="modal-content">
-            <h2>⚙️ Configuración Avanzada</h2>
-            <div style="margin: 1rem 0;">
-                <label>🎭 Tema personalizado:</label>
-                <input type="color" id="primaryColor" value="#667eea">
-                <input type="color" id="secondaryColor" value="#764ba2">
-            </div>
-            <div style="margin: 1rem 0;">
-                <label>📱 Efectos visuales:</label>
-                <input type="range" id="particlesSlider" min="0" max="100" value="20">
-            </div>
-            <button class="btn" onclick="closeModal()">Cerrar</button>
-        </div>
-    </div>
+    
+    <!-- Tooltip -->
+    <div class="tooltip" id="tooltip"></div>
+
     <script>
-        // Datos del horario
+        // Datos del horario (los mismos)
         const scheduleData = [
             ['8:30 - 9:30', 'Sistemas Operativos Monopuesto', 'Redes Locales', 'Digitalización Aplicada a los Sectores Productivos GM', 'Aplicaciones Ofimáticas', 'Aplicaciones Ofimáticas'],
             ['9:30 - 10:30', 'Sistemas Operativos Monopuesto', 'Redes Locales', 'Sistemas Operativos Monopuesto', 'Aplicaciones Ofimáticas', 'Aplicaciones Ofimáticas'],
@@ -873,1006 +789,746 @@
             ['13:00 - 14:00', 'Montaje y Mantenimiento de Equipo', 'Montaje y Mantenimiento de Equipo', 'Redes Locales', 'Redes Locales', 'Itinerario Personal para la Empleabilidad I'],
             ['14:00 - 14:55', 'Montaje y Mantenimiento de Equipo', 'Itinerario Personal para la Empleabilidad I', 'Aplicaciones Ofimáticas', 'Montaje y Mantenimiento de Equipo', 'Sostenibilidad Aplicada al Sistema Productivo']
         ];
-        const subjectAbbreviations = {
-            'Sistemas Operativos Monopuesto': 'SIOPM',
-            'Redes Locales': 'REDLO',
-            'Digitalización Aplicada a los Sectores Productivos GM': 'DASPGM',
-            'Aplicaciones Ofimáticas': 'APLOF',
-            'Itinerario Personal para la Empleabilidad I': 'IPE I',
-            'Montaje y Mantenimiento de Equipo': 'MOMAE',
-            'Sostenibilidad Aplicada al Sistema Productivo': 'SASP'
-        };
-        const subjectColors = {
-            'Sistemas Operativos Monopuesto': 'subject-som',
-            'Redes Locales': 'subject-red',
-            'Digitalización Aplicada a los Sectores Productivos GM': 'subject-dig',
-            'Aplicaciones Ofimáticas': 'subject-ofi',
-            'Itinerario Personal para la Empleabilidad I': 'subject-ipe',
-            'Montaje y Mantenimiento de Equipo': 'subject-mon',
-            'Sostenibilidad Aplicada al Sistema Productivo': 'subject-sos'
-        };
-        const subjectIcons = {
-            'Sistemas Operativos Monopuesto': '💻',
-            'Redes Locales': '🌐',
-            'Digitalización Aplicada a los Sectores Productivos GM': '📱',
-            'Aplicaciones Ofimáticas': '📄',
-            'Itinerario Personal para la Empleabilidad I': '🎯',
-            'Montaje y Mantenimiento de Equipo': '🔧',
-            'Sostenibilidad Aplicada al Sistema Productivo': '🌱'
-        };
-        // Frases graciosas para tiempo libre
-        const funnyMessages = [
-            "¡El café está listo para la próxima clase! ☕",
-            "¿Quizás es momento de un pequeño descanso? 😴",
-            "¡Aprovecha para repasar! O no... 😉",
-            "Tiempo para estirar las piernas 🦵",
-            "¿Alguien dijo merienda? 🍪",
-            "¡Respira hondo, la próxima clase llegará pronto! 🌬️",
-            "Momento perfecto para un meme educativo 📱",
-            "¡Tu cerebro te agradece este descanso! 🧠",
-            "¿Revisaste si hay tareas pendientes? 📚",
-            "¡Carga pilas para la siguiente sesión! 🔋",
-            "Hora de hidratarse 💧",
-            "¿Quizás un pequeño paseo virtual? 🚶‍♂️",
-            "¡El conocimiento espera pacientemente! 📖",
-            "Tiempo de planificar la conquista académica 🗺️",
-            "¡Aprovecha para organizar tus apuntes! 📝"
-        ];
-        // Preguntas para el mini juego
-        const quizQuestions = [
-            {
-                question: "¿Qué protocolo se utiliza principalmente para la transmisión de correos electrónicos?",
-                options: ["HTTP", "FTP", "SMTP", "TCP"],
-                answer: 2
+
+        // Metadatos de materias
+        const subjectMetadata = {
+            'Sistemas Operativos Monopuesto': {
+                icon: '💻',
+                color: 'subject-som',
+                description: 'Sistemas operativos para equipos individuales',
+                teacher: 'Prof. García',
+                room: 'Lab 201',
+                resources: 12,
+                difficulty: 7
             },
-            {
-                question: "¿Qué significa la sigla RAM?",
-                options: ["Random Access Memory", "Read Access Memory", "Rapid Access Memory", "Random Allocation Memory"],
-                answer: 0
+            'Redes Locales': {
+                icon: '🌐',
+                color: 'subject-red',
+                description: 'Configuración y mantenimiento de redes locales',
+                teacher: 'Prof. Rodríguez',
+                room: 'Lab 305',
+                resources: 15,
+                difficulty: 8
             },
-            {
-                question: "¿Qué lenguaje de programación se considera el 'padre' de muchos lenguajes modernos?",
-                options: ["Python", "C", "Java", "Assembly"],
-                answer: 1
+            'Digitalización Aplicada a los Sectores Productivos GM': {
+                icon: '📱',
+                color: 'subject-dig',
+                description: 'Transformación digital aplicada a procesos productivos',
+                teacher: 'Prof. Martínez',
+                room: 'Aula 102',
+                resources: 8,
+                difficulty: 6
             },
-            {
-                question: "¿Qué es un sistema operativo?",
-                options: ["Un programa de edición de texto", "Una interfaz entre el hardware y el usuario", "Un tipo de memoria", "Un dispositivo de almacenamiento"],
-                answer: 1
+            'Aplicaciones Ofimáticas': {
+                icon: '📄',
+                color: 'subject-ofi',
+                description: 'Suite ofimática y herramientas de productividad',
+                teacher: 'Prof. López',
+                room: 'Lab 101',
+                resources: 20,
+                difficulty: 5
             },
-            {
-                question: "¿Qué significa HTML?",
-                options: ["HyperText Markup Language", "HighTech Modern Language", "Hyper Transfer Markup Language", "HighText Machine Language"],
-                answer: 0
+            'Itinerario Personal para la Empleabilidad I': {
+                icon: '🎯',
+                color: 'subject-ipe',
+                description: 'Desarrollo personal para la inserción laboral',
+                teacher: 'Prof. Sánchez',
+                room: 'Aula 203',
+                resources: 10,
+                difficulty: 4
+            },
+            'Montaje y Mantenimiento de Equipo': {
+                icon: '🔧',
+                color: 'subject-mon',
+                description: 'Ensamblaje y mantenimiento de hardware informático',
+                teacher: 'Prof. Fernández',
+                room: 'Taller 1',
+                resources: 18,
+                difficulty: 7
+            },
+            'Sostenibilidad Aplicada al Sistema Productivo': {
+                icon: '🌱',
+                color: 'subject-sos',
+                description: 'Prácticas sostenibles en procesos productivos',
+                teacher: 'Prof. González',
+                room: 'Aula 105',
+                resources: 9,
+                difficulty: 5
             }
-        ];
+        };
+
         // Estado de la aplicación
-        let state = {
-            showAbbreviations: false,
-            showColors: false,
-            compactView: false,
-            devMode: false,
-            shakeMode: false,
-            currentTheme: '',
-            stickyNotes: new Map(),
-            currentClassCell: null,
-            pomodoroInterval: null,
-            pomodoroTime: 25 * 60, // 25 minutos en segundos
-            pomodoroRunning: false,
-            exams: [] // Estado para almacenar exámenes en memoria
+        const appState = {
+            currentView: 'normal',
+            currentTheme: 'dark',
+            selectedSubject: null,
+            isDetailPanelOpen: false,
+            currentClass: null,
+            energy: 100,
+            focusMode: false,
+            animationsEnabled: true
         };
 
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
-            createParticles();
-            renderSchedule();
+            initializeApp();
+            createCursorTrail();
             setupEventListeners();
-            calculateStats();
-            updateClock(); // Iniciar el reloj
-            setInterval(updateClock, 1000); // Actualizar cada segundo
-            updateWeekendCountdown();
-            generateNewQuestion();
-            loadExamsFromJSON(); // <-- Carga los exámenes desde exams.json
-            populateSubjectSelector(); // Rellena el selector para añadir exámenes
-            // Animación de entrada
-            setTimeout(() => {
-                document.querySelector('.schedule-container').classList.add('slide-in');
-            }, 300);
         });
 
-        // Función para cargar exámenes desde un archivo exams.json local
-        async function loadExamsFromJSON() {
-            try {
-                // Intenta leer el archivo exams.json
-                const response = await fetch('exams.json');
-                if (!response.ok) {
-                    console.warn('No se encontró el archivo exams.json o hubo un error:', response.status);
-                    // Si no existe o hay error, inicializa con array vacío
-                    state.exams = [];
-                    console.log('Inicializando con lista de exámenes vacía.');
-                    return;
-                }
-                const examsData = await response.json();
-                if (Array.isArray(examsData)) {
-                    state.exams = examsData; // Carga los exámenes en el estado
-                    console.log('Exámenes cargados desde exams.json');
-                } else {
-                    console.error('El archivo exams.json no contiene un array válido. Inicializando vacío.');
-                    state.exams = [];
-                }
-            } catch (error) {
-                console.error('Error al cargar exams.json:', error);
-                state.exams = []; // Inicializa con array vacío en caso de error
-            }
-            renderExamList(); // Actualiza la UI
-            updateNextExamBanner(); // Actualiza el banner de próximo examen
+        // Inicializar aplicación
+        function initializeApp() {
+            renderSchedule();
+            startClock();
+            updateEnergy();
+            animateEntrance();
+            
+            // Efecto de entrada secuencial
+            setTimeout(() => {
+                document.querySelectorAll('.status-card').forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('animate-in');
+                    }, index * 100);
+                });
+            }, 300);
         }
 
-        // Función para renderizar la lista de exámenes en la UI
-        function renderExamList() {
-            const examListElement = document.getElementById('examList');
-            examListElement.innerHTML = '';
-            const now = new Date();
-
-            // Filtrar solo exámenes futuros y ordenarlos
-            const futureExams = state.exams.filter(exam => new Date(exam.date) > now).sort((a, b) => new Date(a.date) - new Date(b.date));
-
-            if (futureExams.length === 0) {
-                examListElement.innerHTML = '<li class="exam-item"><span>No hay exámenes próximos</span></li>';
-                return;
-            }
-
-            futureExams.forEach((exam, index) => {
-                const examItem = document.createElement('li');
-                examItem.className = 'exam-item';
-                examItem.innerHTML = `
-                    <div>
-                        <span class="subject">${subjectIcons[exam.subject] || '📚'} ${exam.subject}</span>
-                        <span class="date"> - ${new Date(exam.date).toLocaleDateString('es-ES')}</span>
-                    </div>
-                    <button class="delete-exam" onclick="tempDeleteExam(${index})">❌</button>
-                `;
-                examListElement.appendChild(examItem);
-            });
-        }
-
-        // Función para añadir un examen
-        function addExam() {
-            const subjectSelect = document.getElementById('examSubject');
-            const dateInput = document.getElementById('examDate');
-            const subject = subjectSelect.value;
-            const date = dateInput.value;
-            if (!subject || !date) {
-                showNotification('⚠️ Por favor, selecciona una materia y una fecha.', 'error');
-                return;
-            }
-            const newExam = { subject, date };
-            state.exams.push(newExam); // Añade al array en memoria
-            renderExamList(); // Actualiza la UI
-            updateNextExamBanner(); // Actualiza el banner
-            showNotification('✅ Examen añadido a la lista actual.', 'success');
-            // Limpiar formulario
-            subjectSelect.value = '';
-            dateInput.value = '';
-        }
-
-        // Función para eliminar un examen temporalmente (solo en memoria)
-        function tempDeleteExam(index) {
-            const now = new Date();
-            const futureExams = state.exams.filter(exam => new Date(exam.date) > now);
-            const examToDelete = futureExams[index];
-            const globalIndex = state.exams.findIndex(e => 
-                e.subject === examToDelete.subject && e.date === examToDelete.date
-            );
-            if (globalIndex !== -1) {
-                state.exams.splice(globalIndex, 1);
-                renderExamList(); // Actualiza la UI
-                updateNextExamBanner(); // Actualiza el banner
-                showNotification('🗑️ Examen eliminado de la lista actual.', 'info');
-            }
-        }
-
-        // Función para descargar el archivo exams.json con los exámenes actuales
-        function downloadExamsJSON() {
-            const dataStr = JSON.stringify(state.exams, null, 2); // Formato legible
-            const dataUri = 'application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            const exportFileDefaultName = 'exams.json';
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-            showNotification('📥 Archivo exams.json actualizado descargado.', 'info');
-        }
-
-        // Función para rellenar el selector de materias
-        function populateSubjectSelector() {
-            const subjectSelect = document.getElementById('examSubject');
-            Object.keys(subjectAbbreviations).forEach(subject => {
-                const option = document.createElement('option');
-                option.value = subject;
-                option.textContent = subject;
-                subjectSelect.appendChild(option);
-            });
-        }
-
-        // Función para actualizar el banner del próximo examen
-        function updateNextExamBanner() {
-            const bannerElement = document.getElementById('nextExamBanner');
-            const now = new Date();
-            const futureExams = state.exams.filter(exam => new Date(exam.date) > now);
-
-            if (futureExams.length === 0) {
-                bannerElement.style.display = 'none';
-                return;
-            }
-
-            // Encontrar el examen más próximo
-            futureExams.sort((a, b) => new Date(a.date) - new Date(b.date));
-            const nextExam = futureExams[0];
-            const examDate = new Date(nextExam.date);
-            const timeDiff = examDate - now;
-            const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-
-            bannerElement.innerHTML = `🗓️ <strong>${nextExam.subject}</strong><br>Faltan <strong>${days} día${days !== 1 ? 's' : ''}</strong>`;
-            bannerElement.style.display = 'block';
-        }
-
-        // Función del reloj inteligente
-        function updateClock() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('es-ES');
-            const dateString = now.toLocaleDateString('es-ES', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
-            document.getElementById('clockTime').textContent = timeString;
-            document.getElementById('clockDate').textContent = dateString.charAt(0).toUpperCase() + dateString.slice(1);
-            // Determinar el estado actual según el horario
-            const currentStatus = getCurrentClassStatus(now);
-            updateClassStatus(currentStatus);
-            // Actualizar marcador en la tabla
-            updateTableMarker(now);
-        }
-
-        // Determinar el estado actual de clase
-        function getCurrentClassStatus(now) {
-            const currentTime = now.getHours() * 60 + now.getMinutes();
-            const currentDay = now.getDay() - 1; // 0=Lunes, 4=Viernes
-            // Si es fin de semana
-            if (currentDay < 0 || currentDay > 4) {
-                return {
-                    status: 'outside-hours',
-                    message: '¡Es fin de semana! 🎉',
-                    countdown: null,
-                    funnyMessage: getRandomFunnyMessage(),
-                    progress: 0
-                };
-            }
-            // Buscar en qué franja horaria estamos
-            for (let i = 0; i < scheduleData.length; i++) {
-                const timeRange = scheduleData[i][0];
-                const [startTime, endTime] = parseTimeRange(timeRange);
-                if (currentTime >= startTime && currentTime <= endTime) {
-                    // Estamos en esta franja horaria
-                    const subject = scheduleData[i][currentDay + 1];
-                    if (subject === 'DESCANSO') {
-                        return {
-                            status: 'break-time',
-                            message: '¡Hora de descanso! ☕',
-                            countdown: null,
-                            funnyMessage: 'Aprovecha para recargar energías',
-                            progress: 0
-                        };
-                    } else {
-                        // Calcular progreso de la clase
-                        const progress = ((currentTime - startTime) / (endTime - startTime)) * 100;
-                        return {
-                            status: 'in-class',
-                            message: `En clase: ${subject}`,
-                            countdown: null,
-                            funnyMessage: null,
-                            progress: Math.min(progress, 100)
-                        };
-                    }
-                }
-            }
-            // Si no estamos en ninguna franja horaria, calcular cuánto falta para la siguiente
-            let nextClassTime = null;
-            let nextClassSubject = null;
-            for (let i = 0; i < scheduleData.length; i++) {
-                const timeRange = scheduleData[i][0];
-                const [startTime, endTime] = parseTimeRange(timeRange);
-                if (currentTime < startTime) {
-                    nextClassTime = startTime;
-                    nextClassSubject = scheduleData[i][currentDay + 1];
-                    break;
-                }
-            }
-            // Si no hay más clases hoy
-            if (!nextClassTime) {
-                return {
-                    status: 'outside-hours',
-                    message: '¡No hay más clases hoy! 🎉',
-                    countdown: null,
-                    funnyMessage: getRandomFunnyMessage(),
-                    progress: 0
-                };
-            }
-            // Calcular tiempo restante
-            const timeRemaining = nextClassTime - currentTime;
-            const hours = Math.floor(timeRemaining / 60);
-            const minutes = timeRemaining % 60;
-            let countdownText = '';
-            if (hours > 0) {
-                countdownText = `Faltan ${hours}h ${minutes}m`;
-            } else {
-                countdownText = `Faltan ${minutes} minutos`;
-            }
-            return {
-                status: 'free-time',
-                message: `Próxima clase: ${nextClassSubject}`,
-                countdown: countdownText,
-                funnyMessage: getRandomFunnyMessage(),
-                progress: 0
-            };
-        }
-
-        // Actualizar la visualización del estado de clase
-        function updateClassStatus(status) {
-            const classStatusElement = document.getElementById('classStatus');
-            const countdownElement = document.getElementById('countdown');
-            const funnyMessageElement = document.getElementById('funnyMessage');
-            const progressContainer = document.getElementById('progressContainer');
-            const progressFill = document.getElementById('progressFill');
-            const progressText = document.getElementById('progressText');
-            classStatusElement.textContent = status.message;
-            classStatusElement.className = 'class-status ' + status.status;
-            if (status.countdown) {
-                countdownElement.textContent = status.countdown;
-            } else {
-                countdownElement.textContent = '';
-            }
-            if (status.funnyMessage) {
-                funnyMessageElement.textContent = status.funnyMessage;
-            } else {
-                funnyMessageElement.textContent = '';
-            }
-            // Mostrar/ocultar barra de progreso
-            if (status.status === 'in-class' && status.progress > 0) {
-                progressContainer.style.display = 'block';
-                progressFill.style.width = status.progress + '%';
-                progressText.textContent = `Progreso de la clase: ${Math.round(status.progress)}%`;
-            } else {
-                progressContainer.style.display = 'none';
-            }
-        }
-
-        // Actualizar marcador en la tabla
-        function updateTableMarker(now) {
-            const currentTime = now.getHours() * 60 + now.getMinutes();
-            const currentDay = now.getDay() - 1; // 0=Lunes, 4=Viernes
-            // Remover marcador anterior
-            if (state.currentClassCell) {
-                state.currentClassCell.classList.remove('current-class');
-                state.currentClassCell = null;
-            }
-            // Si es fin de semana o fuera de horario, no marcar nada
-            if (currentDay < 0 || currentDay > 4) return;
-            // Buscar la celda actual
-            for (let i = 0; i < scheduleData.length; i++) {
-                const timeRange = scheduleData[i][0];
-                const [startTime, endTime] = parseTimeRange(timeRange);
-                if (currentTime >= startTime && currentTime <= endTime) {
-                    // Encontrar la celda correspondiente en la tabla
-                    const table = document.getElementById('scheduleTable');
-                    if (table.rows.length > i + 1) {
-                        const cell = table.rows[i + 1].cells[currentDay + 1];
-                        if (cell) {
-                            cell.classList.add('current-class');
-                            state.currentClassCell = cell;
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-
-        // Convertir rango de tiempo a minutos
-        function parseTimeRange(timeRange) {
-            const [startStr, endStr] = timeRange.split(' - ');
-            const [startHour, startMinute] = startStr.split(':').map(Number);
-            const [endHour, endMinute] = endStr.split(':').map(Number);
-            return [
-                startHour * 60 + startMinute,
-                endHour * 60 + endMinute
-            ];
-        }
-
-        // Obtener mensaje gracioso aleatorio
-        function getRandomFunnyMessage() {
-            return funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
-        }
-
-        // Temporizador Pomodoro
-        function startPomodoro() {
-            if (state.pomodoroRunning) return;
-            state.pomodoroRunning = true;
-            state.pomodoroInterval = setInterval(updatePomodoro, 1000);
-            document.getElementById('pomodoroStatus').textContent = '⏰ Estudiando...';
-        }
-        function pausePomodoro() {
-            if (!state.pomodoroRunning) return;
-            state.pomodoroRunning = false;
-            clearInterval(state.pomodoroInterval);
-            document.getElementById('pomodoroStatus').textContent = '⏸️ En pausa';
-        }
-        function resetPomodoro() {
-            state.pomodoroRunning = false;
-            clearInterval(state.pomodoroInterval);
-            state.pomodoroTime = 25 * 60;
-            updatePomodoroDisplay();
-            document.getElementById('pomodoroStatus').textContent = 'Tiempo de estudio: 25 min';
-        }
-        function updatePomodoro() {
-            if (state.pomodoroTime > 0) {
-                state.pomodoroTime--;
-                updatePomodoroDisplay();
-            } else {
-                // Tiempo completado
-                clearInterval(state.pomodoroInterval);
-                state.pomodoroRunning = false;
-                document.getElementById('pomodoroStatus').textContent = '✅ ¡Tiempo completado!';
-                showNotification('🍅 ¡Sesión Pomodoro completada! Toma un descanso.', 'success');
-            }
-        }
-        function updatePomodoroDisplay() {
-            const minutes = Math.floor(state.pomodoroTime / 60);
-            const seconds = state.pomodoroTime % 60;
-            document.getElementById('pomodoroTimer').textContent = 
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        // Contador hasta el fin de semana
-        function updateWeekendCountdown() {
-            const now = new Date();
-            const currentDay = now.getDay(); // 0=Dom, 1=Lun, ..., 6=Sab
-            let daysUntilWeekend = 5 - currentDay; // Viernes es el día 5
-            if (currentDay === 0 || currentDay === 6) {
-                daysUntilWeekend = 0;
-            } else if (daysUntilWeekend < 0) {
-                daysUntilWeekend = 0;
-            }
-            const countdownElement = document.getElementById('weekendCountdown');
-            const messageElement = document.getElementById('weekendMessage');
-            if (daysUntilWeekend === 0) {
-                countdownElement.textContent = '¡Es fin de semana! 🎉';
-                messageElement.textContent = '¡Disfruta tu descanso!';
-            } else if (daysUntilWeekend === 1) {
-                countdownElement.textContent = '1 día';
-                messageElement.textContent = '¡Mañana es viernes! 💪';
-            } else {
-                countdownElement.textContent = `${daysUntilWeekend} días`;
-                messageElement.textContent = '¡Tú puedes! 💪';
-            }
-        }
-
-        // Mini juego educativo
-        function generateNewQuestion() {
-            const randomQuestion = quizQuestions[Math.floor(Math.random() * quizQuestions.length)];
-            const questionElement = document.getElementById('gameQuestion');
-            const optionsElement = document.getElementById('gameOptions');
-            const resultElement = document.getElementById('gameResult');
-            questionElement.textContent = randomQuestion.question;
-            optionsElement.innerHTML = '';
-            resultElement.textContent = '';
-            randomQuestion.options.forEach((option, index) => {
-                const button = document.createElement('button');
-                button.className = 'btn';
-                button.textContent = option;
-                button.onclick = () => checkAnswer(index, randomQuestion.answer);
-                optionsElement.appendChild(button);
-            });
-        }
-        function checkAnswer(selectedIndex, correctIndex) {
-            const resultElement = document.getElementById('gameResult');
-            if (selectedIndex === correctIndex) {
-                resultElement.textContent = '✅ ¡Correcto!';
-                resultElement.style.color = '#4CAF50';
-            } else {
-                resultElement.textContent = '❌ Incorrecto. Intenta de nuevo.';
-                resultElement.style.color = '#F44336';
-            }
-        }
-
-        // Crear partículas de fondo
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 50;
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                particlesContainer.appendChild(particle);
-            }
-        }
-
-        // Renderizar horario
+        // Renderizar horario con nueva estructura
         function renderSchedule() {
             const table = document.getElementById('scheduleTable');
             table.innerHTML = '';
-            // Crear encabezado
-            const headerRow = table.insertRow();
-            const days = ['⏰ Horario', '📅 Lunes', '📅 Martes', '📅 Miércoles', '📅 Jueves', '📅 Viernes'];
+            
+            // Cabecera
+            const headerRow = document.createElement('tr');
+            const days = ['⏰ HORARIO', '📅 LUNES', '📅 MARTES', '📅 MIÉRCOLES', '📅 JUEVES', '📅 VIERNES'];
+            
             days.forEach(day => {
                 const th = document.createElement('th');
                 th.textContent = day;
+                th.style.animationDelay = `${Math.random() * 0.5}s`;
                 headerRow.appendChild(th);
             });
-            // Crear filas de datos
-            scheduleData.forEach((rowData, index) => {
-                const row = table.insertRow();
-                if (index === 3) row.classList.add('break-row');
-                rowData.forEach((cellData, cellIndex) => {
-                    const cell = row.insertCell();
+            table.appendChild(headerRow);
+            
+            // Filas de datos
+            scheduleData.forEach((row, rowIndex) => {
+                const tr = document.createElement('tr');
+                tr.style.animationDelay = `${rowIndex * 0.1}s`;
+                
+                row.forEach((cell, cellIndex) => {
+                    const td = document.createElement('td');
+                    
                     if (cellIndex === 0) {
-                        cell.classList.add('time-cell');
-                        cell.textContent = cellData;
+                        // Celda de hora
+                        td.className = 'time-slot';
+                        td.textContent = cell;
+                        td.addEventListener('click', () => showTimeSlotInfo(rowIndex));
+                    } else if (cell === 'DESCANSO') {
+                        // Descanso
+                        td.className = 'break-cell';
+                        td.innerHTML = '☕<br>DESCANSO';
+                        td.addEventListener('click', () => showBreakInfo(rowIndex));
                     } else {
-                        let displayText = cellData;
-                        if (state.showAbbreviations && subjectAbbreviations[cellData]) {
-                            displayText = subjectAbbreviations[cellData];
-                        }
-                        if (cellData !== 'DESCANSO' && subjectIcons[cellData]) {
-                            displayText = subjectIcons[cellData] + ' ' + displayText;
-                        }
-                        cell.innerHTML = displayText;
-                        if (state.showColors && subjectColors[cellData]) {
-                            cell.classList.add(subjectColors[cellData]);
-                        }
-                        if (state.devMode) {
-                            cell.setAttribute('data-debug', `[${index},${cellIndex}]`);
-                        }
-                        // Event listener para notas adhesivas
-                        cell.addEventListener('dblclick', (e) => addStickyNote(e, cell));
+                        // Materia
+                        const subjectInfo = subjectMetadata[cell];
+                        td.className = `subject-cell ${subjectInfo.color}`;
+                        td.innerHTML = `
+                            <div class="subject-icon-mini">${subjectInfo.icon}</div>
+                            <div class="subject-name-mini">${getSubjectAbbr(cell)}</div>
+                        `;
+                        td.dataset.subject = cell;
+                        td.dataset.day = cellIndex - 1;
+                        td.dataset.time = rowIndex;
+                        
+                        td.addEventListener('click', (e) => showSubjectDetail(cell, e));
+                        td.addEventListener('mouseenter', (e) => showTooltip(e, cell));
+                        td.addEventListener('mouseleave', hideTooltip);
                     }
+                    
+                    tr.appendChild(td);
                 });
+                
+                table.appendChild(tr);
             });
-            // Aplicar vista compacta si está activada
-            if (state.compactView) {
-                table.style.fontSize = '0.8rem';
-            } else {
-                table.style.fontSize = '';
-            }
+            
+            // Actualizar clase actual
+            updateCurrentClass();
         }
 
-        // Configurar event listeners
-        function setupEventListeners() {
-            // Cambio de tema
-            document.getElementById('themeSelector').addEventListener('change', function(e) {
-                changeTheme(e.target.value);
-            });
-            // Shake detection
-            if (window.DeviceMotionEvent) {
-                let lastX, lastY, lastZ;
-                let moveCounter = 0;
-                window.addEventListener('devicemotion', function(e) {
-                    if (!state.shakeMode) return;
-                    const acceleration = e.accelerationIncludingGravity;
-                    const curX = acceleration.x;
-                    const curY = acceleration.y;
-                    const curZ = acceleration.z;
-                    if (lastX !== undefined) {
-                        const deltaX = Math.abs(lastX - curX);
-                        const deltaY = Math.abs(lastY - curY);
-                        const deltaZ = Math.abs(lastZ - curZ);
-                        if ((deltaX + deltaY + deltaZ) > 15) {
-                            moveCounter++;
-                            if (moveCounter > 2) {
-                                randomTheme();
-                                moveCounter = 0;
-                            }
-                        }
-                    }
-                    lastX = curX;
-                    lastY = curY;
-                    lastZ = curZ;
-                });
-            }
-        }
-
-        // Funciones de control
-        function toggleAbbreviations() {
-            state.showAbbreviations = !state.showAbbreviations;
-            renderSchedule();
-            updateButtonState('toggleAbbreviations');
-        }
-        function toggleColors() {
-            state.showColors = !state.showColors;
-            renderSchedule();
-            updateButtonState('toggleColors');
-        }
-        function toggleCompactView() {
-            state.compactView = !state.compactView;
-            renderSchedule();
-            updateButtonState('toggleCompactView');
-        }
-        function toggleDevMode() {
-            state.devMode = !state.devMode;
-            document.body.classList.toggle('dev-mode', state.devMode);
-            renderSchedule();
-            updateButtonState('toggleDevMode');
-            if (state.devMode) {
-                console.log('🚀 Developer Mode Activated');
-                console.log('Schedule State:', state);
-                console.log('Schedule Data:', scheduleData);
-            }
-        }
-        function shakeModeToggle() {
-            state.shakeMode = !state.shakeMode;
-            updateButtonState('shakeModeToggle');
-            if (state.shakeMode) {
-                showNotification('🎲 Shake Mode activado - ¡Agita tu dispositivo!', 'info');
-            } else {
-                showNotification('🎲 Shake Mode desactivado', 'info');
-            }
-        }
-        function updateButtonState(functionName) {
-            const buttons = document.querySelectorAll('.btn');
-            buttons.forEach(btn => {
-                if (btn.onclick && btn.onclick.toString().includes(functionName)) {
-                    btn.classList.toggle('active');
-                }
-            });
-        }
-
-        // Cambiar tema
-        function changeTheme(theme) {
-            document.body.className = '';
-            if (theme) {
-                document.body.classList.add(`theme-${theme}`);
-            }
-            state.currentTheme = theme;
-            // Recrear partículas con nuevo tema
-            document.getElementById('particles').innerHTML = '';
-            createParticles();
-            showNotification(`🎨 Tema cambiado: ${getThemeName(theme)}`, 'success');
-        }
-        function getThemeName(theme) {
-            const names = {
-                '': 'Futurista',
-                'university': 'Universidad',
-                'cyberpunk': 'Cyberpunk',
-                'retro': 'Retro 8-bit'
+        // Abreviaturas inteligentes
+        function getSubjectAbbr(fullName) {
+            const abbrMap = {
+                'Sistemas Operativos Monopuesto': 'SIOP',
+                'Redes Locales': 'REDES',
+                'Digitalización Aplicada a los Sectores Productivos GM': 'DIGITAL',
+                'Aplicaciones Ofimáticas': 'OFIMÁTICA',
+                'Itinerario Personal para la Empleabilidad I': 'EMPLEABILIDAD',
+                'Montaje y Mantenimiento de Equipo': 'MANTENIMIENTO',
+                'Sostenibilidad Aplicada al Sistema Productivo': 'SOSTENIBILIDAD'
             };
-            return names[theme] || 'Desconocido';
-        }
-        function randomTheme() {
-            const themes = ['', 'university', 'cyberpunk', 'retro'];
-            const randomTheme = themes[Math.floor(Math.random() * themes.length)];
-            changeTheme(randomTheme);
-            document.getElementById('themeSelector').value = randomTheme;
-            // Efecto glitch temporal
-            document.querySelector('.schedule-container').classList.add('glitch');
-            setTimeout(() => {
-                document.querySelector('.schedule-container').classList.remove('glitch');
-            }, 2000);
+            
+            return abbrMap[fullName] || fullName.substring(0, 12) + '...';
         }
 
-        // Mostrar estadísticas
-        function showStats() {
-            const statsContainer = document.getElementById('statsContainer');
-            const isVisible = statsContainer.style.display !== 'none';
-            statsContainer.style.display = isVisible ? 'none' : 'grid';
-            if (!isVisible) {
-                calculateStats();
-                animateStats();
-            }
-        }
-        function calculateStats() {
-            const subjects = new Set();
-            let totalClasses = 0;
-            scheduleData.forEach(row => {
-                row.slice(1).forEach(cell => {
-                    if (cell && cell !== 'DESCANSO') {
-                        subjects.add(cell);
-                        totalClasses++;
-                    }
+        // Reloj en tiempo real
+        function startClock() {
+            function updateClock() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('es-ES');
+                const dateString = now.toLocaleDateString('es-ES', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
                 });
-            });
-            document.getElementById('totalHours').textContent = Math.round(totalClasses * 0.9); // 55min por clase
-            document.getElementById('totalSubjects').textContent = subjects.size;
-            document.getElementById('avgDaily').textContent = Math.round(totalClasses / 5);
-            document.getElementById('breakTime').textContent = '30';
+                
+                document.getElementById('currentTime').textContent = timeString;
+                document.getElementById('currentDate').textContent = dateString.charAt(0).toUpperCase() + dateString.slice(1);
+                
+                updateCurrentClass();
+                updateDailyProgress();
+            }
+            
+            updateClock();
+            setInterval(updateClock, 1000);
         }
-        function animateStats() {
-            const statNumbers = document.querySelectorAll('.stat-number');
-            statNumbers.forEach((stat, index) => {
-                const finalValue = parseInt(stat.textContent);
-                stat.textContent = '0';
-                setTimeout(() => {
-                    animateNumber(stat, 0, finalValue, 1000);
-                }, index * 200);
-            });
-        }
-        function animateNumber(element, start, end, duration) {
-            const startTime = performance.now();
-            function update(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const current = Math.floor(start + (end - start) * easeOutCubic(progress));
-                element.textContent = current;
-                if (progress < 1) {
-                    requestAnimationFrame(update);
+
+        // Actualizar clase actual
+        function updateCurrentClass() {
+            const now = new Date();
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+            const currentDay = now.getDay() - 1; // 0 = Lunes
+            
+            let foundClass = null;
+            let timeLeft = null;
+            
+            // Buscar en el horario
+            for (let i = 0; i < scheduleData.length; i++) {
+                const timeRange = scheduleData[i][0];
+                const [startTime, endTime] = parseTimeRange(timeRange);
+                
+                if (currentDay >= 0 && currentDay <= 4) {
+                    const subject = scheduleData[i][currentDay + 1];
+                    
+                    if (currentTime >= startTime && currentTime <= endTime) {
+                        if (subject !== 'DESCANSO') {
+                            foundClass = subject;
+                            timeLeft = endTime - currentTime;
+                        } else {
+                            foundClass = 'DESCANSO';
+                        }
+                        break;
+                    }
                 }
             }
-            requestAnimationFrame(update);
-        }
-        function easeOutCubic(t) {
-            return 1 - Math.pow(1 - t, 3);
-        }
-
-        // Notas adhesivas
-        function addStickyNote(event, cell) {
-            const noteText = prompt('📝 Añadir nota:');
-            if (!noteText) return;
-            const note = document.createElement('div');
-            note.className = 'sticky-note';
-            note.textContent = noteText;
-            note.style.top = '5px';
-            note.style.right = '5px';
-            // Botón para eliminar nota
-            const deleteBtn = document.createElement('span');
-            deleteBtn.textContent = '❌';
-            deleteBtn.style.position = 'absolute';
-            deleteBtn.style.top = '-5px';
-            deleteBtn.style.right = '-5px';
-            deleteBtn.style.cursor = 'pointer';
-            deleteBtn.style.fontSize = '0.7rem';
-            deleteBtn.onclick = (e) => {
-                e.stopPropagation();
-                note.remove();
-            };
-            note.appendChild(deleteBtn);
-            cell.style.position = 'relative';
-            cell.appendChild(note);
-            showNotification('📝 Nota añadida', 'success');
-        }
-
-        // Exportar horario - CORREGIDA
-        function exportSchedule() {
-            const scheduleHTML = document.getElementById('scheduleContainer').outerHTML;
-            // Escapar caracteres problemáticos para que sean seguros dentro de la plantilla de cadena de JS
-            const safeScheduleHTML = scheduleHTML
-                .replace(/"/g, '&quot;') // Escapa comillas dobles
-                .replace(/\n/g, ' ')    // Reemplaza saltos de línea por espacios
-                .replace(/\r/g, '');    // Elimina retornos de carro si existen
-            const fullHTML = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Mi Horario Escolar</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; margin: 20px; }
-                        table { border-collapse: collapse; width: 100%; }
-                        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
-                        th { background-color: #f2f2f2; }
-                        .time-cell { background-color: #4CAF50; color: white; }
-                        .break-row td { background-color: #FFC107; }
-                    </style>
-                </head>
-                <body>
-                    <h1>📅 Mi Horario Escolar</h1>
-                    ${safeScheduleHTML}
-                    <p><small>Generado con EduSchedule Pro</small></p>
-                </body>
-                </html>
-            `;
-            const blob = new Blob([fullHTML], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'mi-horario.html';
-            a.click();
-            URL.revokeObjectURL(url);
-            showNotification('📥 Horario exportado', 'success');
+            
+            // Actualizar UI
+            const currentClassEl = document.getElementById('currentClass');
+            const timeLeftEl = document.getElementById('classTimeLeft');
+            
+            if (foundClass) {
+                if (foundClass === 'DESCANSO') {
+                    currentClassEl.textContent = '☕ DESCANSO';
+                    currentClassEl.style.color = '#FFAA00';
+                    timeLeftEl.textContent = '11:30 - 12:00';
+                } else {
+                    currentClassEl.textContent = getSubjectAbbr(foundClass);
+                    currentClassEl.style.color = '';
+                    
+                    if (timeLeft) {
+                        const minutesLeft = Math.floor(timeLeft);
+                        const hours = Math.floor(minutesLeft / 60);
+                        const mins = minutesLeft % 60;
+                        
+                        if (hours > 0) {
+                            timeLeftEl.textContent = `Termina en ${hours}h ${mins}m`;
+                        } else {
+                            timeLeftEl.textContent = `Termina en ${mins} minutos`;
+                        }
+                    }
+                }
+            } else {
+                currentClassEl.textContent = '---';
+                timeLeftEl.textContent = currentDay >= 0 && currentDay <= 4 ? 'Fuera del horario' : 'Fin de semana';
+            }
         }
 
-        // Generar código QR
-        function generateQR() {
-            const scheduleText = scheduleData.map(row => row.join(' | ')).join('');
-            const qrData = encodeURIComponent(scheduleText);
-            const qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${qrData}`;
-            const modal = document.createElement('div');
-            modal.className = 'modal';
-            modal.style.display = 'flex';
-            modal.innerHTML = `
-                <div class="modal-content" style="text-align: center;">
-                    <h2>📱 Código QR del Horario</h2>
-                    <img src="${qrURL}" alt="QR Code" style="max-width: 100%; border-radius: 10px;">
-                    <p>Escanea con tu móvil para compartir</p>
-                    <button class="btn" onclick="this.closest('.modal').remove()">Cerrar</button>
+        // Parsear rango de tiempo
+        function parseTimeRange(range) {
+            const [start, end] = range.split(' - ');
+            const [startHour, startMin] = start.split(':').map(Number);
+            const [endHour, endMin] = end.split(':').map(Number);
+            
+            return [
+                startHour * 60 + startMin,
+                endHour * 60 + endMin
+            ];
+        }
+
+        // Actualizar progreso diario
+        function updateDailyProgress() {
+            const now = new Date();
+            const currentDay = now.getDay() - 1;
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+            
+            if (currentDay < 0 || currentDay > 4) {
+                document.getElementById('dailyProgress').textContent = '0%';
+                document.getElementById('progressText').textContent = 'Fin de semana';
+                return;
+            }
+            
+            // Calcular progreso del día
+            const dayStart = 8 * 60 + 30; // 8:30
+            const dayEnd = 14 * 60 + 55; // 14:55
+            
+            if (currentTime < dayStart) {
+                document.getElementById('dailyProgress').textContent = '0%';
+                document.getElementById('progressText').textContent = 'Clases no iniciadas';
+            } else if (currentTime > dayEnd) {
+                document.getElementById('dailyProgress').textContent = '100%';
+                document.getElementById('progressText').textContent = 'Día completado 🎉';
+            } else {
+                const progress = ((currentTime - dayStart) / (dayEnd - dayStart)) * 100;
+                document.getElementById('dailyProgress').textContent = `${Math.round(progress)}%`;
+                document.getElementById('progressText').textContent = 'En progreso...';
+            }
+        }
+
+        // Sistema de energía
+        function updateEnergy() {
+            const now = new Date();
+            const hour = now.getHours();
+            
+            // La energía disminuye durante el día
+            let energy = 100;
+            
+            if (hour >= 8 && hour < 12) {
+                energy = 100 - ((hour - 8) * 10);
+            } else if (hour >= 12 && hour < 15) {
+                energy = 70 - ((hour - 12) * 15);
+            } else if (hour >= 15) {
+                energy = 40;
+            }
+            
+            // Añadir variación aleatoria
+            energy += (Math.random() * 10 - 5);
+            energy = Math.max(20, Math.min(100, Math.round(energy)));
+            
+            appState.energy = energy;
+            
+            const energyEl = document.getElementById('energyLevel');
+            const tipEl = document.getElementById('energyTip');
+            
+            energyEl.textContent = `${energy}%`;
+            
+            // Cambiar color según nivel
+            if (energy >= 70) {
+                energyEl.style.color = 'var(--success)';
+                tipEl.textContent = '¡Sigue así!';
+            } else if (energy >= 40) {
+                energyEl.style.color = 'var(--warning)';
+                tipEl.textContent = 'Toma un descanso breve';
+            } else {
+                energyEl.style.color = 'var(--danger)';
+                tipEl.textContent = '¡Necesitas recargar!';
+            }
+        }
+
+        // Mostrar detalles de materia
+        function showSubjectDetail(subjectName, event) {
+            const subject = subjectMetadata[subjectName];
+            appState.selectedSubject = subjectName;
+            
+            // Actualizar panel de detalles
+            document.getElementById('detailIcon').textContent = subject.icon;
+            document.getElementById('detailName').textContent = subjectName;
+            document.getElementById('detailInfo').textContent = `${subject.teacher} • ${subject.room}`;
+            
+            // Generar contenido detallado
+            const detailContent = document.getElementById('detailContent');
+            detailContent.innerHTML = `
+                <div style="margin-bottom: 30px;">
+                    <h4 style="color: var(--accent-1); margin-bottom: 10px;">📖 DESCRIPCIÓN</h4>
+                    <p style="color: var(--text-dim); line-height: 1.6;">${subject.description}</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+                    <div>
+                        <h4 style="color: var(--accent-1); margin-bottom: 10px;">📊 ESTADÍSTICAS</h4>
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <span>Recursos:</span>
+                                <span style="color: var(--success);">${subject.resources}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Dificultad:</span>
+                                <span style="color: var(--warning);">${subject.difficulty}/10</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: var(--accent-1); margin-bottom: 10px;">🕐 HORARIOS</h4>
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px;">
+                            <div style="color: var(--text-dim); font-size: 0.9rem;">
+                                ${getSubjectSchedule(subjectName)}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 style="color: var(--accent-1); margin-bottom: 10px;">🎯 ACCIONES</h4>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="cyber-btn" onclick="simulateClass('${subjectName}')">🎬 Simular Clase</button>
+                        <button class="cyber-btn" onclick="addToFavorites('${subjectName}')">⭐ Favorito</button>
+                    </div>
                 </div>
             `;
-            document.body.appendChild(modal);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) modal.remove();
+            
+            // Resaltar en la tabla
+            document.querySelectorAll('.subject-cell').forEach(cell => {
+                cell.classList.remove('focus-subject');
+                if (cell.dataset.subject === subjectName) {
+                    cell.classList.add('focus-subject');
+                }
             });
-            setTimeout(() => modal.remove(), 10000); // Auto-cerrar en 10s
-        }
-
-        // Modo pantalla completa
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().then(() => {
-                    showNotification('🖥️ Modo pantalla completa activado', 'info');
-                    document.querySelector('.navbar').style.display = 'none';
-                    document.querySelector('.main-container').style.marginTop = '0';
-                });
-            } else {
-                document.exitFullscreen().then(() => {
-                    showNotification('🖥️ Modo pantalla completa desactivado', 'info');
-                    document.querySelector('.navbar').style.display = 'block';
-                    document.querySelector('.main-container').style.marginTop = '100px';
-                });
+            
+            // Abrir panel si está cerrado
+            if (!appState.isDetailPanelOpen) {
+                toggleDetailPanel();
+            }
+            
+            // Efecto visual
+            if (event && event.target) {
+                event.target.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    event.target.style.transform = '';
+                }, 300);
             }
         }
 
-        // Sistema de notificaciones
+        // Obtener horarios de una materia
+        function getSubjectSchedule(subjectName) {
+            let schedule = '';
+            const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+            
+            scheduleData.forEach((row, rowIndex) => {
+                row.forEach((cell, cellIndex) => {
+                    if (cellIndex > 0 && cell === subjectName) {
+                        const time = scheduleData[rowIndex][0];
+                        const day = days[cellIndex - 1];
+                        schedule += `${day}: ${time}<br>`;
+                    }
+                });
+            });
+            
+            return schedule || 'No hay horarios esta semana';
+        }
+
+        // Panel de detalles
+        function toggleDetailPanel() {
+            const panel = document.getElementById('detailPanel');
+            appState.isDetailPanelOpen = !appState.isDetailPanelOpen;
+            panel.classList.toggle('active', appState.isDetailPanelOpen);
+        }
+
+        // Cambiar vista
+        function changeView(view) {
+            appState.currentView = view;
+            
+            // Actualizar botones activos
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.includes(view.charAt(0).toUpperCase() + view.slice(1)));
+            });
+            
+            // Aplicar efectos de vista
+            const tableContainer = document.querySelector('.table-container');
+            const table = document.getElementById('scheduleTable');
+            
+            switch(view) {
+                case 'normal':
+                    tableContainer.style.transform = 'rotateX(5deg)';
+                    table.style.fontSize = '';
+                    document.body.classList.remove('focus-mode');
+                    break;
+                    
+                case 'compact':
+                    tableContainer.style.transform = 'none';
+                    table.style.fontSize = '0.85rem';
+                    document.body.classList.remove('focus-mode');
+                    break;
+                    
+                case 'focus':
+                    tableContainer.style.transform = 'rotateX(5deg)';
+                    table.style.fontSize = '';
+                    document.body.classList.add('focus-mode');
+                    break;
+                    
+                case 'timeline':
+                    tableContainer.style.transform = 'rotateX(10deg)';
+                    animateTimelineView();
+                    break;
+            }
+        }
+
+        // Efectos de animación
+        function animateEntrance() {
+            const elements = document.querySelectorAll('.schedule-table th, .schedule-table td');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    el.style.transition = 'all 0.6s ease';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 20);
+            });
+        }
+
+        function animateTimelineView() {
+            const cells = document.querySelectorAll('.subject-cell');
+            cells.forEach((cell, index) => {
+                setTimeout(() => {
+                    cell.style.transform = `translateX(${Math.sin(index) * 10}px)`;
+                    setTimeout(() => {
+                        cell.style.transform = '';
+                    }, 500);
+                }, index * 50);
+            });
+        }
+
+        // Rastro del cursor
+        function createCursorTrail() {
+            const trail = document.querySelector('.cursor-trail');
+            let mouseX = 0, mouseY = 0;
+            let trailX = 0, trailY = 0;
+            
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+            
+            function animateTrail() {
+                trailX += (mouseX - trailX) * 0.1;
+                trailY += (mouseY - trailY) * 0.1;
+                
+                trail.style.left = trailX + 'px';
+                trail.style.top = trailY + 'px';
+                
+                requestAnimationFrame(animateTrail);
+            }
+            
+            animateTrail();
+        }
+
+        // Tooltips
+        function showTooltip(event, content) {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.textContent = content;
+            tooltip.classList.add('active');
+            
+            const x = event.clientX + 15;
+            const y = event.clientY + 15;
+            
+            tooltip.style.left = x + 'px';
+            tooltip.style.top = y + 'px';
+        }
+
+        function hideTooltip() {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.classList.remove('active');
+        }
+
+        // Información de descanso
+        function showBreakInfo(rowIndex) {
+            const times = scheduleData[rowIndex][0].split(' - ');
+            showNotification(`☕ Tiempo de descanso recomendado:<br><strong>${times[0]} - ${times[1]}</strong><br>Aprovecha para recargar energías.`);
+        }
+
+        function showTimeSlotInfo(rowIndex) {
+            const time = scheduleData[rowIndex][0];
+            showNotification(`⏰ Franja horaria:<br><strong>${time}</strong><br>Total: 55 minutos`);
+        }
+
+        // Funciones simuladas
+        function simulateClass(subjectName) {
+            showNotification(`🎬 Simulando clase de ${subjectName}...`, 'info');
+            document.getElementById('detailContent').innerHTML += `
+                <div style="margin-top: 20px; padding: 15px; background: rgba(0, 255, 136, 0.1); border-radius: 8px; border-left: 4px solid var(--success);">
+                    <strong>🎯 Simulación en curso...</strong><br>
+                    <progress value="50" max="100" style="width: 100%; margin-top: 10px;"></progress>
+                </div>
+            `;
+        }
+
+        function addToFavorites(subjectName) {
+            showNotification(`⭐ ${subjectName} añadido a favoritos`, 'success');
+        }
+
+        // Notificaciones
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
-            notification.className = 'notification';
             notification.style.cssText = `
                 position: fixed;
-                top: 100px;
+                top: 20px;
                 right: 20px;
-                background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+                background: ${type === 'success' ? 'rgba(0, 255, 136, 0.9)' : type === 'error' ? 'rgba(255, 55, 95, 0.9)' : 'rgba(0, 217, 255, 0.9)'};
                 color: white;
-                padding: 1rem 2rem;
+                padding: 15px 25px;
                 border-radius: 10px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-                z-index: 3000;
-                transform: translateX(100%);
-                transition: transform 0.3s ease;
-                max-width: 300px;
                 backdrop-filter: blur(10px);
+                z-index: 10000;
+                transform: translateX(100%);
+                transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                max-width: 300px;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+                border: 1px solid rgba(255, 255, 255, 0.2);
             `;
-            notification.textContent = message;
+            notification.innerHTML = message;
             document.body.appendChild(notification);
-            // Animación de entrada
+            
             setTimeout(() => {
                 notification.style.transform = 'translateX(0)';
-            }, 100);
-            // Auto-eliminar
+            }, 10);
+            
             setTimeout(() => {
                 notification.style.transform = 'translateX(100%)';
-                setTimeout(() => notification.remove(), 300);
+                setTimeout(() => notification.remove(), 400);
             }, 3000);
         }
 
-        // Modal de configuración
-        function openConfigModal() {
-            document.getElementById('configModal').style.display = 'flex';
-        }
-        function closeModal() {
-            document.getElementById('configModal').style.display = 'none';
+        // Exportar horario
+        function exportSchedule() {
+            const htmlContent = document.querySelector('.schedule-interface').outerHTML;
+            const blob = new Blob([`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Mi Horario - EduSchedule Pro</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; background: #0a0a14; color: white; }
+                        .schedule-interface { max-width: 1200px; margin: 0 auto; }
+                    </style>
+                </head>
+                <body>
+                    ${htmlContent}
+                    <p style="text-align: center; margin-top: 30px; color: #888;">Generado con EduSchedule Pro v3.0</p>
+                </body>
+                </html>
+            `], { type: 'text/html' });
+            
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'horario-academico.html';
+            a.click();
+            
+            showNotification('📤 Horario exportado exitosamente', 'success');
         }
 
-        // Efectos especiales para eventos
-        function triggerConfetti() {
-            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7'];
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.style.cssText = `
-                    position: fixed;
-                    width: 10px;
-                    height: 10px;
-                    background: ${colors[Math.floor(Math.random() * colors.length)]};
-                    left: ${Math.random() * 100}%;
-                    top: -10px;
-                    z-index: 4000;
-                    border-radius: 50%;
-                    pointer-events: none;
-                    animation: confetti-fall ${Math.random() * 3 + 2}s linear forwards;
-                `;
-                document.body.appendChild(confetti);
-                setTimeout(() => confetti.remove(), 5000);
+        // Cambiar tema
+        function toggleTheme() {
+            const themes = ['dark', 'light', 'blue', 'purple', 'green'];
+            const currentIndex = themes.indexOf(appState.currentTheme);
+            const nextIndex = (currentIndex + 1) % themes.length;
+            
+            changeTheme(themes[nextIndex]);
+            showNotification(`🌓 Tema cambiado a: ${themes[nextIndex].toUpperCase()}`);
+        }
+
+        function changeTheme(theme) {
+            appState.currentTheme = theme;
+            
+            const root = document.documentElement;
+            
+            switch(theme) {
+                case 'light':
+                    root.style.setProperty('--bg-dark', '#f5f7fa');
+                    root.style.setProperty('--bg-darker', '#e4e7ec');
+                    root.style.setProperty('--text-light', '#1a1a2e');
+                    root.style.setProperty('--text-dim', '#4a4a6a');
+                    break;
+                    
+                case 'blue':
+                    root.style.setProperty('--primary-hue', '210');
+                    break;
+                    
+                case 'purple':
+                    root.style.setProperty('--primary-hue', '280');
+                    break;
+                    
+                case 'green':
+                    root.style.setProperty('--primary-hue', '140');
+                    break;
+                    
+                default: // dark
+                    root.style.setProperty('--bg-dark', '#0a0a14');
+                    root.style.setProperty('--bg-darker', '#05050a');
+                    root.style.setProperty('--text-light', '#ffffff');
+                    root.style.setProperty('--text-dim', 'rgba(255, 255, 255, 0.7)');
+                    break;
             }
         }
-        // Agregar estilos de animación para confetti
-        const confettiStyles = document.createElement('style');
-        confettiStyles.textContent = `
-            @keyframes confetti-fall {
-                to {
-                    transform: translateY(100vh) rotate(720deg);
+
+        // Event Listeners
+        function setupEventListeners() {
+            // Actualizar energía cada 5 minutos
+            setInterval(updateEnergy, 300000);
+            
+            // Detectar teclas
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (appState.isDetailPanelOpen) {
+                        toggleDetailPanel();
+                    }
                 }
-            }
-        `;
-        document.head.appendChild(confettiStyles);
-
-        // Easter eggs
-        let konamiCode = [];
-        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
-        document.addEventListener('keydown', function(e) {
-            konamiCode.push(e.code);
-            konamiCode = konamiCode.slice(-10);
-            if (konamiCode.join(',') === konamiSequence.join(',')) {
-                triggerConfetti();
-                showNotification('🎉 ¡Código Konami activado!', 'success');
-                document.querySelector('.schedule-container').classList.add('glow');
-                setTimeout(() => {
-                    document.querySelector('.schedule-container').classList.remove('glow');
-                }, 3000);
-            }
-        });
-
-        // Detector de viernes para confetti automático
-        function checkFridayBonus() {
-            const today = new Date();
-            if (today.getDay() === 5 && today.getHours() > 14) { // Viernes después de las 2 PM
-                triggerConfetti();
-                showNotification('🎉 ¡Feliz viernes! Fin de semana a la vista', 'success');
-            }
-        }
-
-        // Auto-save de preferencias (solo tema, abreviaturas, etc., NO exámenes)
-        function savePreferences() {
-            const preferences = {
-                theme: state.currentTheme,
-                showAbbreviations: state.showAbbreviations,
-                showColors: state.showColors,
-                compactView: state.compactView
-            };
-            localStorage.setItem('eduSchedulePrefs', JSON.stringify(preferences));
-        }
-        function loadPreferences() {
-            const saved = localStorage.getItem('eduSchedulePrefs');
-            if (saved) {
-                const prefs = JSON.parse(saved);
-                if (prefs.theme) changeTheme(prefs.theme);
-                if (prefs.showAbbreviations) toggleAbbreviations();
-                if (prefs.showColors) toggleColors();
-                if (prefs.compactView) toggleCompactView();
-            }
-        }
-
-        // Auto-guardar preferencias cuando cambie el estado (solo preferencias, no exámenes)
-        setInterval(savePreferences, 5000);
-        // Cargar preferencias al inicio
-        setTimeout(loadPreferences, 500);
-
-        // Check para bonus de viernes
-        setTimeout(checkFridayBonus, 2000);
-
-        // Efectos de hover mejorados con JavaScript
-        document.addEventListener('DOMContentLoaded', function() {
-            const scheduleTable = document.getElementById('scheduleTable');
-            scheduleTable.addEventListener('mouseover', function(e) {
-                if (e.target.tagName === 'TD' && !e.target.classList.contains('time-cell')) {
-                    e.target.style.transform = 'scale(1.05)';
-                    e.target.style.zIndex = '100';
+                
+                // Easter egg: Konami Code
+                if (e.key === 'ArrowUp') {
+                    // Implementación básica del Konami Code
+                    setTimeout(() => {
+                        if (e.key === 'ArrowDown') {
+                            showNotification('🎮 ¡Easter egg activado! ¡Modo gamer!', 'success');
+                        }
+                    }, 100);
                 }
             });
-            scheduleTable.addEventListener('mouseout', function(e) {
-                if (e.target.tagName === 'TD') {
-                    e.target.style.transform = '';
-                    e.target.style.zIndex = '';
+            
+            // Detectar clics fuera del panel
+            document.addEventListener('click', (e) => {
+                if (appState.isDetailPanelOpen && !e.target.closest('#detailPanel') && 
+                    !e.target.closest('.subject-cell')) {
+                    toggleDetailPanel();
                 }
             });
-        });
+        }
+
+        // Animación de entrada especial
+        setTimeout(() => {
+            const title = document.querySelector('.header-title');
+            title.style.animation = 'none';
+            setTimeout(() => {
+                title.style.animation = 'slideInUp 0.6s ease-out';
+            }, 10);
+        }, 1000);
 
         console.log(`
-        ███████╗██████╗ ██╗   ██╗███████╗ ██████╗██╗  ██╗███████╗██████╗ ██╗   ██╗██╗     ███████╗
-        ██╔════╝██╔══██╗██║   ██║██╔════╝██╔════╝██║  ██║██╔════╝██╔══██╗██║   ██║██║     ██╔════╝
-        █████╗  ██║  ██║██║   ██║███████╗██║     ███████║█████╗  ██║  ██║██║   ██║██║     █████╗  
-        ██╔══╝  ██║  ██║██║   ██║╚════██║██║     ██╔══██║██╔══╝  ██║  ██║██║   ██║██║     ██╔══╝  
-        ███████╗██████╔╝╚██████╔╝███████║╚██████╗██║  ██║███████╗██████╔╝╚██████╔╝███████╗███████╗
-        ╚══════╝╚═════╝  ╚═════╝ ╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝ ╚══════╝╚══════╝
-                                         PRO v2.0 🚀
-        Desarrollado por Angelpro09_Dev & Claude
+        ╔═══════════════════════════════════════════════════════════╗
+        ║                                                           ║
+        ║   ███████╗██████╗ ██╗   ██╗███████╗ ██████╗██╗  ██╗      ║
+        ║   ██╔════╝██╔══██╗██║   ██║██╔════╝██╔════╝██║  ██║      ║
+        ║   █████╗  ██║  ██║██║   ██║███████╗██║     ███████║      ║
+        ║   ██╔══╝  ██║  ██║██║   ██║╚════██║██║     ██╔══██║      ║
+        ║   ███████╗██████╔╝╚██████╔╝███████║╚██████╗██║  ██║      ║
+        ║   ╚══════╝╚═════╝  ╚═════╝ ╚══════╝ ╚═════╝╚═╝  ╚═╝      ║
+        ║                                                           ║
+        ║                PRO v3.0 - REIMAGINED                      ║
+        ║                Nueva generación de                        ║
+        ║                gestión académica                         ║
+        ║                                                           ║
+        ╚═══════════════════════════════════════════════════════════╝
         `);
     </script>
 </body>
