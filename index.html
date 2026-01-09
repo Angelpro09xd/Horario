@@ -3,1533 +3,639 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduSchedule Pro - Nueva Generación</title>
+    <title>EduOS // Liquid Plasma Edition</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Orbitron:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
         :root {
-            --primary-hue: 220;
-            --primary-sat: 85%;
-            --primary-light: 55%;
-            --bg-dark: #0a0a14;
-            --bg-darker: #05050a;
-            --bg-card: rgba(20, 20, 40, 0.7);
-            --text-light: #ffffff;
-            --text-dim: rgba(255, 255, 255, 0.7);
-            --accent-1: #00d9ff;
-            --accent-2: #9d4edd;
-            --accent-3: #ff6d00;
-            --success: #00ff88;
-            --warning: #ffaa00;
-            --danger: #ff375f;
-            
-            --gradient-primary: linear-gradient(135deg, 
-                hsl(var(--primary-hue), var(--primary-sat), var(--primary-light)) 0%,
-                hsl(calc(var(--primary-hue) + 30), var(--primary-sat), calc(var(--primary-light) - 10%)) 100%);
-            --gradient-accent: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-            --gradient-warning: linear-gradient(135deg, var(--warning), var(--danger));
-            
-            --shadow-glow: 0 0 40px rgba(0, 217, 255, 0.3);
-            --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.4);
-            --border-radius: 16px;
-            --border-radius-sm: 8px;
-            
-            --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --bg-liquid-1: #0f0c29;
+            --bg-liquid-2: #302b63;
+            --bg-liquid-3: #24243e;
+            --glass-bg: rgba(20, 20, 30, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-highlight: rgba(255, 255, 255, 0.05);
+            --accent: #00f2ff;
+            --text: #ffffff;
+            --window-radius: 12px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
 
         body {
-            font-family: 'Montserrat', sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-light);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Fondo dinámico con gradientes animados */
-        .dynamic-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            overflow: hidden;
-        }
-
-        .gradient-blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.3;
-            animation: float 20s infinite ease-in-out;
-        }
-
-        .blob-1 {
-            width: 600px;
-            height: 600px;
-            background: var(--accent-1);
-            top: -200px;
-            left: -200px;
-            animation-delay: 0s;
-        }
-
-        .blob-2 {
-            width: 500px;
-            height: 500px;
-            background: var(--accent-2);
-            bottom: -150px;
-            right: -150px;
-            animation-delay: -5s;
-        }
-
-        .blob-3 {
-            width: 400px;
-            height: 400px;
-            background: var(--accent-3);
-            top: 50%;
-            left: 80%;
-            animation-delay: -10s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(100px, -100px) scale(1.1); }
-            50% { transform: translate(-50px, 150px) scale(0.9); }
-            75% { transform: translate(-150px, -50px) scale(1.05); }
-        }
-
-        /* Grid de partículas */
-        .particle-grid {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            mask-image: radial-gradient(circle at center, black 30%, transparent 70%);
-            animation: grid-pulse 20s infinite alternate;
-        }
-
-        @keyframes grid-pulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.7; }
-        }
-
-        /* Contenedor principal */
-        .main-app {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Header futurista */
-        .app-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 30px 0;
-            margin-bottom: 40px;
-            position: relative;
-        }
-
-        .header-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 3.5rem;
-            font-weight: 900;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: var(--shadow-glow);
-            letter-spacing: 1px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .header-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--gradient-primary);
-            border-radius: 2px;
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.6s ease;
-        }
-
-        .header-title:hover::after {
-            transform: scaleX(1);
-        }
-
-        .header-controls {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        /* Botones mejorados */
-        .cyber-btn {
-            padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid transparent;
-            border-image: var(--gradient-primary) 1;
-            color: var(--text-light);
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-            border-radius: var(--border-radius-sm);
-        }
-
-        .cyber-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.6s;
-        }
-
-        .cyber-btn:hover::before {
-            left: 100%;
-        }
-
-        .cyber-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
-        }
-
-        .cyber-btn.primary {
-            background: var(--gradient-primary);
-            border: none;
-        }
-
-        /* Panel de estado */
-        .status-panel {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        .status-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border-radius: var(--border-radius);
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: var(--transition-smooth);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .status-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-card);
-            border-color: var(--accent-1);
-        }
-
-        .status-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--gradient-primary);
-        }
-
-        .status-title {
-            font-size: 1.1rem;
-            color: var(--text-dim);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .status-content {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .status-subtitle {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* Horario principal - NUEVO DISEÑO */
-        .schedule-interface {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border-radius: var(--border-radius);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-            margin-bottom: 40px;
-            box-shadow: var(--shadow-card);
-        }
-
-        .schedule-header {
-            padding: 30px;
-            background: rgba(0, 0, 0, 0.3);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-        }
-
-        .schedule-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 2rem;
-            font-weight: 700;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .schedule-subtitle {
-            color: var(--text-dim);
-            margin-top: 10px;
-            font-size: 1.1rem;
-        }
-
-        /* Tabla de horario 3D */
-        .schedule-table-3d {
-            position: relative;
-            padding: 20px;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        .table-container {
-            transform: rotateX(5deg);
-            transform-origin: top center;
-            transition: transform 0.6s ease;
-        }
-
-        .schedule-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            border-radius: 12px;
-            overflow: hidden;
-            background: rgba(0, 0, 0, 0.3);
-            position: relative;
-        }
-
-        .schedule-table th {
-            padding: 25px 15px;
-            text-align: center;
-            font-weight: 700;
-            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(157, 78, 221, 0.1));
-            color: var(--text-light);
-            font-family: 'Orbitron', monospace;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-            border-bottom: 2px solid var(--accent-1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .schedule-table th::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent, rgba(0, 217, 255, 0.1));
-            pointer-events: none;
-        }
-
-        .schedule-table td {
-            padding: 25px 15px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .schedule-table td:hover {
-            background: rgba(0, 217, 255, 0.05);
-            transform: scale(1.02);
-            z-index: 10;
-        }
-
-        .time-slot {
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(20, 20, 40, 0.6));
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 600;
-            color: var(--accent-1);
-            border-right: 2px solid var(--accent-1);
-        }
-
-        .subject-cell {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .subject-cell::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .subject-cell:hover::before {
-            left: 100%;
-        }
-
-        /* Estilos de materias por colores */
-        .subject-som {
-            background: linear-gradient(135deg, rgba(0, 217, 255, 0.15), rgba(0, 150, 255, 0.1));
-            border-left: 4px solid var(--accent-1);
-        }
-
-        .subject-red {
-            background: linear-gradient(135deg, rgba(255, 109, 0, 0.15), rgba(255, 50, 50, 0.1));
-            border-left: 4px solid var(--accent-3);
-        }
-
-        .subject-dig {
-            background: linear-gradient(135deg, rgba(157, 78, 221, 0.15), rgba(128, 0, 255, 0.1));
-            border-left: 4px solid var(--accent-2);
-        }
-
-        .subject-ofi {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 200, 100, 0.1));
-            border-left: 4px solid var(--success);
-        }
-
-        .subject-ipe {
-            background: linear-gradient(135deg, rgba(255, 170, 0, 0.15), rgba(255, 100, 0, 0.1));
-            border-left: 4px solid var(--warning);
-        }
-
-        .subject-mon {
-            background: linear-gradient(135deg, rgba(255, 55, 95, 0.15), rgba(255, 0, 60, 0.1));
-            border-left: 4px solid var(--danger);
-        }
-
-        .subject-sos {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 175, 0, 0.1));
-            border-left: 4px solid #ffd700;
-        }
-
-        .break-cell {
-            background: linear-gradient(135deg, rgba(255, 170, 0, 0.2), rgba(255, 100, 0, 0.1));
-            font-style: italic;
-            color: var(--warning);
-            font-weight: 600;
-        }
-
-        /* Efecto de clase actual */
-        .current-class {
-            animation: pulse-border 2s infinite;
-            position: relative;
-            z-index: 5;
-        }
-
-        .current-class::after {
-            content: '🟢 AHORA';
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            font-size: 0.7rem;
-            color: var(--success);
-            font-weight: bold;
-            animation: blink 1s infinite;
-        }
-
-        @keyframes pulse-border {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4); }
-            50% { box-shadow: 0 0 0 8px rgba(0, 255, 136, 0); }
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* Panel lateral de detalles */
-        .detail-panel {
-            position: fixed;
-            top: 0;
-            right: -400px;
-            width: 380px;
+            font-family: 'Inter', sans-serif;
             height: 100vh;
-            background: var(--bg-card);
-            backdrop-filter: blur(30px);
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            z-index: 1000;
-            transition: right 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            overflow-y: auto;
+            width: 100vw;
+            overflow: hidden;
+            color: var(--text);
+            /* Fondo Líquido Animado */
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #141E30);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            position: relative;
         }
 
-        .detail-panel.active {
-            right: 0;
-            box-shadow: -20px 0 60px rgba(0, 0, 0, 0.5);
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        .panel-close {
+        /* --- ORBES FLOTANTES (Efecto Liquid) --- */
+        .orb {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
-            color: var(--text-light);
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .panel-close:hover {
-            transform: rotate(90deg);
-        }
-
-        .subject-detail-header {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .subject-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-        }
-
-        .subject-name {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        /* Animaciones avanzadas */
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .animate-in {
-            animation: slideInUp 0.6s ease-out forwards;
-        }
-
-        /* Selector de vista */
-        .view-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            justify-content: center;
-        }
-
-        .view-btn {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid transparent;
-            color: var(--text-light);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            font-weight: 600;
-        }
-
-        .view-btn.active {
-            background: var(--gradient-primary);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
-        }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .header-title {
-                font-size: 2.5rem;
-            }
-            
-            .schedule-table th,
-            .schedule-table td {
-                padding: 15px 10px;
-            }
-            
-            .detail-panel {
-                width: 320px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header-title {
-                font-size: 2rem;
-            }
-            
-            .app-header {
-                flex-direction: column;
-                gap: 20px;
-                text-align: center;
-            }
-            
-            .schedule-table th,
-            .schedule-table td {
-                padding: 10px 5px;
-                font-size: 0.9rem;
-            }
-            
-            .status-panel {
-                grid-template-columns: 1fr;
-            }
-            
-            .detail-panel {
-                width: 100%;
-                right: -100%;
-            }
-        }
-
-        /* Efectos de cursor */
-        .cursor-trail {
-            position: fixed;
-            width: 6px;
-            height: 6px;
-            background: var(--accent-1);
             border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.7;
-            transition: transform 0.1s;
+            filter: blur(80px);
+            opacity: 0.6;
+            z-index: 0;
+            animation: floatOrb 20s infinite alternate;
+        }
+        .orb-1 { width: 400px; height: 400px; background: #8e2de2; top: -100px; left: -100px; }
+        .orb-2 { width: 500px; height: 500px; background: #4a00e0; bottom: -100px; right: -100px; animation-delay: -5s; }
+        .orb-3 { width: 300px; height: 300px; background: var(--accent); top: 40%; left: 40%; animation-delay: -10s; opacity: 0.3; }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, -50px) scale(1.1); }
         }
 
-        /* Modo focus */
-        .focus-mode .subject-cell:not(.focus-subject) {
-            opacity: 0.3;
-            filter: blur(2px);
-            transition: all 0.4s ease;
-        }
-
-        /* Líneas de conexión */
-        .connection-line {
+        /* --- ESCRITORIO --- */
+        .desktop {
             position: absolute;
-            background: linear-gradient(90deg, var(--accent-1), transparent);
-            height: 2px;
-            pointer-events: none;
+            top: 0; left: 0; width: 100%; height: calc(100% - 60px);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            gap: 20px;
             z-index: 1;
         }
 
-        /* Tooltips mejorados */
-        .tooltip {
-            position: absolute;
-            background: rgba(0, 0, 0, 0.9);
-            color: var(--text-light);
-            padding: 12px 18px;
+        .desktop-icon {
+            width: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 10px;
             border-radius: 8px;
-            font-size: 0.9rem;
-            pointer-events: none;
-            z-index: 1000;
-            border: 1px solid var(--accent-1);
-            backdrop-filter: blur(10px);
-            transform: translateY(-10px);
-            opacity: 0;
-            transition: all 0.3s ease;
-            white-space: nowrap;
         }
 
-        .tooltip.active {
-            opacity: 1;
-            transform: translateY(0);
+        .desktop-icon:hover { background: rgba(255,255,255,0.1); }
+        .desktop-icon img, .desktop-icon div.icon-placeholder {
+            width: 48px; height: 48px; margin-bottom: 5px;
+            font-size: 2rem; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+            border-radius: 12px; border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
+        .desktop-icon span { font-size: 0.8rem; text-shadow: 0 1px 3px rgba(0,0,0,0.8); text-align: center; }
+
+        /* --- VENTANAS (OS WINDOWS) --- */
+        .window {
+            position: absolute;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--window-radius);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: opacity 0.2s, transform 0.2s;
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+            z-index: 10;
+            min-width: 300px;
+            min-height: 200px;
+        }
+
+        .window.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: all;
+        }
+
+        .window-header {
+            height: 36px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            cursor: grab;
+        }
+        .window-header:active { cursor: grabbing; }
+
+        .window-title { font-size: 0.85rem; font-weight: 600; opacity: 0.8; display: flex; align-items: center; gap: 8px; }
+        .window-controls { display: flex; gap: 6px; }
+        .win-btn { width: 12px; height: 12px; border-radius: 50%; border: none; cursor: pointer; }
+        .btn-close { background: #ff5f56; }
+        .btn-min { background: #ffbd2e; }
+        .btn-max { background: #27c93f; }
+
+        .window-body {
+            flex: 1;
+            overflow: auto;
+            padding: 15px;
+            color: #eee;
+        }
+
+        /* --- ESTILOS ESPECÍFICOS DE APPS --- */
+        /* Horario */
+        .schedule-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 4px;
+        }
+        .schedule-table th { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 4px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
+        .schedule-table td { 
+            background: rgba(255,255,255,0.05); 
+            padding: 10px; 
+            border-radius: 4px; 
+            font-size: 0.8rem; 
+            vertical-align: middle;
+            transition: 0.2s;
+            cursor: default;
+        }
+        .schedule-table td:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+        .cell-time { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-weight: bold; text-align: center;}
+        .cell-break { background: rgba(255, 189, 46, 0.1) !important; color: #ffbd2e; text-align: center; font-weight: bold; letter-spacing: 2px;}
+
+        /* Clicker Game */
+        .clicker-container { display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: center; gap: 20px; }
+        .mining-rig { width: 120px; height: 120px; background: radial-gradient(circle, #2a2a35, #000); border: 2px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; cursor: pointer; box-shadow: 0 0 20px var(--accent); transition: 0.1s; }
+        .mining-rig:active { transform: scale(0.95); }
+        .stats-panel { text-align: center; }
+        .coin-count { font-size: 2.5rem; font-weight: 800; color: var(--accent); font-family: 'JetBrains Mono'; }
+        .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 20px; }
+        .shop-item { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; cursor: pointer; text-align: left; }
+        .shop-item:hover { background: rgba(255,255,255,0.2); }
+
+        /* Memory Game */
+        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; max-width: 400px; margin: 0 auto; }
+        .memory-card { aspect-ratio: 1; background: rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 2rem; transform-style: preserve-3d; transition: 0.3s; }
+        .memory-card.flipped { background: var(--accent); color: #000; transform: rotateY(180deg); }
+        .memory-card.matched { background: #27c93f; opacity: 0.5; pointer-events: none; }
+
+        /* --- BARRA DE TAREAS (KDE STYLE) --- */
+        .taskbar {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 56px;
+            background: rgba(10, 10, 15, 0.75);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            gap: 15px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .taskbar-divider { width: 1px; height: 30px; background: rgba(255,255,255,0.1); }
+
+        .app-icon {
+            width: 42px; height: 42px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            background: rgba(255,255,255,0.05);
+        }
+        .app-icon:hover { transform: translateY(-5px) scale(1.1); background: rgba(255,255,255,0.15); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        
+        .app-icon.active::after {
+            content: ''; position: absolute; bottom: -6px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent);
+        }
+
+        .clock-widget {
+            font-size: 0.85rem;
+            text-align: right;
+            line-height: 1.2;
+            color: #ccc;
+            margin-left: 10px;
+        }
+
     </style>
 </head>
 <body>
-    <!-- Fondo dinámico -->
-    <div class="dynamic-bg">
-        <div class="gradient-blob blob-1"></div>
-        <div class="gradient-blob blob-2"></div>
-        <div class="gradient-blob blob-3"></div>
+
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="desktop">
+        <div class="desktop-icon" onclick="openWindow('scheduleWin')">
+            <div class="icon-placeholder">📅</div>
+            <span>Horario</span>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('minerWin')">
+            <div class="icon-placeholder">⛏️</div>
+            <span>Miner</span>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('snakeWin')">
+            <div class="icon-placeholder">🐍</div>
+            <span>Snake</span>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('memoryWin')">
+            <div class="icon-placeholder">🧠</div>
+            <span>Memory</span>
+        </div>
     </div>
-    
-    <!-- Grid de partículas -->
-    <div class="particle-grid"></div>
-    
-    <!-- Rastro del cursor -->
-    <div class="cursor-trail"></div>
-    
-    <div class="main-app">
-        <!-- Header principal -->
-        <header class="app-header">
-            <div>
-                <h1 class="header-title">EDUSCHEDULE PRO v3.0</h1>
-                <p class="schedule-subtitle">Horario académico inteligente con realidad aumentada</p>
-            </div>
-            <div class="header-controls">
-                <button class="cyber-btn" onclick="toggleTheme()">🌓 Tema</button>
-                <button class="cyber-btn primary" onclick="toggleDetailPanel()">📊 Detalles</button>
-                <button class="cyber-btn" onclick="exportSchedule()">📤 Exportar</button>
-            </div>
-        </header>
-        
-        <!-- Panel de estado -->
-        <div class="status-panel">
-            <div class="status-card">
-                <div class="status-title">⏰ HORA ACTUAL</div>
-                <div class="status-content" id="currentTime">--:--:--</div>
-                <div class="status-subtitle" id="currentDate">Cargando...</div>
-            </div>
-            
-            <div class="status-card">
-                <div class="status-title">📚 CLASE ACTUAL</div>
-                <div class="status-content" id="currentClass">---</div>
-                <div class="status-subtitle" id="classTimeLeft"></div>
-            </div>
-            
-            <div class="status-card">
-                <div class="status-title">🎯 PROGRESO DIARIO</div>
-                <div class="status-content" id="dailyProgress">0%</div>
-                <div class="status-subtitle" id="progressText">Sin clases</div>
-            </div>
-            
-            <div class="status-card">
-                <div class="status-title">⚡ ENERGÍA</div>
-                <div class="status-content" id="energyLevel">100%</div>
-                <div class="status-subtitle">Recomendación: <span id="energyTip"></span></div>
+
+    <div id="scheduleWin" class="window" style="top: 50px; left: 50px; width: 900px; height: 600px;">
+        <div class="window-header" onmousedown="startDrag(event, 'scheduleWin')">
+            <div class="window-title">📅 Academic Schedule.xls</div>
+            <div class="window-controls">
+                <button class="win-btn btn-min"></button>
+                <button class="win-btn btn-max"></button>
+                <button class="win-btn btn-close" onclick="closeWindow('scheduleWin')"></button>
             </div>
         </div>
-        
-        <!-- Selector de vista -->
-        <div class="view-selector">
-            <button class="view-btn active" onclick="changeView('normal')">📋 Normal</button>
-            <button class="view-btn" onclick="changeView('compact')">📱 Compacto</button>
-            <button class="view-btn" onclick="changeView('focus')">🎯 Enfoque</button>
-            <button class="view-btn" onclick="changeView('timeline')">⏳ Línea de tiempo</button>
+        <div class="window-body">
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th>Hora</th><th>Lunes</th><th>Martes</th><th>Miércoles</th><th>Jueves</th><th>Viernes</th>
+                    </tr>
+                </thead>
+                <tbody id="scheduleBody">
+                    </tbody>
+            </table>
         </div>
-        
-        <!-- Interface de horario principal -->
-        <div class="schedule-interface">
-            <div class="schedule-header">
-                <h2 class="schedule-title">HORARIO ACADÉMICO 3D</h2>
-                <p class="schedule-subtitle">Semana del 8 de Abril - Interactivo y Dinámico</p>
+    </div>
+
+    <div id="minerWin" class="window" style="top: 80px; left: 150px; width: 400px; height: 500px;">
+        <div class="window-header" onmousedown="startDrag(event, 'minerWin')">
+            <div class="window-title">⛏️ EduCoin Miner v2.0</div>
+            <div class="window-controls">
+                <button class="win-btn btn-close" onclick="closeWindow('minerWin')"></button>
             </div>
-            
-            <div class="schedule-table-3d">
-                <div class="table-container">
-                    <table class="schedule-table" id="scheduleTable">
-                        <!-- Generado dinámicamente por JavaScript -->
-                    </table>
+        </div>
+        <div class="window-body">
+            <div class="clicker-container">
+                <div class="stats-panel">
+                    <div class="coin-count" id="coinCount">0.00</div>
+                    <div style="font-size: 0.8rem; color: #aaa;">EDU/s: <span id="cpsCount">0.0</span></div>
                 </div>
-            </div>
-        </div>
-        
-        <!-- Panel de detalles lateral -->
-        <div class="detail-panel" id="detailPanel">
-            <button class="panel-close" onclick="toggleDetailPanel()">✕</button>
-            <div class="subject-detail-header" id="detailHeader">
-                <div class="subject-icon" id="detailIcon">📚</div>
-                <h3 class="subject-name" id="detailName">Selecciona una materia</h3>
-                <p class="status-subtitle" id="detailInfo">Haz clic en cualquier celda para ver detalles</p>
-            </div>
-            
-            <div class="detail-content" id="detailContent">
-                <!-- Contenido dinámico -->
+                <div class="mining-rig" onclick="clickMine()">⚡</div>
+                <div class="shop-grid" id="shopGrid"></div>
             </div>
         </div>
     </div>
-    
-    <!-- Tooltip -->
-    <div class="tooltip" id="tooltip"></div>
+
+    <div id="snakeWin" class="window" style="top: 100px; left: 300px; width: 440px; height: 500px;">
+        <div class="window-header" onmousedown="startDrag(event, 'snakeWin')">
+            <div class="window-title">🐍 Neon Snake.exe</div>
+            <div class="window-controls">
+                <button class="win-btn btn-close" onclick="closeWindow('snakeWin')"></button>
+            </div>
+        </div>
+        <div class="window-body" style="display:flex; flex-direction:column; align-items:center;">
+            <canvas id="snakeCanvas" width="400" height="400" style="background: #000; border: 1px solid var(--accent);"></canvas>
+            <div style="margin-top: 10px;">Score: <span id="snakeScore">0</span></div>
+            <button onclick="initSnake()" style="margin-top:10px; padding:5px 15px; background:var(--accent); border:none; border-radius:4px; font-weight:bold;">Reiniciar</button>
+        </div>
+    </div>
+
+    <div id="memoryWin" class="window" style="top: 120px; left: 400px; width: 450px; height: 500px;">
+        <div class="window-header" onmousedown="startDrag(event, 'memoryWin')">
+            <div class="window-title">🧠 Memory Matrix</div>
+            <div class="window-controls">
+                <button class="win-btn btn-close" onclick="closeWindow('memoryWin')"></button>
+            </div>
+        </div>
+        <div class="window-body">
+            <div style="text-align: center; margin-bottom: 15px;">Encuentra los pares</div>
+            <div class="memory-grid" id="memoryGrid"></div>
+            <div style="text-align:center; margin-top:20px;">
+                <button onclick="initMemory()" style="padding:8px 20px; background: #fff; color:#000; border:none; border-radius:20px; cursor:pointer;">Reiniciar Partida</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="taskbar">
+        <div class="app-icon" style="background: rgba(255,255,255,0.15)">❖</div> <div class="taskbar-divider"></div>
+        <div class="app-icon" onclick="toggleWindow('scheduleWin')" title="Horario">📅</div>
+        <div class="app-icon" onclick="toggleWindow('minerWin')" title="Miner">⛏️</div>
+        <div class="app-icon" onclick="toggleWindow('snakeWin')" title="Snake">🐍</div>
+        <div class="app-icon" onclick="toggleWindow('memoryWin')" title="Memory">🧠</div>
+        <div class="taskbar-divider"></div>
+        <div class="clock-widget" id="clock">
+            12:00<br><span style="font-size:0.7em; opacity:0.7">12/04</span>
+        </div>
+    </div>
 
     <script>
-        // Datos del horario (los mismos)
-        const scheduleData = [
-            ['8:30 - 9:30', 'Sistemas Operativos Monopuesto', 'Redes Locales', 'Digitalización Aplicada a los Sectores Productivos GM', 'Aplicaciones Ofimáticas', 'Aplicaciones Ofimáticas'],
-            ['9:30 - 10:30', 'Sistemas Operativos Monopuesto', 'Redes Locales', 'Sistemas Operativos Monopuesto', 'Aplicaciones Ofimáticas', 'Aplicaciones Ofimáticas'],
-            ['10:30 - 11:30', 'Aplicaciones Ofimáticas', 'Redes Locales', 'Sistemas Operativos Monopuesto', 'Itinerario Personal para la Empleabilidad I', 'Sistemas Operativos Monopuesto'],
-            ['11:30 - 12:00', 'DESCANSO', 'DESCANSO', 'DESCANSO', 'DESCANSO', 'DESCANSO'],
-            ['12:00 - 13:00', 'Aplicaciones Ofimáticas', 'Montaje y Mantenimiento de Equipo', 'Redes Locales', 'Redes Locales', 'Montaje y Mantenimiento de Equipo'],
-            ['13:00 - 14:00', 'Montaje y Mantenimiento de Equipo', 'Montaje y Mantenimiento de Equipo', 'Redes Locales', 'Redes Locales', 'Itinerario Personal para la Empleabilidad I'],
-            ['14:00 - 14:55', 'Montaje y Mantenimiento de Equipo', 'Itinerario Personal para la Empleabilidad I', 'Aplicaciones Ofimáticas', 'Montaje y Mantenimiento de Equipo', 'Sostenibilidad Aplicada al Sistema Productivo']
-        ];
+        // --- LOGICA DE VENTANAS (OS) ---
+        let highestZ = 100;
 
-        // Metadatos de materias
-        const subjectMetadata = {
-            'Sistemas Operativos Monopuesto': {
-                icon: '💻',
-                color: 'subject-som',
-                description: 'Sistemas operativos para equipos individuales',
-                teacher: 'Prof. García',
-                room: 'Lab 201',
-                resources: 12,
-                difficulty: 7
-            },
-            'Redes Locales': {
-                icon: '🌐',
-                color: 'subject-red',
-                description: 'Configuración y mantenimiento de redes locales',
-                teacher: 'Prof. Rodríguez',
-                room: 'Lab 305',
-                resources: 15,
-                difficulty: 8
-            },
-            'Digitalización Aplicada a los Sectores Productivos GM': {
-                icon: '📱',
-                color: 'subject-dig',
-                description: 'Transformación digital aplicada a procesos productivos',
-                teacher: 'Prof. Martínez',
-                room: 'Aula 102',
-                resources: 8,
-                difficulty: 6
-            },
-            'Aplicaciones Ofimáticas': {
-                icon: '📄',
-                color: 'subject-ofi',
-                description: 'Suite ofimática y herramientas de productividad',
-                teacher: 'Prof. López',
-                room: 'Lab 101',
-                resources: 20,
-                difficulty: 5
-            },
-            'Itinerario Personal para la Empleabilidad I': {
-                icon: '🎯',
-                color: 'subject-ipe',
-                description: 'Desarrollo personal para la inserción laboral',
-                teacher: 'Prof. Sánchez',
-                room: 'Aula 203',
-                resources: 10,
-                difficulty: 4
-            },
-            'Montaje y Mantenimiento de Equipo': {
-                icon: '🔧',
-                color: 'subject-mon',
-                description: 'Ensamblaje y mantenimiento de hardware informático',
-                teacher: 'Prof. Fernández',
-                room: 'Taller 1',
-                resources: 18,
-                difficulty: 7
-            },
-            'Sostenibilidad Aplicada al Sistema Productivo': {
-                icon: '🌱',
-                color: 'subject-sos',
-                description: 'Prácticas sostenibles en procesos productivos',
-                teacher: 'Prof. González',
-                room: 'Aula 105',
-                resources: 9,
-                difficulty: 5
+        function openWindow(id) {
+            const win = document.getElementById(id);
+            win.classList.add('active');
+            bringToFront(id);
+            // Iniciar juegos si corresponde
+            if(id === 'snakeWin' && !snakeInterval) initSnake();
+            if(id === 'memoryWin' && document.getElementById('memoryGrid').innerHTML === '') initMemory();
+        }
+
+        function closeWindow(id) {
+            const win = document.getElementById(id);
+            win.classList.remove('active');
+            if(id === 'snakeWin') clearInterval(snakeInterval);
+        }
+
+        function toggleWindow(id) {
+            const win = document.getElementById(id);
+            if(win.classList.contains('active')) {
+                // Si está activa pero no en foco, poner en foco. Si ya está en foco, cerrar/minimizar
+                if(win.style.zIndex < highestZ) {
+                    bringToFront(id);
+                } else {
+                    closeWindow(id);
+                }
+            } else {
+                openWindow(id);
             }
-        };
+        }
 
-        // Estado de la aplicación
-        const appState = {
-            currentView: 'normal',
-            currentTheme: 'dark',
-            selectedSubject: null,
-            isDetailPanelOpen: false,
-            currentClass: null,
-            energy: 100,
-            focusMode: false,
-            animationsEnabled: true
-        };
+        function bringToFront(id) {
+            highestZ++;
+            document.getElementById(id).style.zIndex = highestZ;
+        }
 
-        // Inicialización
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeApp();
-            createCursorTrail();
-            setupEventListeners();
+        // --- SISTEMA DE ARRASTRE (DRAG AND DROP) ---
+        let isDragging = false;
+        let currentWin = null;
+        let offset = { x: 0, y: 0 };
+
+        function startDrag(e, id) {
+            isDragging = true;
+            currentWin = document.getElementById(id);
+            bringToFront(id);
+            offset.x = e.clientX - currentWin.offsetLeft;
+            offset.y = e.clientY - currentWin.offsetTop;
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging || !currentWin) return;
+            currentWin.style.left = (e.clientX - offset.x) + 'px';
+            currentWin.style.top = (e.clientY - offset.y) + 'px';
         });
 
-        // Inicializar aplicación
-        function initializeApp() {
-            renderSchedule();
-            startClock();
-            updateEnergy();
-            animateEntrance();
-            
-            // Efecto de entrada secuencial
-            setTimeout(() => {
-                document.querySelectorAll('.status-card').forEach((card, index) => {
-                    setTimeout(() => {
-                        card.classList.add('animate-in');
-                    }, index * 100);
-                });
-            }, 300);
-        }
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            currentWin = null;
+        });
 
-        // Renderizar horario con nueva estructura
-        function renderSchedule() {
-            const table = document.getElementById('scheduleTable');
-            table.innerHTML = '';
-            
-            // Cabecera
-            const headerRow = document.createElement('tr');
-            const days = ['⏰ HORARIO', '📅 LUNES', '📅 MARTES', '📅 MIÉRCOLES', '📅 JUEVES', '📅 VIERNES'];
-            
-            days.forEach(day => {
-                const th = document.createElement('th');
-                th.textContent = day;
-                th.style.animationDelay = `${Math.random() * 0.5}s`;
-                headerRow.appendChild(th);
-            });
-            table.appendChild(headerRow);
-            
-            // Filas de datos
-            scheduleData.forEach((row, rowIndex) => {
-                const tr = document.createElement('tr');
-                tr.style.animationDelay = `${rowIndex * 0.1}s`;
-                
-                row.forEach((cell, cellIndex) => {
-                    const td = document.createElement('td');
-                    
-                    if (cellIndex === 0) {
-                        // Celda de hora
-                        td.className = 'time-slot';
-                        td.textContent = cell;
-                        td.addEventListener('click', () => showTimeSlotInfo(rowIndex));
-                    } else if (cell === 'DESCANSO') {
-                        // Descanso
-                        td.className = 'break-cell';
-                        td.innerHTML = '☕<br>DESCANSO';
-                        td.addEventListener('click', () => showBreakInfo(rowIndex));
-                    } else {
-                        // Materia
-                        const subjectInfo = subjectMetadata[cell];
-                        td.className = `subject-cell ${subjectInfo.color}`;
-                        td.innerHTML = `
-                            <div class="subject-icon-mini">${subjectInfo.icon}</div>
-                            <div class="subject-name-mini">${getSubjectAbbr(cell)}</div>
-                        `;
-                        td.dataset.subject = cell;
-                        td.dataset.day = cellIndex - 1;
-                        td.dataset.time = rowIndex;
-                        
-                        td.addEventListener('click', (e) => showSubjectDetail(cell, e));
-                        td.addEventListener('mouseenter', (e) => showTooltip(e, cell));
-                        td.addEventListener('mouseleave', hideTooltip);
-                    }
-                    
-                    tr.appendChild(td);
-                });
-                
-                table.appendChild(tr);
-            });
-            
-            // Actualizar clase actual
-            updateCurrentClass();
-        }
+        // --- 1. RENDERIZADO DEL HORARIO ---
+        const scheduleData = [
+            ['8:30', 'Sistemas Operativos Monopuesto', 'Redes Locales', 'Digitalización Aplicada a los Sectores Productivos GM', 'Aplicaciones Ofimáticas', 'Aplicaciones Ofimáticas'],
+            ['9:30', 'Sistemas Operativos Monopuesto', 'Redes Locales', 'Sistemas Operativos Monopuesto', 'Aplicaciones Ofimáticas', 'Aplicaciones Ofimáticas'],
+            ['10:30', 'Aplicaciones Ofimáticas', 'Redes Locales', 'Sistemas Operativos Monopuesto', 'Itinerario Personal para la Empleabilidad I', 'Sistemas Operativos Monopuesto'],
+            ['11:30', 'DESCANSO', 'DESCANSO', 'DESCANSO', 'DESCANSO', 'DESCANSO'],
+            ['12:00', 'Aplicaciones Ofimáticas', 'Montaje y Mantenimiento de Equipo', 'Redes Locales', 'Redes Locales', 'Montaje y Mantenimiento de Equipo'],
+            ['13:00', 'Montaje y Mantenimiento de Equipo', 'Montaje y Mantenimiento de Equipo', 'Redes Locales', 'Redes Locales', 'Itinerario Personal para la Empleabilidad I'],
+            ['14:00', 'Montaje y Mantenimiento de Equipo', 'Itinerario Personal para la Empleabilidad I', 'Aplicaciones Ofimáticas', 'Montaje y Mantenimiento de Equipo', 'Sostenibilidad Aplicada al Sistema Productivo']
+        ];
 
-        // Abreviaturas inteligentes
-        function getSubjectAbbr(fullName) {
-            const abbrMap = {
-                'Sistemas Operativos Monopuesto': 'SIOP',
-                'Redes Locales': 'REDES',
-                'Digitalización Aplicada a los Sectores Productivos GM': 'DIGITAL',
-                'Aplicaciones Ofimáticas': 'OFIMÁTICA',
-                'Itinerario Personal para la Empleabilidad I': 'EMPLEABILIDAD',
-                'Montaje y Mantenimiento de Equipo': 'MANTENIMIENTO',
-                'Sostenibilidad Aplicada al Sistema Productivo': 'SOSTENIBILIDAD'
-            };
-            
-            return abbrMap[fullName] || fullName.substring(0, 12) + '...';
-        }
-
-        // Reloj en tiempo real
-        function startClock() {
-            function updateClock() {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString('es-ES');
-                const dateString = now.toLocaleDateString('es-ES', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-                
-                document.getElementById('currentTime').textContent = timeString;
-                document.getElementById('currentDate').textContent = dateString.charAt(0).toUpperCase() + dateString.slice(1);
-                
-                updateCurrentClass();
-                updateDailyProgress();
-            }
-            
-            updateClock();
-            setInterval(updateClock, 1000);
-        }
-
-        // Actualizar clase actual
-        function updateCurrentClass() {
-            const now = new Date();
-            const currentTime = now.getHours() * 60 + now.getMinutes();
-            const currentDay = now.getDay() - 1; // 0 = Lunes
-            
-            let foundClass = null;
-            let timeLeft = null;
-            
-            // Buscar en el horario
-            for (let i = 0; i < scheduleData.length; i++) {
-                const timeRange = scheduleData[i][0];
-                const [startTime, endTime] = parseTimeRange(timeRange);
-                
-                if (currentDay >= 0 && currentDay <= 4) {
-                    const subject = scheduleData[i][currentDay + 1];
-                    
-                    if (currentTime >= startTime && currentTime <= endTime) {
-                        if (subject !== 'DESCANSO') {
-                            foundClass = subject;
-                            timeLeft = endTime - currentTime;
-                        } else {
-                            foundClass = 'DESCANSO';
-                        }
-                        break;
-                    }
-                }
-            }
-            
-            // Actualizar UI
-            const currentClassEl = document.getElementById('currentClass');
-            const timeLeftEl = document.getElementById('classTimeLeft');
-            
-            if (foundClass) {
-                if (foundClass === 'DESCANSO') {
-                    currentClassEl.textContent = '☕ DESCANSO';
-                    currentClassEl.style.color = '#FFAA00';
-                    timeLeftEl.textContent = '11:30 - 12:00';
+        const tbody = document.getElementById('scheduleBody');
+        scheduleData.forEach(row => {
+            const tr = document.createElement('tr');
+            row.forEach((cell, i) => {
+                const td = document.createElement('td');
+                if (i === 0) {
+                    td.innerText = cell;
+                    td.className = 'cell-time';
+                } else if (cell === 'DESCANSO') {
+                    td.innerText = '☕ DESCANSO';
+                    td.className = 'cell-break';
                 } else {
-                    currentClassEl.textContent = getSubjectAbbr(foundClass);
-                    currentClassEl.style.color = '';
-                    
-                    if (timeLeft) {
-                        const minutesLeft = Math.floor(timeLeft);
-                        const hours = Math.floor(minutesLeft / 60);
-                        const mins = minutesLeft % 60;
-                        
-                        if (hours > 0) {
-                            timeLeftEl.textContent = `Termina en ${hours}h ${mins}m`;
-                        } else {
-                            timeLeftEl.textContent = `Termina en ${mins} minutos`;
-                        }
-                    }
+                    td.innerText = cell;
                 }
-            } else {
-                currentClassEl.textContent = '---';
-                timeLeftEl.textContent = currentDay >= 0 && currentDay <= 4 ? 'Fuera del horario' : 'Fin de semana';
+                tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+        });
+
+        // --- 2. JUEGO: CRYPTO CLICKER ---
+        let coins = 0;
+        let cps = 0;
+        const shopItems = [
+            { name: 'GPU Básica', cost: 50, cps: 1 },
+            { name: 'ASIC Miner', cost: 200, cps: 5 },
+            { name: 'Granja Solar', cost: 1000, cps: 20 },
+            { name: 'Quantum CPU', cost: 5000, cps: 100 }
+        ];
+
+        function clickMine() {
+            coins += 1;
+            updateMinerUI();
+        }
+
+        function buyItem(idx) {
+            const item = shopItems[idx];
+            if(coins >= item.cost) {
+                coins -= item.cost;
+                cps += item.cps;
+                item.cost = Math.floor(item.cost * 1.5);
+                updateMinerUI();
+                renderShop();
             }
         }
 
-        // Parsear rango de tiempo
-        function parseTimeRange(range) {
-            const [start, end] = range.split(' - ');
-            const [startHour, startMin] = start.split(':').map(Number);
-            const [endHour, endMin] = end.split(':').map(Number);
-            
-            return [
-                startHour * 60 + startMin,
-                endHour * 60 + endMin
-            ];
+        function renderShop() {
+            const grid = document.getElementById('shopGrid');
+            grid.innerHTML = '';
+            shopItems.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = 'shop-item';
+                div.innerHTML = `
+                    <div style="font-weight:bold">${item.name}</div>
+                    <div style="color:var(--accent)">+${item.cps} CPS</div>
+                    <div style="font-size:0.8em; opacity:0.7">Cost: ${item.cost}</div>
+                `;
+                div.onclick = () => buyItem(idx);
+                grid.appendChild(div);
+            });
+        }
+        
+        function updateMinerUI() {
+            document.getElementById('coinCount').innerText = coins.toFixed(2);
+            document.getElementById('cpsCount').innerText = cps.toFixed(1);
         }
 
-        // Actualizar progreso diario
-        function updateDailyProgress() {
+        setInterval(() => {
+            coins += cps / 10;
+            updateMinerUI();
+        }, 100);
+        renderShop();
+
+        // --- 3. JUEGO: NEON SNAKE ---
+        const canvas = document.getElementById('snakeCanvas');
+        const ctx = canvas.getContext('2d');
+        const box = 20;
+        let snake = [];
+        let food = {};
+        let d = '';
+        let snakeInterval;
+        let snakeScore = 0;
+
+        function initSnake() {
+            snake = [{x: 9*box, y: 10*box}];
+            food = {
+                x: Math.floor(Math.random()*19+1) * box,
+                y: Math.floor(Math.random()*19+1) * box
+            };
+            scoreSnake = 0;
+            d = '';
+            document.getElementById('snakeScore').innerText = '0';
+            if(snakeInterval) clearInterval(snakeInterval);
+            snakeInterval = setInterval(drawSnake, 100);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.keyCode == 37 && d != 'RIGHT') d = 'LEFT';
+            else if(e.keyCode == 38 && d != 'DOWN') d = 'UP';
+            else if(e.keyCode == 39 && d != 'LEFT') d = 'RIGHT';
+            else if(e.keyCode == 40 && d != 'UP') d = 'DOWN';
+        });
+
+        function drawSnake() {
+            ctx.fillStyle = "#000";
+            ctx.fillRect(0,0,400,400);
+
+            for(let i=0; i<snake.length; i++) {
+                ctx.fillStyle = (i == 0) ? "#00f2ff" : "#fff";
+                ctx.fillRect(snake[i].x, snake[i].y, box, box);
+                ctx.strokeStyle = "#000";
+                ctx.strokeRect(snake[i].x, snake[i].y, box, box);
+            }
+
+            ctx.fillStyle = "#ff00e6"; // Comida rosa
+            ctx.fillRect(food.x, food.y, box, box);
+
+            let snakeX = snake[0].x;
+            let snakeY = snake[0].y;
+
+            if(d == 'LEFT') snakeX -= box;
+            if(d == 'UP') snakeY -= box;
+            if(d == 'RIGHT') snakeX += box;
+            if(d == 'DOWN') snakeY += box;
+
+            if(snakeX == food.x && snakeY == food.y) {
+                scoreSnake++;
+                document.getElementById('snakeScore').innerText = scoreSnake;
+                food = {
+                    x: Math.floor(Math.random()*19) * box,
+                    y: Math.floor(Math.random()*19) * box
+                };
+            } else {
+                snake.pop();
+            }
+
+            let newHead = {x: snakeX, y: snakeY};
+
+            if(snakeX < 0 || snakeX >= 400 || snakeY < 0 || snakeY >= 400 || collision(newHead, snake)) {
+                clearInterval(snakeInterval);
+                ctx.fillStyle = "white";
+                ctx.font = "30px Arial";
+                ctx.fillText("Game Over", 120, 200);
+            }
+
+            snake.unshift(newHead);
+        }
+
+        function collision(head, array) {
+            for(let i=0; i<array.length; i++) {
+                if(head.x == array[i].x && head.y == array[i].y) return true;
+            }
+            return false;
+        }
+
+        // --- 4. JUEGO: MEMORY MATRIX ---
+        const icons = ['🚀','🎮','💿','🤖','👽','👾','🎃','💎'];
+        let memoryCards = [...icons, ...icons]; // Pares
+        let flippedCards = [];
+        let matchedPairs = 0;
+
+        function initMemory() {
+            const grid = document.getElementById('memoryGrid');
+            grid.innerHTML = '';
+            flippedCards = [];
+            matchedPairs = 0;
+            // Shuffle
+            memoryCards.sort(() => 0.5 - Math.random());
+            
+            memoryCards.forEach((icon, index) => {
+                const card = document.createElement('div');
+                card.classList.add('memory-card');
+                card.dataset.icon = icon;
+                card.dataset.index = index;
+                
+                card.onclick = () => flipCard(card);
+                
+                // Front (hidden)
+                const front = document.createElement('div');
+                front.innerText = icon;
+                card.appendChild(front);
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function flipCard(card) {
+            if(flippedCards.length < 2 && !card.classList.contains('flipped')) {
+                card.classList.add('flipped');
+                card.innerText = card.dataset.icon; // Mostrar icono
+                flippedCards.push(card);
+
+                if(flippedCards.length === 2) {
+                    checkMatch();
+                }
+            }
+        }
+
+        function checkMatch() {
+            const [c1, c2] = flippedCards;
+            if(c1.dataset.icon === c2.dataset.icon) {
+                c1.classList.add('matched');
+                c2.classList.add('matched');
+                matchedPairs++;
+                flippedCards = [];
+            } else {
+                setTimeout(() => {
+                    c1.classList.remove('flipped');
+                    c1.innerText = '';
+                    c2.classList.remove('flipped');
+                    c2.innerText = '';
+                    flippedCards = [];
+                }, 1000);
+            }
+        }
+
+        // --- CLOCK ---
+        setInterval(() => {
             const now = new Date();
-            const currentDay = now.getDay() - 1;
-            const currentTime = now.getHours() * 60 + now.getMinutes();
-            
-            if (currentDay < 0 || currentDay > 4) {
-                document.getElementById('dailyProgress').textContent = '0%';
-                document.getElementById('progressText').textContent = 'Fin de semana';
-                return;
-            }
-            
-            // Calcular progreso del día
-            const dayStart = 8 * 60 + 30; // 8:30
-            const dayEnd = 14 * 60 + 55; // 14:55
-            
-            if (currentTime < dayStart) {
-                document.getElementById('dailyProgress').textContent = '0%';
-                document.getElementById('progressText').textContent = 'Clases no iniciadas';
-            } else if (currentTime > dayEnd) {
-                document.getElementById('dailyProgress').textContent = '100%';
-                document.getElementById('progressText').textContent = 'Día completado 🎉';
-            } else {
-                const progress = ((currentTime - dayStart) / (dayEnd - dayStart)) * 100;
-                document.getElementById('dailyProgress').textContent = `${Math.round(progress)}%`;
-                document.getElementById('progressText').textContent = 'En progreso...';
-            }
-        }
-
-        // Sistema de energía
-        function updateEnergy() {
-            const now = new Date();
-            const hour = now.getHours();
-            
-            // La energía disminuye durante el día
-            let energy = 100;
-            
-            if (hour >= 8 && hour < 12) {
-                energy = 100 - ((hour - 8) * 10);
-            } else if (hour >= 12 && hour < 15) {
-                energy = 70 - ((hour - 12) * 15);
-            } else if (hour >= 15) {
-                energy = 40;
-            }
-            
-            // Añadir variación aleatoria
-            energy += (Math.random() * 10 - 5);
-            energy = Math.max(20, Math.min(100, Math.round(energy)));
-            
-            appState.energy = energy;
-            
-            const energyEl = document.getElementById('energyLevel');
-            const tipEl = document.getElementById('energyTip');
-            
-            energyEl.textContent = `${energy}%`;
-            
-            // Cambiar color según nivel
-            if (energy >= 70) {
-                energyEl.style.color = 'var(--success)';
-                tipEl.textContent = '¡Sigue así!';
-            } else if (energy >= 40) {
-                energyEl.style.color = 'var(--warning)';
-                tipEl.textContent = 'Toma un descanso breve';
-            } else {
-                energyEl.style.color = 'var(--danger)';
-                tipEl.textContent = '¡Necesitas recargar!';
-            }
-        }
-
-        // Mostrar detalles de materia
-        function showSubjectDetail(subjectName, event) {
-            const subject = subjectMetadata[subjectName];
-            appState.selectedSubject = subjectName;
-            
-            // Actualizar panel de detalles
-            document.getElementById('detailIcon').textContent = subject.icon;
-            document.getElementById('detailName').textContent = subjectName;
-            document.getElementById('detailInfo').textContent = `${subject.teacher} • ${subject.room}`;
-            
-            // Generar contenido detallado
-            const detailContent = document.getElementById('detailContent');
-            detailContent.innerHTML = `
-                <div style="margin-bottom: 30px;">
-                    <h4 style="color: var(--accent-1); margin-bottom: 10px;">📖 DESCRIPCIÓN</h4>
-                    <p style="color: var(--text-dim); line-height: 1.6;">${subject.description}</p>
-                </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
-                    <div>
-                        <h4 style="color: var(--accent-1); margin-bottom: 10px;">📊 ESTADÍSTICAS</h4>
-                        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                                <span>Recursos:</span>
-                                <span style="color: var(--success);">${subject.resources}</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between;">
-                                <span>Dificultad:</span>
-                                <span style="color: var(--warning);">${subject.difficulty}/10</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <h4 style="color: var(--accent-1); margin-bottom: 10px;">🕐 HORARIOS</h4>
-                        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px;">
-                            <div style="color: var(--text-dim); font-size: 0.9rem;">
-                                ${getSubjectSchedule(subjectName)}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 style="color: var(--accent-1); margin-bottom: 10px;">🎯 ACCIONES</h4>
-                    <div style="display: flex; gap: 10px;">
-                        <button class="cyber-btn" onclick="simulateClass('${subjectName}')">🎬 Simular Clase</button>
-                        <button class="cyber-btn" onclick="addToFavorites('${subjectName}')">⭐ Favorito</button>
-                    </div>
-                </div>
-            `;
-            
-            // Resaltar en la tabla
-            document.querySelectorAll('.subject-cell').forEach(cell => {
-                cell.classList.remove('focus-subject');
-                if (cell.dataset.subject === subjectName) {
-                    cell.classList.add('focus-subject');
-                }
-            });
-            
-            // Abrir panel si está cerrado
-            if (!appState.isDetailPanelOpen) {
-                toggleDetailPanel();
-            }
-            
-            // Efecto visual
-            if (event && event.target) {
-                event.target.style.transform = 'scale(1.1)';
-                setTimeout(() => {
-                    event.target.style.transform = '';
-                }, 300);
-            }
-        }
-
-        // Obtener horarios de una materia
-        function getSubjectSchedule(subjectName) {
-            let schedule = '';
-            const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-            
-            scheduleData.forEach((row, rowIndex) => {
-                row.forEach((cell, cellIndex) => {
-                    if (cellIndex > 0 && cell === subjectName) {
-                        const time = scheduleData[rowIndex][0];
-                        const day = days[cellIndex - 1];
-                        schedule += `${day}: ${time}<br>`;
-                    }
-                });
-            });
-            
-            return schedule || 'No hay horarios esta semana';
-        }
-
-        // Panel de detalles
-        function toggleDetailPanel() {
-            const panel = document.getElementById('detailPanel');
-            appState.isDetailPanelOpen = !appState.isDetailPanelOpen;
-            panel.classList.toggle('active', appState.isDetailPanelOpen);
-        }
-
-        // Cambiar vista
-        function changeView(view) {
-            appState.currentView = view;
-            
-            // Actualizar botones activos
-            document.querySelectorAll('.view-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.textContent.includes(view.charAt(0).toUpperCase() + view.slice(1)));
-            });
-            
-            // Aplicar efectos de vista
-            const tableContainer = document.querySelector('.table-container');
-            const table = document.getElementById('scheduleTable');
-            
-            switch(view) {
-                case 'normal':
-                    tableContainer.style.transform = 'rotateX(5deg)';
-                    table.style.fontSize = '';
-                    document.body.classList.remove('focus-mode');
-                    break;
-                    
-                case 'compact':
-                    tableContainer.style.transform = 'none';
-                    table.style.fontSize = '0.85rem';
-                    document.body.classList.remove('focus-mode');
-                    break;
-                    
-                case 'focus':
-                    tableContainer.style.transform = 'rotateX(5deg)';
-                    table.style.fontSize = '';
-                    document.body.classList.add('focus-mode');
-                    break;
-                    
-                case 'timeline':
-                    tableContainer.style.transform = 'rotateX(10deg)';
-                    animateTimelineView();
-                    break;
-            }
-        }
-
-        // Efectos de animación
-        function animateEntrance() {
-            const elements = document.querySelectorAll('.schedule-table th, .schedule-table td');
-            elements.forEach((el, index) => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(20px)';
-                
-                setTimeout(() => {
-                    el.style.transition = 'all 0.6s ease';
-                    el.style.opacity = '1';
-                    el.style.transform = 'translateY(0)';
-                }, index * 20);
-            });
-        }
-
-        function animateTimelineView() {
-            const cells = document.querySelectorAll('.subject-cell');
-            cells.forEach((cell, index) => {
-                setTimeout(() => {
-                    cell.style.transform = `translateX(${Math.sin(index) * 10}px)`;
-                    setTimeout(() => {
-                        cell.style.transform = '';
-                    }, 500);
-                }, index * 50);
-            });
-        }
-
-        // Rastro del cursor
-        function createCursorTrail() {
-            const trail = document.querySelector('.cursor-trail');
-            let mouseX = 0, mouseY = 0;
-            let trailX = 0, trailY = 0;
-            
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-            });
-            
-            function animateTrail() {
-                trailX += (mouseX - trailX) * 0.1;
-                trailY += (mouseY - trailY) * 0.1;
-                
-                trail.style.left = trailX + 'px';
-                trail.style.top = trailY + 'px';
-                
-                requestAnimationFrame(animateTrail);
-            }
-            
-            animateTrail();
-        }
-
-        // Tooltips
-        function showTooltip(event, content) {
-            const tooltip = document.getElementById('tooltip');
-            tooltip.textContent = content;
-            tooltip.classList.add('active');
-            
-            const x = event.clientX + 15;
-            const y = event.clientY + 15;
-            
-            tooltip.style.left = x + 'px';
-            tooltip.style.top = y + 'px';
-        }
-
-        function hideTooltip() {
-            const tooltip = document.getElementById('tooltip');
-            tooltip.classList.remove('active');
-        }
-
-        // Información de descanso
-        function showBreakInfo(rowIndex) {
-            const times = scheduleData[rowIndex][0].split(' - ');
-            showNotification(`☕ Tiempo de descanso recomendado:<br><strong>${times[0]} - ${times[1]}</strong><br>Aprovecha para recargar energías.`);
-        }
-
-        function showTimeSlotInfo(rowIndex) {
-            const time = scheduleData[rowIndex][0];
-            showNotification(`⏰ Franja horaria:<br><strong>${time}</strong><br>Total: 55 minutos`);
-        }
-
-        // Funciones simuladas
-        function simulateClass(subjectName) {
-            showNotification(`🎬 Simulando clase de ${subjectName}...`, 'info');
-            document.getElementById('detailContent').innerHTML += `
-                <div style="margin-top: 20px; padding: 15px; background: rgba(0, 255, 136, 0.1); border-radius: 8px; border-left: 4px solid var(--success);">
-                    <strong>🎯 Simulación en curso...</strong><br>
-                    <progress value="50" max="100" style="width: 100%; margin-top: 10px;"></progress>
-                </div>
-            `;
-        }
-
-        function addToFavorites(subjectName) {
-            showNotification(`⭐ ${subjectName} añadido a favoritos`, 'success');
-        }
-
-        // Notificaciones
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: ${type === 'success' ? 'rgba(0, 255, 136, 0.9)' : type === 'error' ? 'rgba(255, 55, 95, 0.9)' : 'rgba(0, 217, 255, 0.9)'};
-                color: white;
-                padding: 15px 25px;
-                border-radius: 10px;
-                backdrop-filter: blur(10px);
-                z-index: 10000;
-                transform: translateX(100%);
-                transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                max-width: 300px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-            `;
-            notification.innerHTML = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 10);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => notification.remove(), 400);
-            }, 3000);
-        }
-
-        // Exportar horario
-        function exportSchedule() {
-            const htmlContent = document.querySelector('.schedule-interface').outerHTML;
-            const blob = new Blob([`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Mi Horario - EduSchedule Pro</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; margin: 20px; background: #0a0a14; color: white; }
-                        .schedule-interface { max-width: 1200px; margin: 0 auto; }
-                    </style>
-                </head>
-                <body>
-                    ${htmlContent}
-                    <p style="text-align: center; margin-top: 30px; color: #888;">Generado con EduSchedule Pro v3.0</p>
-                </body>
-                </html>
-            `], { type: 'text/html' });
-            
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'horario-academico.html';
-            a.click();
-            
-            showNotification('📤 Horario exportado exitosamente', 'success');
-        }
-
-        // Cambiar tema
-        function toggleTheme() {
-            const themes = ['dark', 'light', 'blue', 'purple', 'green'];
-            const currentIndex = themes.indexOf(appState.currentTheme);
-            const nextIndex = (currentIndex + 1) % themes.length;
-            
-            changeTheme(themes[nextIndex]);
-            showNotification(`🌓 Tema cambiado a: ${themes[nextIndex].toUpperCase()}`);
-        }
-
-        function changeTheme(theme) {
-            appState.currentTheme = theme;
-            
-            const root = document.documentElement;
-            
-            switch(theme) {
-                case 'light':
-                    root.style.setProperty('--bg-dark', '#f5f7fa');
-                    root.style.setProperty('--bg-darker', '#e4e7ec');
-                    root.style.setProperty('--text-light', '#1a1a2e');
-                    root.style.setProperty('--text-dim', '#4a4a6a');
-                    break;
-                    
-                case 'blue':
-                    root.style.setProperty('--primary-hue', '210');
-                    break;
-                    
-                case 'purple':
-                    root.style.setProperty('--primary-hue', '280');
-                    break;
-                    
-                case 'green':
-                    root.style.setProperty('--primary-hue', '140');
-                    break;
-                    
-                default: // dark
-                    root.style.setProperty('--bg-dark', '#0a0a14');
-                    root.style.setProperty('--bg-darker', '#05050a');
-                    root.style.setProperty('--text-light', '#ffffff');
-                    root.style.setProperty('--text-dim', 'rgba(255, 255, 255, 0.7)');
-                    break;
-            }
-        }
-
-        // Event Listeners
-        function setupEventListeners() {
-            // Actualizar energía cada 5 minutos
-            setInterval(updateEnergy, 300000);
-            
-            // Detectar teclas
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    if (appState.isDetailPanelOpen) {
-                        toggleDetailPanel();
-                    }
-                }
-                
-                // Easter egg: Konami Code
-                if (e.key === 'ArrowUp') {
-                    // Implementación básica del Konami Code
-                    setTimeout(() => {
-                        if (e.key === 'ArrowDown') {
-                            showNotification('🎮 ¡Easter egg activado! ¡Modo gamer!', 'success');
-                        }
-                    }, 100);
-                }
-            });
-            
-            // Detectar clics fuera del panel
-            document.addEventListener('click', (e) => {
-                if (appState.isDetailPanelOpen && !e.target.closest('#detailPanel') && 
-                    !e.target.closest('.subject-cell')) {
-                    toggleDetailPanel();
-                }
-            });
-        }
-
-        // Animación de entrada especial
-        setTimeout(() => {
-            const title = document.querySelector('.header-title');
-            title.style.animation = 'none';
-            setTimeout(() => {
-                title.style.animation = 'slideInUp 0.6s ease-out';
-            }, 10);
+            document.getElementById('clock').innerHTML = 
+                `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}<br>` +
+                `<span style="font-size:0.7em; opacity:0.7">${now.getDate()}/${now.getMonth()+1}</span>`;
         }, 1000);
 
-        console.log(`
-        ╔═══════════════════════════════════════════════════════════╗
-        ║                                                           ║
-        ║   ███████╗██████╗ ██╗   ██╗███████╗ ██████╗██╗  ██╗      ║
-        ║   ██╔════╝██╔══██╗██║   ██║██╔════╝██╔════╝██║  ██║      ║
-        ║   █████╗  ██║  ██║██║   ██║███████╗██║     ███████║      ║
-        ║   ██╔══╝  ██║  ██║██║   ██║╚════██║██║     ██╔══██║      ║
-        ║   ███████╗██████╔╝╚██████╔╝███████║╚██████╗██║  ██║      ║
-        ║   ╚══════╝╚═════╝  ╚═════╝ ╚══════╝ ╚═════╝╚═╝  ╚═╝      ║
-        ║                                                           ║
-        ║                PRO v3.0 - REIMAGINED                      ║
-        ║                Nueva generación de                        ║
-        ║                gestión académica                         ║
-        ║                                                           ║
-        ╚═══════════════════════════════════════════════════════════╝
-        `);
+        // Inicializar
+        openWindow('scheduleWin'); // Abrir horario por defecto
+
     </script>
 </body>
 </html>
