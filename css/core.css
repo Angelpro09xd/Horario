@@ -1,0 +1,173 @@
+/* ===========================================================================
+   CORE — tokens, temas, reset y tipografía
+   =========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* — Paleta base — */
+  --bg-0: #04050b;
+  --bg-1: #080a14;
+  --bg-2: #0d1020;
+
+  --ink-1: #f3f6ff;
+  --ink-2: #b9c2e0;
+  --ink-3: #7c87ab;
+  --ink-4: #4d5673;
+
+  /* — Acentos del tema (los sobrescribe [data-theme]) — */
+  --accent: #35e7ff;
+  --accent-2: #ff4ecd;
+  --accent-3: #9b5bff;
+  --accent-ink: #001217;
+
+  /* — Estado — */
+  --ok: #2be38b;
+  --warn: #ffc53d;
+  --bad: #ff5c7a;
+
+  /* — Cristal — */
+  --blur: 22px;
+  --glass-a: rgba(255, 255, 255, 0.055);
+  --glass-b: rgba(255, 255, 255, 0.016);
+  --glass-edge: rgba(255, 255, 255, 0.14);
+  --glass-edge-hi: rgba(255, 255, 255, 0.34);
+  --glow: 1;
+
+  /* — Geometría — */
+  --r-xs: 8px;
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 26px;
+  --r-xl: 34px;
+  --rail-w: 232px;
+  --topbar-h: 68px;
+  --gap: 18px;
+
+  /* — Movimiento — */
+  --sp-1: 140ms cubic-bezier(.22, 1, .36, 1);
+  --sp-2: 320ms cubic-bezier(.22, 1, .36, 1);
+  --sp-3: 620ms cubic-bezier(.16, 1, .3, 1);
+
+  /* — Tipografía — */
+  --font-ui: 'Space Grotesk', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-display: 'Orbitron', var(--font-ui);
+}
+
+/* — Temas ----------------------------------------------------------------- */
+[data-theme="aurora"]   { --accent: #35e7ff; --accent-2: #ff4ecd; --accent-3: #7c5cff; --accent-ink: #001217; --bg-0: #04050b; }
+[data-theme="synth"]    { --accent: #ff4ecd; --accent-2: #7c5cff; --accent-3: #35e7ff; --accent-ink: #1a0016; --bg-0: #0a0413; }
+[data-theme="toxic"]    { --accent: #9dff3c; --accent-2: #00ffc3; --accent-3: #ffe83c; --accent-ink: #0a1400; --bg-0: #030a05; }
+[data-theme="solar"]    { --accent: #ffb03c; --accent-2: #ff5c3c; --accent-3: #ffe83c; --accent-ink: #1a0d00; --bg-0: #0b0603; }
+[data-theme="ice"]      { --accent: #8fd6ff; --accent-2: #c9b6ff; --accent-3: #ffffff; --accent-ink: #001320; --bg-0: #040810; }
+[data-theme="vapor"]    { --accent: #00ffd5; --accent-2: #ff7ab8; --accent-3: #8f7bff; --accent-ink: #001a16; --bg-0: #050810; }
+[data-theme="carbon"]   { --accent: #d6dcf0; --accent-2: #8e97b8; --accent-3: #ffffff; --accent-ink: #05070d; --bg-0: #06070a; }
+
+/* — Reset ----------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+* { margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overscroll-behavior: none;
+}
+
+body {
+  font-family: var(--font-ui);
+  background: var(--bg-0);
+  color: var(--ink-1);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img, svg, canvas { display: block; max-width: 100%; }
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+}
+
+button { cursor: pointer; }
+
+a { color: var(--accent); text-decoration: none; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+::selection { background: color-mix(in oklab, var(--accent) 45%, transparent); color: #fff; }
+
+/* — Scrollbars ------------------------------------------------------------ */
+* { scrollbar-width: thin; scrollbar-color: color-mix(in oklab, var(--accent) 45%, transparent) transparent; }
+*::-webkit-scrollbar { width: 9px; height: 9px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 55%, transparent), color-mix(in oklab, var(--accent-2) 45%, transparent));
+  border-radius: 99px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* — Tipografía ------------------------------------------------------------ */
+h1, h2, h3 { font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; }
+
+.display {
+  font-family: var(--font-display);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+
+.muted { color: var(--ink-3); }
+.dim   { color: var(--ink-2); }
+
+.neon-text {
+  color: var(--accent);
+  text-shadow: 0 0 calc(18px * var(--glow)) color-mix(in oklab, var(--accent) 70%, transparent);
+}
+
+/* — Utilidades ------------------------------------------------------------ */
+.row { display: flex; align-items: center; gap: 10px; }
+.col { display: flex; flex-direction: column; }
+.grow { flex: 1 1 auto; min-width: 0; }
+.wrap { flex-wrap: wrap; }
+.center { align-items: center; justify-content: center; }
+.between { justify-content: space-between; }
+.hidden { display: none !important; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* — Movimiento reducido --------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+body[data-motion="off"] *, body[data-motion="off"] *::before, body[data-motion="off"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 60ms !important;
+}

@@ -1,1 +1,14 @@
-Nothing should be ignored since only a source file (`index.html`) was modified and no build artifacts, dependencies, or temporary files were present in the changes.
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp
+
+# Temporales
+*.log
+*.tmp
+node_modules/

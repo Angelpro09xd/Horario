@@ -1,10 +1,17 @@
 [
   {
-    "subject": "Redes Locales",
-    "date": "2025-11-11"
-  }
-    {
-    "subject": "Aplicaciones Ofimáticas",
-    "date": "2025-11-20"
+    "subject": "Servicios en Red",
+    "date": "2026-11-10",
+    "note": "Tema 1 y 2: DNS y DHCP"
+  },
+  {
+    "subject": "Sistemas Operativos en Red",
+    "date": "2026-11-19",
+    "note": "Instalación y dominios en Windows Server"
+  },
+  {
+    "subject": "Aplicaciones Web",
+    "date": "2026-12-02",
+    "note": "Gestores de contenidos"
   }
 ]
