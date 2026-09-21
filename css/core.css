@@ -69,9 +69,14 @@
 
 * { margin: 0; padding: 0; }
 
-html, body {
-  height: 100%;
-  overscroll-behavior: none;
+html {
+  min-height: 100%;
+  overscroll-behavior-y: none;
+}
+
+body {
+  min-height: 100%;
+  overflow-x: hidden;   /* nunca scroll lateral; el vertical, siempre nativo */
 }
 
 body {
@@ -80,7 +85,6 @@ body {
   color: var(--ink-1);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow: hidden;
   -webkit-tap-highlight-color: transparent;
 }
 

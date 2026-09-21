@@ -148,10 +148,12 @@
     render();
   }
 
+  function scroller() { return document.scrollingElement || document.documentElement; }
+
   function render() {
     var v = VIEWS[current];
     U.clear(viewHost);
-    viewHost.scrollTop = 0;
+    global.scrollTo(0, 0);
     document.title = v.title + ' · Horario ' + D.SCHOOL.group;
 
     var body = el('div', { class: 'view-body' });
@@ -165,6 +167,7 @@
     ]));
     viewHost.appendChild(body);
     v.render(body);
+    measureChrome();
     viewHost._body = body;
     if (v.tick) v.tick(body);
   }
@@ -182,9 +185,9 @@
   }
 
   function refresh() {
-    var pos = viewHost ? viewHost.scrollTop : 0;
+    var pos = scroller().scrollTop;
     render();
-    if (viewHost) viewHost.scrollTop = pos;
+    scroller().scrollTop = pos;
   }
 
   function goToday() {
@@ -229,6 +232,14 @@
     var dot = U.qs('.status-dot');
     if (dot) dot.style.background = subject ? subject.neon : 'var(--accent)';
     if (dot) dot.style.boxShadow = '0 0 14px ' + (subject ? subject.neon : 'var(--accent)');
+  }
+
+  /* Altura real de la barra superior: la usan los elementos pegajosos
+     (el selector de día) y cambia con el zoom o el tamaño de fuente. */
+  function measureChrome() {
+    var bar = U.qs('.topbar');
+    if (!bar) return;
+    document.documentElement.style.setProperty('--chrome-h', Math.round(bar.offsetHeight) + 'px');
   }
 
   /* ------------------------------------------------------------- utilidad */
@@ -328,8 +339,9 @@
 
   /* Desplaza la vista con las teclas de siempre. Devuelve true si la consumió. */
   function scrollKey(e) {
-    if (!viewHost || e.ctrlKey || e.metaKey || e.altKey) return false;
-    var page = Math.max(120, viewHost.clientHeight - 90);
+    if (e.ctrlKey || e.metaKey || e.altKey) return false;
+    var box = scroller();
+    var page = Math.max(120, global.innerHeight - 90);
     var step = 90;
     var by = null, to = null;
 
@@ -340,30 +352,35 @@
       case 'PageUp': by = -page; break;
       case ' ': case 'Spacebar': by = e.shiftKey ? -page : page; break;
       case 'Home': to = 0; break;
-      case 'End': to = viewHost.scrollHeight; break;
+      case 'End': to = box.scrollHeight; break;
       default: return false;
     }
 
-    if (viewHost.scrollHeight <= viewHost.clientHeight + 1) return false;
+    if (box.scrollHeight <= global.innerHeight + 1) return false;
     e.preventDefault();
-    if (to != null) viewHost.scrollTo({ top: to, behavior: 'auto' });   /* Inicio/Fin, directos */
-    else viewHost.scrollBy({ top: by, behavior: 'smooth' });
+    if (to != null) global.scrollTo({ top: to, behavior: 'auto' });   /* Inicio/Fin, directos */
+    else global.scrollBy({ top: by, behavior: 'smooth' });
     return true;
   }
 
   /* --------------------------------------------------------------- gestos */
   function bindSwipe() {
     var x0 = null, y0 = null, t0 = 0;
-    viewHost.addEventListener('touchstart', function (e) {
+    document.addEventListener('touchstart', function (e) {
       if (e.touches.length !== 1) return;
+      /* Ni dentro de una hoja, ni de la paleta, ni del modo foco, ni en la barra. */
+      if (e.target.closest && e.target.closest('.modal, .palette, .focus, .tabbar, .fab, input, textarea, select')) {
+        x0 = null; return;
+      }
       x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now();
     }, { passive: true });
-    viewHost.addEventListener('touchend', function (e) {
+    document.addEventListener('touchend', function (e) {
       if (x0 == null) return;
       var t = e.changedTouches[0];
       var dx = t.clientX - x0, dy = t.clientY - y0, dt = Date.now() - t0;
       x0 = null;
       if (dt > 600 || Math.abs(dx) < 60 || Math.abs(dy) > Math.abs(dx) * 0.7) return;
+      if (HX.focus.isOpen || HX.palette.isOpen || document.querySelector('.modal.open')) return;
       if (current === 'week') {
         var body = viewHost._body;
         if (body && body._setDay) {
@@ -498,6 +515,8 @@
     go(initial);
 
     paintTopbar();
+    measureChrome();
+    global.addEventListener('resize', measureChrome, { passive: true });
     setInterval(loop, 1000);
 
     global.addEventListener('hashchange', function () {

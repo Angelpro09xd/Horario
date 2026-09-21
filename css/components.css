@@ -130,7 +130,7 @@ input[type="date"], input[type="time"] { color-scheme: dark; }
 }
 
 /* — Tarjetas y rejillas ---------------------------------------------------- */
-.cards { display: grid; gap: var(--gap); grid-template-columns: repeat(auto-fill, minmax(268px, 1fr)); }
+.cards { display: grid; gap: var(--gap); grid-template-columns: repeat(auto-fill, minmax(min(268px, 100%), 1fr)); }
 
 .card { padding: 18px; border-radius: var(--r-md); }
 .card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
@@ -146,11 +146,11 @@ input[type="date"], input[type="time"] { color-scheme: dark; }
 .stat .k { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
 .stat .v { font-family: var(--font-mono); font-size: 30px; font-weight: 700; line-height: 1; }
 .stat .u { font-size: 12px; color: var(--ink-3); }
-.stat::after {
-  content: ''; position: absolute; right: -30px; bottom: -30px;
-  width: 110px; height: 110px; border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in oklab, var(--c, var(--accent)) 28%, transparent), transparent 70%);
-  pointer-events: none;
+/* Mismo motivo que en .hero: el halo es fondo, no un círculo desbordado. */
+.stat {
+  background:
+    radial-gradient(70% 90% at 108% 108%, color-mix(in oklab, var(--c, var(--accent)) 30%, transparent), transparent 68%),
+    linear-gradient(160deg, var(--glass-a), var(--glass-b));
 }
 
 /* — Listas ----------------------------------------------------------------- */
@@ -210,9 +210,11 @@ input[type="date"], input[type="time"] { color-scheme: dark; }
   transition: width var(--sp-3);
 }
 .bar-value { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-2); min-width: 42px; text-align: right; }
+/* No debe sobresalir del carril: con `overflow: hidden` el carril se
+   convertiría en un contenedor desplazable capaz de tragarse la rueda. */
 .bar-mark {
-  position: absolute; top: -3px; bottom: -3px; width: 2px;
-  background: rgba(255, 255, 255, 0.45);
+  position: absolute; top: 0; bottom: 0; width: 2px;
+  background: rgba(255, 255, 255, 0.55);
   left: var(--at, 50%);
 }
 .bar-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: var(--ink-3); margin-top: 4px; }

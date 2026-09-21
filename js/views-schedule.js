@@ -234,64 +234,89 @@
     return { main: 'Libre', sub: '—' };
   }
 
+  /* Escribe solo si cambia: así el DOM no se toca 60 veces por minuto
+     (reconstruirlo entero cada segundo rompía el desplazamiento con la
+     rueda cuando el cursor estaba quieto sobre la vista). */
+  function setText(node, text) {
+    if (node && node.textContent !== text) node.textContent = text;
+  }
+
+  function radarList() {
+    var out = [];
+    store.state.exams.forEach(function (e) {
+      var d = T.daysUntil(e.date);
+      if (d != null && d >= 0) out.push({ id: e.id, kind: 'examen', title: e.title || 'Examen', subject: e.subject, days: d, date: e.date });
+    });
+    store.state.tasks.filter(function (t) { return !t.done && t.due; }).forEach(function (t) {
+      var d = T.daysUntil(t.due);
+      if (d != null) out.push({ id: t.id, kind: 'tarea', title: t.title, subject: t.subject, days: d, date: t.due });
+    });
+    out.sort(function (a, b) { return a.days - b.days; });
+    return out;
+  }
+
+  /* Huella de lo estructural: si no cambia, el tick solo refresca números. */
+  function signature(snap) {
+    return [
+      snap.dayKey, snap.holiday ? snap.holiday.name : '',
+      snap.current ? snap.current.subject + snap.current.start.getTime() : '',
+      snap.upcoming ? snap.upcoming.subject + snap.upcoming.start.getTime() : '',
+      snap.lessons.map(function (l) { return l.subject + l.start.getTime(); }).join(','),
+      radarList().map(function (r) { return r.id + ':' + r.days; }).join(','),
+      store.state.tasks.filter(function (t) { return !t.done; }).length
+    ].join('|');
+  }
+
   function renderNow(host) {
     var hero = el('div', { class: 'hero glass sheen' });
     var timelineCard = el('div', { class: 'card glass' });
     var statsGrid = el('div', { class: 'quick-stats' });
     var sideCard = el('div', { class: 'card glass' });
 
-    var left = el('div', { class: 'col', style: { gap: 'var(--gap)' } }, [hero, timelineCard]);
-    var right = el('div', { class: 'col', style: { gap: 'var(--gap)' } }, [statsGrid, sideCard]);
-    host.appendChild(el('div', { class: 'now-grid stagger' }, [left, right]));
+    host.appendChild(el('div', { class: 'now-grid stagger' }, [
+      el('div', { class: 'col', style: { gap: 'var(--gap)' } }, [hero, timelineCard]),
+      el('div', { class: 'col', style: { gap: 'var(--gap)' } }, [statsGrid, sideCard])
+    ]));
 
-    host._now = { hero: hero, timelineCard: timelineCard, statsGrid: statsGrid, sideCard: sideCard };
-    paintNow(host, true);
+    host._now = { hero: hero, timelineCard: timelineCard, statsGrid: statsGrid, sideCard: sideCard, sig: null, refs: null };
+    buildNow(host);
   }
 
-  function paintNow(host, full) {
+  /* Construye la estructura (solo cuando cambia algo estructural). */
+  function buildNow(host) {
     var refs = host._now;
-    if (!refs) return;
     var snap = T.snapshot();
     var current = snap.current;
     var subject = current && current.subject ? D.subject(current.subject) : null;
     var target = subject || (snap.upcoming ? D.subject(snap.upcoming.subject) : null);
     var color = target ? target.neon : 'var(--accent)';
+    var isLive = snap.phase === 'class' && !!subject;
+    var isBreak = snap.phase === 'break';
+    var st = statusLine(snap);
 
     /* --- Héroe --- */
-    var hero = refs.hero;
-    hero.style.setProperty('--c', color);
-    U.clear(hero);
+    U.clear(refs.hero);
+    refs.hero.style.setProperty('--c', color);
 
-    var isLive = snap.phase === 'class' && subject;
-    var isBreak = snap.phase === 'break';
-    var countdownMs = isLive || isBreak ? snap.remaining : snap.untilNext;
-    var ratio = isLive || isBreak ? snap.progress : (function () {
-      if (!snap.untilNext) return 0;
-      var span = Math.min(snap.untilNext, 3600000);
-      return 1 - span / 3600000;
-    })();
-
-    var ringInner = [
-      el('div', { class: 'big mono', text: countdownMs != null && countdownMs < 86400000 ? T.countdown(countdownMs) : '—' }),
-      el('div', { class: 'lbl', text: isLive ? 'restante' : isBreak ? 'de recreo' : 'para entrar' })
-    ];
-    var ring = U.ring(Math.max(0, Math.min(1, ratio || 0)), color, ringInner);
+    var ringBig = el('div', { class: 'big mono', text: '--:--' });
+    var ringLbl = el('div', { class: 'lbl', text: isLive ? 'restante' : isBreak ? 'de recreo' : 'para entrar' });
+    var ring = U.ring(0, color, [ringBig, ringLbl]);
     ring.classList.add('hero-ring');
-    hero.appendChild(ring);
+    refs.hero.appendChild(ring);
 
-    var st = statusLine(snap);
-    var body = el('div', { class: 'hero-body' }, [
-      el('div', { class: 'hero-eyebrow' }, [
-        el('span', { class: 'tag', style: { '--c': color }, text: isLive ? 'Ahora mismo' : isBreak ? 'Recreo' : 'Siguiente' }),
-        el('span', { class: 'eyebrow', text: st.main })
-      ]),
+    var tag = el('span', { class: 'tag', style: { '--c': color }, text: isLive ? 'Ahora mismo' : isBreak ? 'Recreo' : 'Siguiente' });
+    var statusTxt = el('span', { class: 'eyebrow', text: st.main });
+    var metaTime = el('span', { class: 'mono', text: isLive || isBreak
+      ? T.clock(current.start) + '–' + T.clock(current.end)
+      : (snap.upcoming ? T.clock(snap.upcoming.start) + '–' + T.clock(snap.upcoming.end) : '') });
+
+    refs.hero.appendChild(el('div', { class: 'hero-body' }, [
+      el('div', { class: 'hero-eyebrow' }, [tag, statusTxt]),
       el('div', { class: 'hero-code', text: target ? target.code : '—' }),
       el('div', { class: 'hero-name', text: target ? target.name : (snap.holiday ? snap.holiday.name : 'Sin clases programadas') }),
       el('div', { class: 'hero-meta' }, target ? [
         el('span', {}, [el('b', { text: D.TEACHERS[target.teacher].name })]),
-        el('span', { class: 'mono', text: isLive || isBreak
-          ? T.clock(current.start) + '–' + T.clock(current.end)
-          : (snap.upcoming ? T.clock(snap.upcoming.start) + '–' + T.clock(snap.upcoming.end) : '') }),
+        metaTime,
         el('span', { text: snap.upcoming && !isLive ? T.longDate(snap.upcoming.start) : (D.WEEKLY[target.id] + ' h / semana') })
       ] : [el('span', { text: st.sub })]),
       el('div', { class: 'hero-actions' }, [
@@ -299,36 +324,33 @@
         el('button', { class: 'btn', type: 'button', html: icon('calendar') + '<span>Ver semana</span>', onclick: function () { HX.app.go('week'); } }),
         target ? el('button', { class: 'btn ghost', type: 'button', html: icon('info') + '<span>Materia</span>', onclick: function () { openSubject(target.id); } }) : null
       ])
-    ]);
-    hero.appendChild(body);
+    ]));
 
-    /* --- Línea del día --- */
-    var tl = refs.timelineCard;
-    U.clear(tl);
-    tl.appendChild(el('div', { class: 'card-head' }, [
+    /* --- Jornada --- */
+    U.clear(refs.timelineCard);
+    var dayPct = el('div', { class: 'mono muted', text: '0%' });
+    var daySub = el('div', { class: 'view-sub' });
+    var meter = el('i');
+    refs.timelineCard.appendChild(el('div', { class: 'card-head' }, [
       el('span', { class: 'icon-btn', html: icon('clock'), style: { pointerEvents: 'none' } }),
       el('div', { class: 'grow' }, [
-        el('div', { class: 'card-title', text: snap.dayKey ? 'Jornada de hoy' : 'Próximo día lectivo' }),
-        el('div', { class: 'view-sub', text: snap.dayKey && !snap.holiday
-          ? snap.doneLessons + ' de ' + snap.totalLessons + ' bloques completados'
-          : (snap.upcoming ? T.longDate(snap.upcoming.start) : '') })
+        el('div', { class: 'card-title', text: snap.dayKey && !snap.holiday ? 'Jornada de hoy' : 'Próximo día lectivo' }),
+        daySub
       ]),
-      el('div', { class: 'mono muted', text: Math.round((snap.dayProgress || 0) * 100) + '%' })
+      dayPct
     ]));
-    tl.appendChild(el('div', { class: 'meter', style: { marginBottom: '14px' } },
-      el('i', { style: { '--p': ((snap.dayProgress || 0) * 100).toFixed(1) + '%' } })));
+    refs.timelineCard.appendChild(el('div', { class: 'meter', style: { marginBottom: '14px' } }, meter));
 
     var list = snap.lessons.length ? snap.lessons : (function () {
       var nx = snap.upcoming;
-      return nx ? T.mergedSessionsOf(nx.start).filter(function (s) { return !s.isBreak; }) : [];
+      return nx ? T.mergedSessionsOf(nx.start).filter(function (x) { return !x.isBreak; }) : [];
     })();
 
-    var nowMs = T.now().getTime();
-    tl.appendChild(el('div', { class: 'timeline' }, list.map(function (s) {
+    var tlItems = list.map(function (s) {
       var sub = D.subject(s.subject);
-      var state = nowMs >= s.end.getTime() ? 'past' : (nowMs >= s.start.getTime() ? 'now' : 'future');
-      return el('button', {
-        class: 'tl-item', type: 'button', dataset: { state: state },
+      var badge = el('div', { class: 'tag', style: { '--c': sub.neon }, text: s.periods.length + 'h' });
+      var node = el('button', {
+        class: 'tl-item', type: 'button', dataset: { state: 'future' },
         style: { '--c': sub.neon }, onclick: function () { openSubject(sub.id); }
       }, [
         el('div', { class: 'tl-time' }, [
@@ -340,36 +362,32 @@
           el('div', { class: 'tl-title truncate', text: sub.code + ' · ' + sub.name }),
           el('div', { class: 'tl-sub truncate', text: D.TEACHERS[sub.teacher].name })
         ]),
-        el('div', { class: 'tag', style: { '--c': sub.neon }, text: state === 'now' ? 'en curso' : (s.periods.length + 'h') })
+        badge
       ]);
-    })));
+      return { node: node, session: s, badge: badge, hours: s.periods.length + 'h' };
+    });
+    refs.timelineCard.appendChild(el('div', { class: 'timeline' }, tlItems.map(function (x) { return x.node; })));
 
-    /* --- Estadísticas --- */
-    var pendingTasks = store.state.tasks.filter(function (t) { return !t.done; });
-    var nextExam = store.state.exams
-      .filter(function (e) { return e.date && T.daysUntil(e.date) >= 0; })
-      .sort(function (a, b) { return a.date < b.date ? -1 : 1; })[0];
-    var hoursLeft = snap.lessons.filter(function (s) { return s.end.getTime() > nowMs; })
-      .reduce(function (acc, s) { return acc + (s.end - Math.max(nowMs, s.start)) / 3600000; }, 0);
-
+    /* --- Indicadores --- */
     U.clear(refs.statsGrid);
+    var statNodes = {};
     [
-      { k: 'Clases hoy', v: String(snap.totalLessons), u: snap.totalLessons ? snap.doneLessons + ' hechas' : 'día libre', c: 'var(--accent)' },
-      { k: 'Horas restantes', v: hoursLeft > 0 ? hoursLeft.toFixed(1) : '0', u: 'hasta las 15:00', c: 'var(--accent-2)' },
-      { k: 'Tareas', v: String(pendingTasks.length), u: 'pendientes', c: pendingTasks.length ? 'var(--warn)' : 'var(--ok)' },
-      { k: 'Próximo examen', v: nextExam ? String(T.daysUntil(nextExam.date)) : '—', u: nextExam ? 'días · ' + (D.subject(nextExam.subject) ? D.subject(nextExam.subject).code : 'general') : 'nada a la vista', c: 'var(--bad)' }
+      { k: 'clases', label: 'Clases hoy', c: 'var(--accent)' },
+      { k: 'horas', label: 'Horas restantes', c: 'var(--accent-2)' },
+      { k: 'tareas', label: 'Tareas', c: 'var(--warn)' },
+      { k: 'examen', label: 'Próximo examen', c: 'var(--bad)' }
     ].forEach(function (s) {
-      refs.statsGrid.appendChild(el('div', { class: 'stat glass', style: { '--c': s.c } }, [
-        el('div', { class: 'k', text: s.k }),
-        el('div', { class: 'v', style: { color: s.c }, text: s.v }),
-        el('div', { class: 'u', text: s.u })
-      ]));
+      var v = el('div', { class: 'v', style: { color: s.c }, text: '—' });
+      var u = el('div', { class: 'u', text: '' });
+      statNodes[s.k] = { v: v, u: u, node: el('div', { class: 'stat glass', style: { '--c': s.c } }, [
+        el('div', { class: 'k', text: s.label }), v, u
+      ]) };
+      refs.statsGrid.appendChild(statNodes[s.k].node);
     });
 
-    /* --- Panel lateral: lo que viene --- */
-    var side = refs.sideCard;
-    U.clear(side);
-    side.appendChild(el('div', { class: 'card-head' }, [
+    /* --- Radar --- */
+    U.clear(refs.sideCard);
+    refs.sideCard.appendChild(el('div', { class: 'card-head' }, [
       el('span', { class: 'icon-btn', html: icon('zap'), style: { pointerEvents: 'none' } }),
       el('div', { class: 'grow' }, [
         el('div', { class: 'card-title', text: 'En el radar' }),
@@ -377,25 +395,15 @@
       ])
     ]));
 
-    var radar = [];
-    store.state.exams.forEach(function (e) {
-      var d = T.daysUntil(e.date);
-      if (d != null && d >= 0) radar.push({ kind: 'examen', title: e.title || 'Examen', subject: e.subject, days: d, date: e.date });
-    });
-    store.state.tasks.filter(function (t) { return !t.done && t.due; }).forEach(function (t) {
-      var d = T.daysUntil(t.due);
-      if (d != null) radar.push({ kind: 'tarea', title: t.title, subject: t.subject, days: d, date: t.due });
-    });
-    radar.sort(function (a, b) { return a.days - b.days; });
-
+    var radar = radarList();
     if (!radar.length) {
-      side.appendChild(el('div', { class: 'empty' }, [
+      refs.sideCard.appendChild(el('div', { class: 'empty' }, [
         el('span', { html: icon('sparkles') }),
         el('div', { text: 'Nada pendiente. Disfrútalo.' }),
         el('button', { class: 'btn sm', type: 'button', text: 'Añadir tarea', onclick: function () { HX.app.quickAdd('task'); } })
       ]));
     } else {
-      side.appendChild(el('div', { class: 'list' }, radar.slice(0, 6).map(function (r) {
+      refs.sideCard.appendChild(el('div', { class: 'list' }, radar.slice(0, 6).map(function (r) {
         var sub = D.subject(r.subject);
         var c = sub ? sub.neon : 'var(--accent)';
         return el('div', { class: 'item accented', style: { '--c': c } }, [
@@ -411,9 +419,74 @@
         ]);
       })));
     }
+
+    refs.refs = {
+      ring: ring, ringBig: ringBig, ringLbl: ringLbl, statusTxt: statusTxt,
+      dayPct: dayPct, daySub: daySub, meter: meter, tlItems: tlItems, stats: statNodes
+    };
+    refs.sig = signature(snap);
+    paintNowValues(host);
   }
 
-  function tickNow(host) { paintNow(host); }
+  /* Solo los valores vivos: cuenta atrás, anillo, progreso y estados. */
+  function paintNowValues(host) {
+    var refs = host._now;
+    if (!refs || !refs.refs) return;
+    var r = refs.refs;
+    var snap = T.snapshot();
+    var isLive = snap.phase === 'class' && snap.current && snap.current.subject;
+    var isBreak = snap.phase === 'break';
+
+    var countdownMs = isLive || isBreak ? snap.remaining : snap.untilNext;
+    var ratio = isLive || isBreak ? snap.progress : (function () {
+      if (!snap.untilNext) return 0;
+      var span = Math.min(snap.untilNext, 3600000);
+      return 1 - span / 3600000;
+    })();
+
+    setText(r.ringBig, countdownMs != null && countdownMs < 86400000 ? T.countdown(countdownMs) : '—');
+    r.ring.style.setProperty('--p', String(Math.max(0, Math.min(1, ratio || 0))));
+    setText(r.statusTxt, statusLine(snap).main);
+
+    setText(r.dayPct, Math.round((snap.dayProgress || 0) * 100) + '%');
+    setText(r.daySub, snap.dayKey && !snap.holiday
+      ? snap.doneLessons + ' de ' + snap.totalLessons + ' bloques completados'
+      : (snap.upcoming ? T.longDate(snap.upcoming.start) : ''));
+    r.meter.style.setProperty('--p', ((snap.dayProgress || 0) * 100).toFixed(1) + '%');
+
+    var nowMs = T.now().getTime();
+    r.tlItems.forEach(function (x) {
+      var state = nowMs >= x.session.end.getTime() ? 'past' : (nowMs >= x.session.start.getTime() ? 'now' : 'future');
+      if (x.node.dataset.state !== state) x.node.dataset.state = state;
+      setText(x.badge, state === 'now' ? 'en curso' : x.hours);
+    });
+
+    var pending = store.state.tasks.filter(function (t) { return !t.done; });
+    var nextExam = store.state.exams
+      .filter(function (e) { return e.date && T.daysUntil(e.date) >= 0; })
+      .sort(function (a, b) { return a.date < b.date ? -1 : 1; })[0];
+    var hoursLeft = snap.lessons.filter(function (s) { return s.end.getTime() > nowMs; })
+      .reduce(function (acc, s) { return acc + (s.end - Math.max(nowMs, s.start)) / 3600000; }, 0);
+
+    setText(r.stats.clases.v, String(snap.totalLessons));
+    setText(r.stats.clases.u, snap.totalLessons ? snap.doneLessons + ' hechas' : 'día libre');
+    setText(r.stats.horas.v, hoursLeft > 0 ? hoursLeft.toFixed(1) : '0');
+    setText(r.stats.horas.u, 'hasta las 15:00');
+    setText(r.stats.tareas.v, String(pending.length));
+    setText(r.stats.tareas.u, 'pendientes');
+    r.stats.tareas.v.style.color = pending.length ? 'var(--warn)' : 'var(--ok)';
+    setText(r.stats.examen.v, nextExam ? String(T.daysUntil(nextExam.date)) : '—');
+    setText(r.stats.examen.u, nextExam
+      ? 'días · ' + (D.subject(nextExam.subject) ? D.subject(nextExam.subject).code : 'general')
+      : 'nada a la vista');
+  }
+
+  function tickNow(host) {
+    if (!host._now) return;
+    var snap = T.snapshot();
+    if (signature(snap) !== host._now.sig) buildNow(host);   /* cambió la clase o los datos */
+    else paintNowValues(host);
+  }
 
   /* ============================================================= MATERIAS */
   function renderSubjects(host) {

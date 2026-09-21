@@ -183,9 +183,12 @@ body.has-pointer .cursor-glow { opacity: 1; }
 
 /* — Entradas -------------------------------------------------------------- */
 .rise { animation: rise var(--sp-3) both; }
+/* Solo opacidad y desplazamiento: son propiedades que el compositor maneja
+   sin recalcular capas. Con `filter: blur()` la primera rueda tras cambiar
+   de vista se perdía mientras duraba la animación. */
 @keyframes rise {
-  from { opacity: 0; transform: translateY(16px) scale(0.985); filter: blur(6px); }
-  to   { opacity: 1; transform: none; filter: none; }
+  from { opacity: 0; transform: translateY(16px) scale(0.985); }
+  to   { opacity: 1; transform: none; }
 }
 
 .stagger > * { animation: rise var(--sp-3) both; }

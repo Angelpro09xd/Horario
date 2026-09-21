@@ -4,14 +4,27 @@
 
 #app {
   position: relative;
-  height: 100dvh;
+  min-height: 100dvh;
   display: grid;
   grid-template-columns: var(--rail-w) minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr);
+  align-items: start;
   gap: 0;
-  overflow: hidden;
   padding: 14px;
   padding-left: 0;
+}
+
+/* Velo superior: lo que pasa por detrás de la barra se difumina en vez de
+   asomar por el hueco de 14 px. */
+#app::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: calc(env(safe-area-inset-top) + 18px);
+  background: linear-gradient(to bottom,
+    var(--bg-0) 78%,
+    color-mix(in oklab, var(--bg-0) 25%, transparent));
+  z-index: 15;
+  pointer-events: none;
 }
 
 /* — Carril lateral (PC) ---------------------------------------------------- */
@@ -24,6 +37,11 @@
   border-radius: var(--r-lg);
   overflow-y: auto;
   overflow-x: hidden;
+  position: sticky;
+  top: 14px;
+  align-self: start;
+  max-height: calc(100dvh - 28px);
+  z-index: 18;
 }
 
 .brand { display: flex; align-items: center; gap: 12px; padding: 4px 6px 18px; }
@@ -83,9 +101,8 @@
 /* — Columna principal ------------------------------------------------------ */
 .main {
   min-width: 0;
-  min-height: 0;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
   gap: 14px;
 }
 
@@ -94,6 +111,12 @@
   padding: 12px 18px;
   border-radius: var(--r-lg);
   min-height: var(--topbar-h);
+  position: sticky;
+  top: 14px;
+  z-index: 20;
+  background:
+    linear-gradient(160deg, var(--glass-a), var(--glass-b)),
+    color-mix(in oklab, var(--bg-0) 90%, transparent);
 }
 
 .status-pill {
@@ -137,11 +160,6 @@
 /* — Área de vistas --------------------------------------------------------- */
 .view {
   position: relative;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
   padding: 2px 4px 30px;
 }
 
@@ -166,21 +184,20 @@
 }
 
 @media (max-width: 860px) {
-  body { overflow: hidden; }
-
   #app {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
     padding: 0;
     padding-top: env(safe-area-inset-top);
   }
+  #app::before { height: calc(env(safe-area-inset-top) + 10px); }
 
   .rail { display: none; }
 
   .main { gap: 10px; padding: 10px 10px 0; }
 
   .topbar {
-    position: relative;
+    position: sticky;
+    top: calc(env(safe-area-inset-top) + 6px);
     padding: 10px 12px;
     border-radius: var(--r-md);
     min-height: 0;
@@ -200,7 +217,6 @@
 
   .view {
     padding: 0 2px calc(150px + env(safe-area-inset-bottom));
-    -webkit-overflow-scrolling: touch;
   }
   .view-head { padding: 2px 4px 12px; }
   .view-title { font-size: 21px; }
@@ -218,6 +234,9 @@
     padding: 7px;
     border-radius: 24px;
     gap: 2px;
+    background:
+      linear-gradient(160deg, var(--glass-a), var(--glass-b)),
+      color-mix(in oklab, var(--bg-0) 90%, transparent);
   }
   .tab {
     position: relative;
