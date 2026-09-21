@@ -302,6 +302,11 @@
       }
       if (typing) return;
 
+      /* El documento no scrollea (lo hace #view), así que las teclas de
+         desplazamiento hay que atenderlas a mano. */
+      var overlayOpen = HX.focus.isOpen || HX.palette.isOpen || !!document.querySelector('.modal.open');
+      if (!overlayOpen && scrollKey(e)) return;
+
       var k = e.key.toLowerCase();
       var byKey = Object.keys(VIEWS).filter(function (id) { return VIEWS[id].key === e.key; })[0];
       if (byKey) { e.preventDefault(); go(byKey); return; }
@@ -319,6 +324,31 @@
         }
       }
     });
+  }
+
+  /* Desplaza la vista con las teclas de siempre. Devuelve true si la consumió. */
+  function scrollKey(e) {
+    if (!viewHost || e.ctrlKey || e.metaKey || e.altKey) return false;
+    var page = Math.max(120, viewHost.clientHeight - 90);
+    var step = 90;
+    var by = null, to = null;
+
+    switch (e.key) {
+      case 'ArrowDown': by = step; break;
+      case 'ArrowUp': by = -step; break;
+      case 'PageDown': by = page; break;
+      case 'PageUp': by = -page; break;
+      case ' ': case 'Spacebar': by = e.shiftKey ? -page : page; break;
+      case 'Home': to = 0; break;
+      case 'End': to = viewHost.scrollHeight; break;
+      default: return false;
+    }
+
+    if (viewHost.scrollHeight <= viewHost.clientHeight + 1) return false;
+    e.preventDefault();
+    if (to != null) viewHost.scrollTo({ top: to, behavior: 'auto' });   /* Inicio/Fin, directos */
+    else viewHost.scrollBy({ top: by, behavior: 'smooth' });
+    return true;
   }
 
   /* --------------------------------------------------------------- gestos */
@@ -408,7 +438,21 @@
 
     if ('serviceWorker' in navigator && global.location.protocol.indexOf('http') === 0) {
       global.addEventListener('load', function () {
-        navigator.serviceWorker.register('sw.js').catch(function (err) {
+        navigator.serviceWorker.register('sw.js').then(function (reg) {
+          /* Si llega una versión nueva mientras la app está abierta, se ofrece
+             recargar: si no, el navegador seguiría con los archivos en caché. */
+          reg.addEventListener('updatefound', function () {
+            var fresh = reg.installing;
+            if (!fresh) return;
+            fresh.addEventListener('statechange', function () {
+              if (fresh.state === 'installed' && navigator.serviceWorker.controller) {
+                U.toast('Hay una versión nueva · toca para actualizar', 'ok', 12000, function () {
+                  global.location.reload();
+                });
+              }
+            });
+          });
+        }).catch(function (err) {
           console.warn('[sw] no registrado:', err && err.message);
         });
       });

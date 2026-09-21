@@ -6,9 +6,10 @@
   position: relative;
   height: 100dvh;
   display: grid;
-  grid-template-columns: var(--rail-w) 1fr;
-  grid-template-rows: 1fr;
+  grid-template-columns: var(--rail-w) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   gap: 0;
+  overflow: hidden;
   padding: 14px;
   padding-left: 0;
 }
@@ -21,7 +22,8 @@
   padding: 18px 14px;
   margin: 0 14px;
   border-radius: var(--r-lg);
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .brand { display: flex; align-items: center; gap: 12px; padding: 4px 6px 18px; }
@@ -81,8 +83,9 @@
 /* — Columna principal ------------------------------------------------------ */
 .main {
   min-width: 0;
+  min-height: 0;
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto minmax(0, 1fr);
   gap: 14px;
 }
 
@@ -135,9 +138,11 @@
 .view {
   position: relative;
   min-height: 0;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   padding: 2px 4px 30px;
-  scroll-behavior: smooth;
 }
 
 .view-head { display: flex; align-items: flex-end; gap: 16px; padding: 4px 6px 16px; flex-wrap: wrap; }
@@ -164,8 +169,8 @@
   body { overflow: hidden; }
 
   #app {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
     padding: 0;
     padding-top: env(safe-area-inset-top);
   }

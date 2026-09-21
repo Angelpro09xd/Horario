@@ -46,6 +46,7 @@ apuntes por materia.
 | `N` | Nueva tarea |
 | `T` | Ir a hoy |
 | `←` `→` | Cambiar de día |
+| `↑` `↓` `Re Pág` `Av Pág` `Inicio` `Fin` | Desplazar la vista |
 | `Espacio` | Pausar el pomodoro |
 | `Esc` | Cerrar |
 

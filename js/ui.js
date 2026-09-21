@@ -96,7 +96,7 @@
   }
 
   /* — Avisos --------------------------------------------------------------- */
-  function toast(message, kind, ms) {
+  function toast(message, kind, ms, onClick) {
     var host = qs('.toasts') || document.body.appendChild(el('div', { class: 'toasts' }));
     var node = el('div', { class: 'toast glass', dataset: { kind: kind || 'info' } }, [
       el('span', { class: 'row', html: icon(kind === 'ok' ? 'check' : kind === 'bad' ? 'close' : kind === 'warn' ? 'bell' : 'sparkles') }),
@@ -104,7 +104,14 @@
     ]);
     host.appendChild(node);
     var t = setTimeout(hide, ms || 3200);
-    node.addEventListener('click', hide);
+    if (onClick) {
+      node.style.cursor = 'pointer';
+      node.appendChild(el('span', { html: icon('right'), style: { opacity: '.6' } }));
+    }
+    node.addEventListener('click', function () {
+      hide();
+      if (onClick) onClick();
+    });
     function hide() {
       clearTimeout(t);
       node.classList.add('out');
