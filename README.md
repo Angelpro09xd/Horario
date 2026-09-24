@@ -109,7 +109,7 @@ Transcrito del parte oficial «Grupos de alumnos · 2º GM» (Peñalara, 14/09/2
 | APLWE | Aplicaciones Web | María Dolores Muñoz Muñoz | 7 |
 | INGPRO | Inglés Profesional | Juan Antonio Peña Martín | 2 |
 | SIOPR | Sistemas Operativos en Red | Antonia Prats Campos | 6 |
-| SINF | Sistemas Informáticos | Paula Rochina García | 4 |
+| SINF | Seguridad Informática | Paula Rochina García | 4 |
 | PI | Proyecto Intermodular | Nuria María Rodríguez Navarro | 2 |
 
 Tramos: 8:30–9:30 · 9:30–10:30 · 10:30–11:30 · **recreo 11:30–12:00** · 12:00–13:00 · 13:00–14:00 · 14:00–15:00.

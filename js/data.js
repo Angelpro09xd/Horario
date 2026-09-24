@@ -48,9 +48,9 @@
     SIOPR:  { id: 'SIOPR',  code: 'SIOPR',  name: 'Sistemas Operativos en Red',
               teacher: 'PRATS',     neon: '#FFC53D', chart: '#b58f00', icon: '🖧',
               about: 'Windows Server y GNU/Linux: dominios, usuarios y recursos compartidos.' },
-    SINF:   { id: 'SINF',   code: 'SINF',   name: 'Sistemas Informáticos',
-              teacher: 'ROCHINA',   neon: '#2BE38B', chart: '#18af74', icon: '💾',
-              about: 'Hardware, sistemas operativos y mantenimiento de equipos.' },
+    SINF:   { id: 'SINF',   code: 'SINF',   name: 'Seguridad Informática',
+              teacher: 'ROCHINA',   neon: '#2BE38B', chart: '#18af74', icon: '🔐',
+              about: 'Amenazas y vulnerabilidades, copias de seguridad, cifrado, cortafuegos y seguridad física y lógica.' },
     PI:     { id: 'PI',     code: 'PI',     name: 'Proyecto Intermodular',
               teacher: 'RODRIGUEZ', neon: '#FF8A3C', chart: '#e26e39', icon: '🚀',
               about: 'Proyecto que integra los resultados de aprendizaje del ciclo.' }

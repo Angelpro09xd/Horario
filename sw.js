@@ -1,7 +1,7 @@
 /* ===========================================================================
    Service worker — la app funciona sin conexión
    =========================================================================== */
-var VERSION = 'horario-v1.0.2';
+var VERSION = 'horario-v1.0.3';
 var CORE = [
   './',
   'index.html',
