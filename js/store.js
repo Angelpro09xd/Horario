@@ -9,6 +9,7 @@
 
   var DEFAULTS = {
     settings: {
+      skin: 'glass',
       theme: 'aurora',
       accent: null,           // null → el del tema
       blur: 22,
@@ -17,6 +18,7 @@
       grain: true,
       scanlines: false,
       cursorGlow: true,
+      tilt: true,
       sound: false,
       haptics: true,
       reduceMotion: false,

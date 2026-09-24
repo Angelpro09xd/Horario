@@ -1,0 +1,314 @@
+/* ===========================================================================
+   PIEL · TELEMETRÍA  (lenguaje visual propio)
+   -----------------------------------------------------------------------
+   Gramática del lenguaje:
+   1. Nada es redondo. Las esquinas se cortan en chaflán, no se curvan.
+   2. Todo se mide: retículas, reglillas y cotas en los bordes de cada panel.
+   3. La tipografía es monoespaciada y las etiquetas van en versalitas
+      espaciadas, como serigrafiadas sobre un instrumento.
+   4. El color no rellena: señala. Cada materia es un testigo luminoso y un
+      raíl de 3 px, nunca un fondo.
+   5. El movimiento es de máquina: barridos, parpadeos y revelados por
+      cortina. Ni rebotes ni inercias blandas.
+   =========================================================================== */
+
+:root[data-skin="hud"] {
+  --font-ui: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-display: 'JetBrains Mono', ui-monospace, monospace;
+
+  --bg-0: #03060a;
+  --ink-1: #d8f4ff;
+  --ink-2: #8fb3c4;
+  --ink-3: #5d7a88;
+  --ink-4: #3b5260;
+
+  --line: color-mix(in oklab, var(--accent) 26%, transparent);
+  --line-soft: color-mix(in oklab, var(--accent) 12%, transparent);
+  --panel: rgba(6, 12, 18, 0.72);
+
+  --glow: 0.7;
+  --blur: 3px;
+
+  --r-xs: 0px;
+  --r-sm: 0px;
+  --r-md: 0px;
+  --r-lg: 0px;
+  --r-xl: 0px;
+
+  --sp-1: 90ms linear;
+  --sp-2: 160ms linear;
+  --sp-3: 260ms steps(8, end);
+}
+
+/* — Fondo: retícula milimetrada sobre negro — */
+[data-skin="hud"] .bg {
+  background:
+    linear-gradient(var(--line-soft) 1px, transparent 1px) 0 0 / 100% 28px,
+    linear-gradient(90deg, var(--line-soft) 1px, transparent 1px) 0 0 / 28px 100%,
+    radial-gradient(120% 90% at 50% 0%, color-mix(in oklab, var(--accent) 10%, transparent), transparent 60%),
+    var(--bg-0);
+}
+[data-skin="hud"] .orb { display: none; }
+[data-skin="hud"] .bg-grid { opacity: 0.1; }
+[data-skin="hud"] .grain { opacity: 0.07; }
+[data-skin="hud"] .cursor-glow {
+  background: none;
+  border: 1px solid var(--line);
+  width: 220px; height: 220px; margin: -110px 0 0 -110px;
+  mix-blend-mode: normal;
+  opacity: 0.35;
+}
+[data-skin="hud"] .cursor-glow::before,
+[data-skin="hud"] .cursor-glow::after {
+  content: ''; position: absolute; background: var(--line);
+}
+[data-skin="hud"] .cursor-glow::before { left: 50%; top: -14px; bottom: -14px; width: 1px; }
+[data-skin="hud"] .cursor-glow::after { top: 50%; left: -14px; right: -14px; height: 1px; }
+
+/* — Paneles: chaflán en dos esquinas, corchetes y reglilla superior — */
+[data-skin="hud"] .glass,
+[data-skin="hud"] .card,
+[data-skin="hud"] .rail,
+[data-skin="hud"] .topbar,
+[data-skin="hud"] .modal,
+[data-skin="hud"] .palette,
+[data-skin="hud"] .toast,
+[data-skin="hud"] .stat,
+[data-skin="hud"] .mini-card {
+  position: relative;
+  background: var(--panel);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--line);
+  border-radius: 0;
+  box-shadow: inset 0 0 40px -30px var(--accent);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+[data-skin="hud"] .glass::before { display: none; }
+[data-skin="hud"] .glass.sheen::after { display: none; }
+
+/* Corchetes de esquina */
+[data-skin="hud"] .card::before,
+[data-skin="hud"] .topbar::before,
+[data-skin="hud"] .stat::before {
+  content: '';
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 12px; height: 12px;
+  border-top: 1px solid var(--accent);
+  border-right: 1px solid var(--accent);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Reglilla de cotas */
+[data-skin="hud"] .card::after,
+[data-skin="hud"] .topbar::after {
+  content: '';
+  position: absolute;
+  left: 14px; right: 26px; top: 0;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 9px);
+  pointer-events: none;
+}
+
+/* — Tipografía: versalitas espaciadas — */
+[data-skin="hud"] .card-title,
+[data-skin="hud"] .view-title,
+[data-skin="hud"] .item-title,
+[data-skin="hud"] .brand-title,
+[data-skin="hud"] .modal-title {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+[data-skin="hud"] .view-title { font-size: 22px; }
+[data-skin="hud"] .view-sub::before { content: '// '; color: var(--ink-4); }
+
+/* — Navegación: índice numerado — */
+[data-skin="hud"] .nav-btn {
+  border-radius: 0;
+  border-left: 2px solid transparent;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 12.5px;
+}
+[data-skin="hud"] .nav-btn:hover { background: color-mix(in oklab, var(--accent) 8%, transparent); }
+[data-skin="hud"] .nav-btn[aria-current="page"] {
+  background: color-mix(in oklab, var(--accent) 14%, transparent);
+  border-left-color: var(--accent);
+}
+[data-skin="hud"] .nav-btn[aria-current="page"]::before { display: none; }
+[data-skin="hud"] .nav-btn[aria-current="page"]::after {
+  content: '◂';
+  margin-left: auto;
+  color: var(--accent);
+  animation: hudBlink 1.1s steps(2, end) infinite;
+}
+@keyframes hudBlink { 50% { opacity: 0; } }
+
+/* — Botones: rectangulares con chaflán — */
+[data-skin="hud"] .btn,
+[data-skin="hud"] .icon-btn,
+[data-skin="hud"] .chip,
+[data-skin="hud"] .tag,
+[data-skin="hud"] .slot-pill,
+[data-skin="hud"] .legend-item {
+  border-radius: 0;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+[data-skin="hud"] .btn {
+  background: transparent;
+  border: 1px solid var(--line);
+  font-weight: 700;
+  font-size: 12px;
+}
+[data-skin="hud"] .btn:hover { background: color-mix(in oklab, var(--accent) 12%, transparent); border-color: var(--accent); }
+[data-skin="hud"] .btn.primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  box-shadow: 0 0 20px -6px var(--accent);
+}
+[data-skin="hud"] .icon-btn { background: transparent; border: 1px solid var(--line); }
+
+/* — Campos — */
+[data-skin="hud"] .input,
+[data-skin="hud"] .select,
+[data-skin="hud"] .textarea {
+  background-color: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--line);
+  border-radius: 0;
+  font-family: var(--font-mono);
+}
+[data-skin="hud"] .input:focus,
+[data-skin="hud"] .select:focus,
+[data-skin="hud"] .textarea:focus { border-color: var(--accent); box-shadow: inset 0 0 22px -14px var(--accent); }
+[data-skin="hud"] .switch .track { border-radius: 0; border: 1px solid var(--line); background: rgba(0, 0, 0, 0.4); }
+[data-skin="hud"] .switch .track::after { border-radius: 0; }
+[data-skin="hud"] .switch input:checked + .track { background: color-mix(in oklab, var(--accent) 30%, transparent); }
+[data-skin="hud"] .check { border-radius: 0; }
+
+/* — Listas: raíl de color, fondo neutro — */
+[data-skin="hud"] .item,
+[data-skin="hud"] .tl-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line-soft);
+  border-left: 3px solid var(--c, var(--accent));
+  border-radius: 0;
+}
+[data-skin="hud"] .item:hover,
+[data-skin="hud"] .tl-item:hover { background: color-mix(in oklab, var(--accent) 7%, transparent); transform: none; }
+
+/* — Horario: la celda es una ficha de instrumento — */
+[data-skin="hud"] .cell {
+  background: rgba(255, 255, 255, 0.022);
+  border: 1px solid var(--line-soft);
+  border-left: 3px solid var(--c);
+  border-radius: 0;
+  backdrop-filter: none;
+  box-shadow: none;
+  clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%);
+  transition: background var(--sp-1), border-color var(--sp-1);
+}
+[data-skin="hud"] .cell::before {
+  content: '';
+  position: absolute; right: 8px; top: 9px;
+  width: 6px; height: 6px;
+  background: var(--c);
+  box-shadow: 0 0 10px var(--c);
+  opacity: 0.9;
+}
+[data-skin="hud"] .cell:hover {
+  background: color-mix(in oklab, var(--c) 12%, transparent);
+  border-color: var(--c);
+  transform: none;
+  box-shadow: none;
+}
+[data-skin="hud"] .cell[data-state="now"] {
+  background: color-mix(in oklab, var(--c) 16%, transparent);
+  border-color: var(--c);
+  animation: none;
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--c) 40%, transparent);
+}
+/* Barrido de escaneo sobre la clase en curso */
+[data-skin="hud"] .cell[data-state="now"]::after {
+  content: '';
+  position: absolute; left: 0; right: 0; height: 30%;
+  background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--c) 22%, transparent), transparent);
+  animation: hudScan 2.6s linear infinite;
+  pointer-events: none;
+}
+@keyframes hudScan { from { top: -30%; } to { top: 100%; } }
+[data-skin="hud"] .cell[data-state="next"] { border-style: solid; border-left-style: dashed; }
+[data-skin="hud"] .cell-code { text-shadow: 0 0 14px color-mix(in oklab, var(--c) 50%, transparent); letter-spacing: 0.1em; }
+[data-skin="hud"] .cell-name { text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.06em; }
+[data-skin="hud"] .cell-mid::before, [data-skin="hud"] .cell-mid::after { background: repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 6px); }
+[data-skin="hud"] .badge-now {
+  border-radius: 0;
+  clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px);
+}
+[data-skin="hud"] .day-head {
+  background: transparent;
+  border: 1px solid var(--line-soft);
+  border-radius: 0;
+  border-bottom-width: 2px;
+}
+[data-skin="hud"] .day-head .n { text-transform: uppercase; letter-spacing: 0.12em; font-size: 12px; }
+[data-skin="hud"] .day-head[data-today="true"] { background: color-mix(in oklab, var(--accent) 10%, transparent); box-shadow: none; }
+[data-skin="hud"] .break-cell { border-radius: 0; background: repeating-linear-gradient(135deg, var(--line-soft) 0 6px, transparent 6px 14px); }
+[data-skin="hud"] .time-cell { border-right: 1px solid var(--line-soft); }
+[data-skin="hud"] .today-glow { border-radius: 0; background: color-mix(in oklab, var(--accent) 5%, transparent); border-color: var(--line-soft); }
+
+/* Línea del ahora: cruceta con cota */
+[data-skin="hud"] .now-line { height: 1px; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+[data-skin="hud"] .now-line::before { width: 7px; height: 7px; border-radius: 0; transform: translate(0, -50%) rotate(45deg); }
+
+/* — Héroe: lectura de instrumento — */
+[data-skin="hud"] .hero { background: var(--panel); border: 1px solid var(--line); }
+[data-skin="hud"] .hero-code { letter-spacing: 0.12em; text-shadow: 0 0 30px color-mix(in oklab, var(--c) 45%, transparent); }
+[data-skin="hud"] .hero-name { text-transform: uppercase; letter-spacing: 0.08em; font-size: 13px; }
+[data-skin="hud"] .ring { border-radius: 0; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
+[data-skin="hud"] .ring::before { border-radius: 0; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); inset: 7px; }
+[data-skin="hud"] .ring::after { display: none; }
+[data-skin="hud"] .meter { border-radius: 0; background: rgba(255, 255, 255, 0.06); height: 8px; }
+[data-skin="hud"] .meter i {
+  border-radius: 0;
+  background: repeating-linear-gradient(90deg, var(--accent) 0 4px, transparent 4px 7px);
+  box-shadow: none;
+}
+[data-skin="hud"] .bar-track, [data-skin="hud"] .bar-fill { border-radius: 0; }
+[data-skin="hud"] .bar-fill { background: repeating-linear-gradient(90deg, var(--c) 0 5px, transparent 5px 8px); box-shadow: none; }
+
+/* — Barra inferior y FAB — */
+[data-skin="hud"] .tabbar { border-radius: 0; border: 1px solid var(--line); clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
+[data-skin="hud"] .tab { border-radius: 0; text-transform: uppercase; letter-spacing: 0.06em; }
+[data-skin="hud"] .tab[aria-current="page"] { background: color-mix(in oklab, var(--accent) 16%, transparent); }
+[data-skin="hud"] .tab[aria-current="page"]::after { border-radius: 0; height: 2px; width: 34px; }
+[data-skin="hud"] .fab {
+  border-radius: 0;
+  background: var(--accent);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+[data-skin="hud"] .day-picker { border-radius: 0; }
+[data-skin="hud"] .day-pick { border-radius: 0; }
+
+/* — Materias — */
+[data-skin="hud"] .subject-card { border-radius: 0; }
+[data-skin="hud"] .subject-top { background: linear-gradient(180deg, color-mix(in oklab, var(--c) 12%, transparent), transparent); border-bottom: 1px solid var(--line-soft); }
+[data-skin="hud"] .subject-code { letter-spacing: 0.12em; }
+[data-skin="hud"] .exam-card { border-radius: 0; }
+[data-skin="hud"] .empty { border-radius: 0; border-color: var(--line-soft); }
+[data-skin="hud"] .eyebrow, [data-skin="hud"] .group-title { color: var(--ink-3); }
+
+/* — Movimiento de máquina: revelado por cortina y parpadeo del testigo — */
+[data-skin="hud"] .stagger > * { animation: hudReveal 380ms steps(10, end) both; }
+@keyframes hudReveal {
+  from { opacity: 0; clip-path: inset(0 100% 0 0); }
+  to   { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+[data-skin="hud"] .status-dot { border-radius: 0; animation: hudBlink 1.4s steps(2, end) infinite; }
+[data-skin="hud"] .view-in { animation: hudWipe 260ms steps(9, end) both; }
+@keyframes hudWipe { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }

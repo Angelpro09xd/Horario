@@ -24,7 +24,23 @@ apuntes por materia.
 | **Exámenes** | Cuenta atrás en días, notas del temario y creación de una tarea de repaso en un toque. |
 | **Notas** | Media ponderada por materia y media global, con la línea del aprobado. |
 | **Materias** | Ficha de cada módulo: profesorado, horas semanales, dónde cae en el horario y apuntes propios. |
-| **Ajustes** | Siete temas de neón, acento personalizado, desenfoque del cristal, efectos, avisos y exportación de datos. |
+| **Ajustes** | Cuatro lenguajes visuales, doce paletas, acento personalizado, control del cristal, efectos, avisos y exportación de datos. |
+
+### Cuatro lenguajes visuales
+
+La piel no es un cambio de color: cambia la **forma, la materia, la tipografía y
+el movimiento**. El color va aparte, así que cualquiera de las doce paletas
+funciona con cualquiera de las cuatro pieles.
+
+| Piel | De qué va |
+|---|---|
+| **Liquid Glass** | Capas translúcidas con desenfoque, bordes luminosos, auroras de fondo y una constelación de puntos. Lo que había. |
+| **Material Expressive** | El lenguaje de Google recreado: superficies tonales sin desenfoque, esquinas muy generosas que **se deforman al pulsar**, capas de estado en vez de sombras, indicador de píldora en la navegación, progreso **ondulado** con su punto final, y movimiento con muelle. |
+| **Telemetría** | Lenguaje propio. Nada es redondo: las esquinas se cortan en chaflán. Todo se mide, con retículas y reglillas de cotas en los bordes de cada panel. Tipografía monoespaciada en versalitas. El color no rellena, señala: cada materia es un testigo luminoso y un raíl de 3 px. El movimiento es de máquina: barridos de escaneo, parpadeos y revelados por cortina. |
+| **Papel Riso** | Lenguaje propio, y el único en claro. Es papel: fondo crema, trama de semitono y fibra. Tinta plana, sin degradados ni brillos. La profundidad se dibuja con sombras duras desplazadas. El registro es imperfecto, cada pieza se imprime un par de píxeles desviada, y las tarjetas caen con un grado de más o de menos. |
+
+Paletas: Aurora, Synth, Toxic, Solar, Ice, Vapor, Carbon, Nebulosa, Menta,
+Cobalto, Brasa y Sakura.
 
 ### Detalles que quizá no se ven a la primera
 
@@ -35,6 +51,9 @@ apuntes por materia.
 - **Paleta de comandos** (`Ctrl/⌘ + K` o `K`) para ir a cualquier sitio o cambiar de tema.
 - **Gestos**: desliza a los lados para cambiar de día o de sección en el móvil.
 - **Sin servidores**: nada de cuentas, nada de nube. Tus datos se exportan e importan en JSON.
+- **Las tarjetas se inclinan** hacia el cursor en las pieles con profundidad, y cada
+  lenguaje tiene su propia animación de entrada: muelle, cortina o caída sobre el papel.
+- **Movimiento reducido** desactiva de golpe partículas, inclinación y animaciones.
 
 ### Atajos
 
@@ -78,14 +97,18 @@ manifest.webmanifest       instalación como app
 sw.js                      caché offline
 exams.json                 exámenes iniciales (se importan la primera vez)
 css/
-  core.css                 tokens, temas y tipografía
-  fx.css                   cristal líquido, neón, partículas y grano
+  core.css                 tokens, paletas y tipografía
+  fx.css                   cristal líquido, neón, partículas y animaciones
   layout.css               armazón PC / Android
   components.css           botones, campos, listas, modales, gráficos
   views.css                rejilla del horario, panel de ahora, foco
+  skin-material.css        lenguaje Material Expressive
+  skin-hud.css             lenguaje Telemetría
+  skin-paper.css           lenguaje Papel Riso
 js/
   data.js                  horario, materias, profesorado y calendario
   store.js                 estado y persistencia local
+  skins.js                 lenguajes visuales y color de materia por piel
   time.js                  qué toca ahora, bloques y cuentas atrás
   ui.js                    helpers de DOM, iconos, modales y avisos
   fx.js                    fondo animado, sonido y vibración

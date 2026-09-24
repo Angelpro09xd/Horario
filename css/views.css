@@ -458,3 +458,98 @@
 .about-line { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px dashed rgba(255, 255, 255, 0.08); font-size: 13px; }
 .about-line:last-child { border-bottom: none; }
 .about-line b { color: var(--ink-1); font-weight: 600; }
+
+/* ====================== SELECTOR DE LENGUAJE VISUAL ======================= */
+.skin-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(min(150px, 100%), 1fr));
+}
+
+.skin-card {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border-radius: var(--r-md);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  text-align: left;
+  transition: transform var(--sp-1), border-color var(--sp-1), background var(--sp-1);
+}
+.skin-card:hover { transform: translateY(-3px); border-color: color-mix(in oklab, var(--accent) 50%, transparent); }
+.skin-card[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 12%, transparent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.skin-name { font-size: 13px; font-weight: 700; margin-top: 6px; }
+.skin-claim { font-size: 10.5px; color: var(--ink-3); line-height: 1.35; }
+
+/* Cada miniatura se dibuja en su propio idioma, pase lo que pase fuera */
+.skin-demo {
+  position: relative;
+  display: block;
+  height: 64px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #070a12;
+}
+.skin-demo i { position: absolute; display: block; }
+
+/* Cristal líquido */
+[data-preview="glass"] .skin-demo {
+  background: radial-gradient(120% 90% at 20% 0%, #2a3f6b, #070a12 70%);
+}
+[data-preview="glass"] .d1 {
+  left: 8px; top: 9px; right: 8px; height: 17px; border-radius: 9px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(4px);
+}
+[data-preview="glass"] .d2 {
+  left: 8px; bottom: 9px; width: 52%; height: 24px; border-radius: 8px;
+  background: linear-gradient(140deg, rgba(53, 231, 255, 0.55), rgba(53, 231, 255, 0.12));
+  border: 1px solid rgba(53, 231, 255, 0.6);
+  box-shadow: 0 0 16px rgba(53, 231, 255, 0.45);
+}
+[data-preview="glass"] .d3 {
+  right: 8px; bottom: 9px; width: 26px; height: 24px; border-radius: 8px;
+  background: rgba(255, 78, 205, 0.35);
+  border: 1px solid rgba(255, 78, 205, 0.7);
+  box-shadow: 0 0 14px rgba(255, 78, 205, 0.5);
+}
+
+/* Material Expressive */
+[data-preview="material"] .skin-demo { background: #171a20; }
+[data-preview="material"] .d1 { left: 8px; top: 9px; right: 8px; height: 17px; border-radius: 999px; background: #2b3340; }
+[data-preview="material"] .d2 { left: 8px; bottom: 9px; width: 52%; height: 24px; border-radius: 14px; background: #35e7ff; }
+[data-preview="material"] .d3 { right: 8px; bottom: 9px; width: 30px; height: 24px; border-radius: 999px; background: #56406b; }
+
+/* Telemetría */
+[data-preview="hud"] .skin-demo {
+  background:
+    linear-gradient(rgba(53, 231, 255, 0.1) 1px, transparent 1px) 0 0 / 100% 9px,
+    linear-gradient(90deg, rgba(53, 231, 255, 0.1) 1px, transparent 1px) 0 0 / 9px 100%,
+    #03060a;
+}
+[data-preview="hud"] .d1 {
+  left: 8px; top: 9px; right: 8px; height: 15px;
+  border: 1px solid rgba(53, 231, 255, 0.55);
+  clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+}
+[data-preview="hud"] .d2 {
+  left: 8px; bottom: 9px; width: 52%; height: 22px;
+  border: 1px solid rgba(53, 231, 255, 0.45);
+  border-left: 3px solid #35e7ff;
+  background: rgba(53, 231, 255, 0.1);
+}
+[data-preview="hud"] .d3 {
+  right: 8px; bottom: 14px; width: 26px; height: 12px;
+  background: repeating-linear-gradient(90deg, #35e7ff 0 3px, transparent 3px 6px);
+}
+
+/* Papel Riso */
+[data-preview="paper"] .skin-demo { background: #f3ece0; }
+[data-preview="paper"] .d1 { left: 8px; top: 9px; right: 8px; height: 15px; border: 2px solid #1b1712; border-radius: 3px; background: #fff; box-shadow: 2px 2px 0 rgba(27,23,18,.35); }
+[data-preview="paper"] .d2 { left: 8px; bottom: 10px; width: 50%; height: 22px; border: 2px solid #1b1712; border-radius: 3px; background: #7fd4e8; box-shadow: 3px 3px 0 #1b1712; }
+[data-preview="paper"] .d3 { right: 9px; bottom: 10px; width: 26px; height: 22px; border: 2px solid #1b1712; border-radius: 999px; background: #ef9ab0; box-shadow: 3px 3px 0 rgba(27,23,18,.4); }

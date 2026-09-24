@@ -8,7 +8,7 @@
   var D = HX.data, T = HX.time, U = HX.ui, store = HX.store;
   var el = U.el, icon = U.icon;
 
-  function subjColor(id) { var s = D.subject(id); return s ? s.neon : 'var(--accent)'; }
+  function subjColor(id) { return HX.skins.color(id); }
 
   function openSubject(id) { HX.app.openSubject(id); }
 
@@ -100,7 +100,7 @@
           class: 'cell', type: 'button',
           dataset: { day: String(d.i), from: String(b.from), to: String(b.to), subject: s.id,
             holiday: String(!!holidayHere) },
-          style: { '--c': s.neon, gridColumn: String(idx + 2), gridRow: (b.from + 2) + ' / span ' + b.span },
+          style: { '--c': HX.skins.color(s), gridColumn: String(idx + 2), gridRow: (b.from + 2) + ' / span ' + b.span },
           onclick: function () { HX.fx.tap(); openSubject(s.id); },
           title: s.name + ' · ' + t.name
         }, [
@@ -126,7 +126,7 @@
     var legend = el('div', { class: 'legend' }, Object.keys(D.SUBJECTS).map(function (id) {
       var s = D.SUBJECTS[id];
       return el('button', {
-        class: 'legend-item', type: 'button', style: { '--c': s.neon },
+        class: 'legend-item', type: 'button', style: { '--c': HX.skins.color(s) },
         onclick: function () { openSubject(id); }
       }, [
         el('span', { class: 'dot' }),
@@ -238,7 +238,17 @@
      (reconstruirlo entero cada segundo rompía el desplazamiento con la
      rueda cuando el cursor estaba quieto sobre la vista). */
   function setText(node, text) {
-    if (node && node.textContent !== text) node.textContent = text;
+    if (!node || node.textContent === text) return false;
+    node.textContent = text;
+    return true;
+  }
+
+  /* Un latido breve cada vez que el número cambia: la app respira. */
+  function pulse(node) {
+    if (!node || store.get('settings.reduceMotion')) return;
+    node.classList.remove('pulse-tick');
+    void node.offsetWidth;          /* reinicia la animación */
+    node.classList.add('pulse-tick');
   }
 
   function radarList() {
@@ -289,7 +299,7 @@
     var current = snap.current;
     var subject = current && current.subject ? D.subject(current.subject) : null;
     var target = subject || (snap.upcoming ? D.subject(snap.upcoming.subject) : null);
-    var color = target ? target.neon : 'var(--accent)';
+    var color = HX.skins.color(target);
     var isLive = snap.phase === 'class' && !!subject;
     var isBreak = snap.phase === 'break';
     var st = statusLine(snap);
@@ -348,10 +358,10 @@
 
     var tlItems = list.map(function (s) {
       var sub = D.subject(s.subject);
-      var badge = el('div', { class: 'tag', style: { '--c': sub.neon }, text: s.periods.length + 'h' });
+      var badge = el('div', { class: 'tag', style: { '--c': HX.skins.color(sub) }, text: s.periods.length + 'h' });
       var node = el('button', {
         class: 'tl-item', type: 'button', dataset: { state: 'future' },
-        style: { '--c': sub.neon }, onclick: function () { openSubject(sub.id); }
+        style: { '--c': HX.skins.color(sub) }, onclick: function () { openSubject(sub.id); }
       }, [
         el('div', { class: 'tl-time' }, [
           el('div', { text: T.clock(s.start) }),
@@ -405,7 +415,7 @@
     } else {
       refs.sideCard.appendChild(el('div', { class: 'list' }, radar.slice(0, 6).map(function (r) {
         var sub = D.subject(r.subject);
-        var c = sub ? sub.neon : 'var(--accent)';
+        var c = HX.skins.color(sub);
         return el('div', { class: 'item accented', style: { '--c': c } }, [
           el('div', { class: 'grow' }, [
             el('div', { class: 'item-title truncate', text: r.title }),
@@ -444,7 +454,7 @@
       return 1 - span / 3600000;
     })();
 
-    setText(r.ringBig, countdownMs != null && countdownMs < 86400000 ? T.countdown(countdownMs) : '—');
+    if (setText(r.ringBig, countdownMs != null && countdownMs < 86400000 ? T.countdown(countdownMs) : '—')) pulse(r.ringBig);
     r.ring.style.setProperty('--p', String(Math.max(0, Math.min(1, ratio || 0))));
     setText(r.statusTxt, statusLine(snap).main);
 
@@ -501,7 +511,7 @@
         });
       });
       var avg = store.average(id);
-      cards.appendChild(el('article', { class: 'subject-card card glass sheen', style: { '--c': s.neon } }, [
+      cards.appendChild(el('article', { class: 'subject-card card glass sheen', style: { '--c': HX.skins.color(s) } }, [
         el('div', { class: 'subject-top' }, [
           el('div', { class: 'row between' }, [
             el('div', { class: 'subject-code', text: s.code }),

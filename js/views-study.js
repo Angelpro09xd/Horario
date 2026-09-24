@@ -16,7 +16,7 @@
     return opts;
   }
 
-  function colorOf(id) { var s = D.subject(id); return s ? s.neon : 'var(--accent)'; }
+  function colorOf(id) { return HX.skins.color(id); }
 
   /* ================================================================ TAREAS */
   function taskDialog(existing) {
@@ -59,7 +59,7 @@
 
   function taskItem(t) {
     var sub = D.subject(t.subject);
-    var c = sub ? sub.neon : 'var(--accent)';
+    var c = HX.skins.color(sub);
     var days = t.due ? T.daysUntil(t.due) : null;
     var badge = null;
     if (t.done) badge = { text: 'hecha', c: 'var(--ok)' };
@@ -121,7 +121,7 @@
     ].concat(Object.keys(D.SUBJECTS).map(function (id) {
       var s = D.SUBJECTS[id];
       return el('button', {
-        class: 'chip', type: 'button', style: { '--c': s.neon },
+        class: 'chip', type: 'button', style: { '--c': HX.skins.color(s) },
         'aria-pressed': String(filter.subject === id),
         onclick: function () { filter.subject = filter.subject === id ? '' : id; HX.app.refresh(); }
       }, [el('span', { class: 'dot' }), s.code]);
@@ -250,7 +250,7 @@
 
     function card(e) {
       var sub = D.subject(e.subject);
-      var c = sub ? sub.neon : 'var(--accent)';
+      var c = HX.skins.color(sub);
       var days = T.daysUntil(e.date);
       var ratio = days < 0 ? 1 : Math.max(0.03, Math.min(1, 1 - days / 21));
       var ring = U.ring(ratio, days <= 3 && days >= 0 ? 'var(--bad)' : c, [
@@ -384,9 +384,9 @@
       var s = D.SUBJECTS[id];
       var list = store.state.grades[id] || [];
       var avg = store.average(id);
-      cards.appendChild(el('div', { class: 'card glass', style: { '--c': s.neon } }, [
+      cards.appendChild(el('div', { class: 'card glass', style: { '--c': HX.skins.color(s) } }, [
         el('div', { class: 'card-head' }, [
-          el('span', { class: 'tag', style: { '--c': s.neon }, text: s.code }),
+          el('span', { class: 'tag', style: { '--c': HX.skins.color(s) }, text: s.code }),
           el('div', { class: 'grow truncate', style: { fontSize: '12.5px', color: 'var(--ink-3)' }, text: s.name }),
           el('span', { class: 'mono', style: { color: avg == null ? 'var(--ink-4)' : avg >= 5 ? 'var(--ok)' : 'var(--bad)', fontWeight: '700' },
             text: avg == null ? '—' : avg.toFixed(2) })
@@ -453,25 +453,25 @@
       icon: 'book',
       body: [
         el('div', { class: 'row wrap', style: { gap: '10px' } }, [
-          el('span', { class: 'tag', style: { '--c': s.neon }, text: D.WEEKLY[id] + ' h / semana' }),
+          el('span', { class: 'tag', style: { '--c': HX.skins.color(s) }, text: D.WEEKLY[id] + ' h / semana' }),
           el('span', { class: 'tag', style: { '--c': avg == null ? 'var(--ink-4)' : avg >= 5 ? 'var(--ok)' : 'var(--bad)' },
             text: avg == null ? 'sin notas' : 'media ' + avg.toFixed(2) }),
           el('span', { class: 'tag', style: { '--c': pending.length ? 'var(--warn)' : 'var(--ok)' },
             text: pending.length + ' tareas pendientes' })
         ]),
         el('p', { class: 'dim', style: { fontSize: '13.5px', lineHeight: '1.6' }, text: s.about }),
-        next ? el('div', { class: 'item accented', style: { '--c': s.neon } }, [
-          el('span', { html: icon('zap'), style: { width: '18px', color: s.neon } }),
+        next ? el('div', { class: 'item accented', style: { '--c': HX.skins.color(s) } }, [
+          el('span', { html: icon('zap'), style: { width: '18px', color: HX.skins.color(s) } }),
           el('div', { class: 'grow' }, [
             el('div', { class: 'item-title', text: 'Próxima sesión' }),
             el('div', { class: 'item-sub', text: T.longDate(next.start) + ' · ' + T.clock(next.start) + '–' + T.clock(next.end) })
           ]),
-          el('span', { class: 'tag', style: { '--c': s.neon }, text: T.human(next.start.getTime() - T.now().getTime()) })
+          el('span', { class: 'tag', style: { '--c': HX.skins.color(s) }, text: T.human(next.start.getTime() - T.now().getTime()) })
         ]) : null,
         el('div', {}, [
           el('div', { class: 'eyebrow', style: { marginBottom: '8px' }, text: 'En el horario' }),
-          el('div', { class: 'subject-slots', style: { '--c': s.neon } }, slots.map(function (x) {
-            return el('span', { class: 'slot-pill', style: { '--c': s.neon },
+          el('div', { class: 'subject-slots', style: { '--c': HX.skins.color(s) } }, slots.map(function (x) {
+            return el('span', { class: 'slot-pill', style: { '--c': HX.skins.color(s) },
               text: x.day.short + ' ' + x.from.start + '–' + x.to.end });
           }))
         ]),
@@ -492,7 +492,12 @@
     { id: 'solar', name: 'Solar', a: '#ffb03c', b: '#ff5c3c' },
     { id: 'ice', name: 'Ice', a: '#8fd6ff', b: '#c9b6ff' },
     { id: 'vapor', name: 'Vapor', a: '#00ffd5', b: '#ff7ab8' },
-    { id: 'carbon', name: 'Carbon', a: '#d6dcf0', b: '#8e97b8' }
+    { id: 'carbon', name: 'Carbon', a: '#d6dcf0', b: '#8e97b8' },
+    { id: 'nebula', name: 'Nebulosa', a: '#8b7cff', b: '#ff6ec7' },
+    { id: 'mint', name: 'Menta', a: '#4fffc1', b: '#63b3ff' },
+    { id: 'cobalt', name: 'Cobalto', a: '#4d8dff', b: '#22d3ee' },
+    { id: 'ember', name: 'Brasa', a: '#ff6b3d', b: '#ffd166' },
+    { id: 'sakura', name: 'Sakura', a: '#ff9bc4', b: '#b06cff' }
   ];
 
   function settingsCard(title, iconName, children) {
@@ -548,6 +553,35 @@
       ]);
     }
 
+    /* Lenguaje visual: la piel manda sobre forma, materia y movimiento */
+    var skinGrid = el('div', { class: 'skin-grid' }, HX.skins.SKINS.map(function (sk) {
+      return el('button', {
+        class: 'skin-card', type: 'button', 'aria-pressed': String((s.skin || 'glass') === sk.id),
+        dataset: { preview: sk.id },
+        onclick: function () {
+          store.set('settings.skin', sk.id);
+          HX.fx.applySettings();
+          HX.fx.tap('up');
+          HX.app.refresh();
+          U.toast('Lenguaje visual: ' + sk.name, 'ok');
+        }
+      }, [
+        el('span', { class: 'skin-demo' }, [
+          el('i', { class: 'd1' }), el('i', { class: 'd2' }), el('i', { class: 'd3' })
+        ]),
+        el('span', { class: 'skin-name', text: sk.name }),
+        el('span', { class: 'skin-claim', text: sk.claim })
+      ]);
+    }));
+
+    grid.appendChild(settingsCard('Lenguaje visual', 'sparkles', [
+      el('p', { class: 'view-sub', style: { marginBottom: '12px' },
+        text: 'Cada piel cambia forma, materia, tipografía y movimiento. El color va aparte.' }),
+      skinGrid,
+      el('p', { class: 'view-sub', style: { marginTop: '12px', lineHeight: '1.6' },
+        text: HX.skins.byId(s.skin || 'glass').about })
+    ]));
+
     grid.appendChild(settingsCard('Apariencia', 'sparkles', [
       el('div', { class: 'eyebrow', style: { margin: '2px 0 10px' }, text: 'Tema' }),
       swatches,
@@ -570,6 +604,7 @@
       U.switchRow('Grano de película', 'Textura sutil sobre todo', s.grain, function (v) { store.set('settings.grain', v); HX.fx.applySettings(); }),
       U.switchRow('Líneas de escaneo', 'Modo CRT retrofuturista', s.scanlines, function (v) { store.set('settings.scanlines', v); HX.fx.applySettings(); }),
       U.switchRow('Halo del cursor', 'Solo en ordenador', s.cursorGlow, function (v) { store.set('settings.cursorGlow', v); HX.fx.applySettings(); }),
+      U.switchRow('Inclinar tarjetas', 'Siguen al cursor en 3D', s.tilt, function (v) { store.set('settings.tilt', v); HX.fx.applySettings(); }),
       U.switchRow('Sonido', 'Pitidos al interactuar', s.sound, function (v) { store.set('settings.sound', v); if (v) HX.fx.play('ok'); }),
       U.switchRow('Vibración', 'En móviles compatibles', s.haptics, function (v) { store.set('settings.haptics', v); if (v) HX.fx.buzz(20); }),
       U.switchRow('Reducir movimiento', 'Menos animación, más batería', s.reduceMotion, function (v) { store.set('settings.reduceMotion', v); HX.fx.applySettings(); })

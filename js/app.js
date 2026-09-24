@@ -133,8 +133,9 @@
   }
 
   /* ------------------------------------------------------------- enrutado */
-  function go(id, skipHash) {
+  function go(id, skipHash, primeraVez, after) {
     if (!VIEWS[id]) id = 'week';
+    var cambia = current !== id;
     current = id;
     if (!skipHash) {
       try { global.history.replaceState(null, '', '#/' + id); } catch (e) { global.location.hash = '#/' + id; }
@@ -145,18 +146,26 @@
     U.qsa('.tab').forEach(function (b) {
       if (b.dataset.view === id) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
     });
-    render();
+    render(cambia && !primeraVez, after);
   }
 
   function scroller() { return document.scrollingElement || document.documentElement; }
 
-  function render() {
+  /* Pinta la vista. La entrada la anima el CSS sobre .view-body: la API de
+     transiciones del navegador congelaba el desplazamiento mientras duraba
+     y volvía asíncrono el pintado. */
+  function render(animate, after) {
+    paintView(after, animate);
+  }
+
+  function paintView(after, animate) {
     var v = VIEWS[current];
+    if (HX.fx.resetTilt) HX.fx.resetTilt();
     U.clear(viewHost);
     global.scrollTo(0, 0);
     document.title = v.title + ' · Horario ' + D.SCHOOL.group;
 
-    var body = el('div', { class: 'view-body' });
+    var body = el('div', { class: 'view-body' + (animate && !store.get('settings.reduceMotion') ? ' view-in' : '') });
     viewHost.appendChild(el('div', { class: 'view-head' }, [
       el('div', {}, [
         el('div', { class: 'eyebrow', text: D.SCHOOL.group + ' · ' + D.SCHOOL.year }),
@@ -170,6 +179,7 @@
     measureChrome();
     viewHost._body = body;
     if (v.tick) v.tick(body);
+    if (after) after();
   }
 
   function viewActions() {
@@ -186,16 +196,20 @@
 
   function refresh() {
     var pos = scroller().scrollTop;
-    render();
-    scroller().scrollTop = pos;
+    render(false, function () { scroller().scrollTop = pos; });
   }
 
   function goToday() {
     var d = T.now().getDay();
     var day = D.dayByIndex(d);
-    if (current !== 'week') go('week');
-    var body = viewHost._body;
-    if (body && body._setDay) body._setDay(day ? day.i : 1);
+    var mostrar = function () {
+      var body = viewHost._body;
+      if (body && body._setDay) body._setDay(day ? day.i : 1);
+    };
+    /* La vista puede pintarse dentro de una transición, así que el día se
+       selecciona cuando el DOM ya existe. */
+    if (current !== 'week') go('week', false, false, mostrar);
+    else mostrar();
     U.toast(day ? 'Mostrando ' + day.name : 'Hoy no hay clase — te enseño el lunes', 'info', 2200);
   }
 
@@ -230,8 +244,8 @@
     }
 
     var dot = U.qs('.status-dot');
-    if (dot) dot.style.background = subject ? subject.neon : 'var(--accent)';
-    if (dot) dot.style.boxShadow = '0 0 14px ' + (subject ? subject.neon : 'var(--accent)');
+    if (dot) dot.style.background = HX.skins.color(subject);
+    if (dot) dot.style.boxShadow = '0 0 14px ' + HX.skins.color(subject);
   }
 
   /* Altura real de la barra superior: la usan los elementos pegajosos
@@ -512,7 +526,7 @@
     var isMobile = global.matchMedia('(max-width: 860px)').matches;
     var startPref = store.get('settings.startView', 'auto');
     var initial = VIEWS[hash] ? hash : (startPref === 'auto' ? (isMobile ? 'now' : 'week') : startPref);
-    go(initial);
+    go(initial, false, true);
 
     paintTopbar();
     measureChrome();

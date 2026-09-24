@@ -239,3 +239,52 @@ body.has-pointer .cursor-glow { opacity: 1; }
 @keyframes bootBar { from { transform: translateX(-110%); } to { transform: translateX(380%); } }
 
 .boot-text { font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--ink-3); }
+
+
+/* ===========================================================================
+   TRANSICIONES DE VISTA (API del navegador) y animaciones compartidas
+   =========================================================================== */
+/* Entrada de la vista: la anima el propio contenedor, sin congelar la página */
+.view-in { animation: vtIn 260ms var(--emphasis) both; }
+@keyframes vtIn { from { opacity: 0; transform: translateY(10px); } }
+body[data-motion="off"] .view-in { animation: none; }
+
+/* Latido del valor que acaba de cambiar */
+@keyframes tick {
+  0%   { transform: translateY(0); }
+  35%  { transform: translateY(-2px); }
+  100% { transform: translateY(0); }
+}
+
+/* Brillo que recorre una superficie (carga, esqueleto) */
+@keyframes shimmer {
+  from { background-position: -140% 0; }
+  to   { background-position: 240% 0; }
+}
+
+/* Chispa al completar algo */
+@keyframes spark {
+  0%   { transform: scale(0.4); opacity: 0.9; }
+  70%  { transform: scale(1.5); opacity: 0.25; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+.check[aria-checked="true"]::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  border: 2px solid var(--c, var(--accent));
+  animation: spark 520ms ease-out forwards;
+  pointer-events: none;
+}
+.check { position: relative; }
+
+/* Ondulación al pulsar (la usan varias pieles) */
+@keyframes ripple {
+  from { transform: scale(0); opacity: 0.35; }
+  to   { transform: scale(2.4); opacity: 0; }
+}
+
+/* Latido del contador al cambiar de segundo */
+.pulse-tick { animation: tick 380ms ease-out; }

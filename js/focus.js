@@ -102,7 +102,7 @@
     var current = snap.current;
     var subject = current && current.subject ? D.subject(current.subject) :
       (snap.upcoming ? D.subject(snap.upcoming.subject) : null);
-    var color = subject ? subject.neon : 'var(--accent)';
+    var color = HX.skins.color(subject);
     node.style.setProperty('--c', color);
 
     if (pomo.on) {

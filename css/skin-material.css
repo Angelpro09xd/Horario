@@ -1,0 +1,342 @@
+/* ===========================================================================
+   PIEL · MATERIAL EXPRESSIVE
+   Reglas del lenguaje: superficies tonales (el color tiñe el gris, no hay
+   cristal), esquinas muy generosas que se deforman al pulsar, capas de
+   estado en vez de sombras para el foco, y movimiento con muelle.
+   =========================================================================== */
+
+:root[data-skin="material"] {
+  --font-ui: 'Outfit', 'Roboto', 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Outfit', var(--font-ui);
+
+  /* Superficies tonales: gris teñido con el acento, como en Material 3 */
+  --surface-0: color-mix(in oklab, var(--accent) 5%, #0e1013);
+  --surface-1: color-mix(in oklab, var(--accent) 8%, #15181d);
+  --surface-2: color-mix(in oklab, var(--accent) 11%, #1b1f26);
+  --surface-3: color-mix(in oklab, var(--accent) 14%, #222731);
+  --outline: color-mix(in oklab, var(--accent) 18%, #4a505c);
+
+  /* Contenedores de color, el recurso expresivo de M3 */
+  --cont-pri: color-mix(in oklab, var(--accent) 26%, #181c22);
+  --cont-sec: color-mix(in oklab, var(--accent-2) 22%, #181c22);
+  --cont-ter: color-mix(in oklab, var(--accent-3) 22%, #181c22);
+
+  --bg-0: color-mix(in oklab, var(--accent) 4%, #0b0d10);
+  --ink-1: #f2f4f8;
+  --ink-2: #c6ccd8;
+  --ink-3: #939bab;
+  --ink-4: #656d7c;
+
+  --glow: 0.25;
+  --blur: 0px;
+
+  --r-xs: 12px;
+  --r-sm: 18px;
+  --r-md: 24px;
+  --r-lg: 30px;
+  --r-xl: 38px;
+
+  --sp-1: 180ms var(--spring);
+  --sp-2: 380ms var(--emphasis);
+  --sp-3: 520ms var(--emphasis);
+}
+
+/* — Fondo: sin auroras ni retícula, solo superficie tonal — */
+[data-skin="material"] .bg {
+  background:
+    radial-gradient(120% 90% at 15% -10%, color-mix(in oklab, var(--accent) 16%, transparent), transparent 60%),
+    radial-gradient(90% 80% at 100% 110%, color-mix(in oklab, var(--accent-2) 13%, transparent), transparent 62%),
+    var(--bg-0);
+}
+[data-skin="material"] .orb { display: none; }   /* las manchas las pinta el lienzo */
+[data-skin="material"] .bg-grid,
+[data-skin="material"] .grain,
+[data-skin="material"] .cursor-glow { display: none; }
+
+/* — Superficies: tono, no cristal — */
+[data-skin="material"] .glass,
+[data-skin="material"] .card,
+[data-skin="material"] .rail,
+[data-skin="material"] .topbar,
+[data-skin="material"] .modal,
+[data-skin="material"] .palette,
+[data-skin="material"] .toast {
+  background: var(--surface-1);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 14px -6px rgba(0, 0, 0, 0.5);
+}
+[data-skin="material"] .glass::before,
+[data-skin="material"] .glass.sheen::after { display: none; }
+
+[data-skin="material"] .topbar {
+  background: var(--surface-2);
+  border-radius: var(--r-xl);
+}
+[data-skin="material"] .rail { background: var(--surface-0); box-shadow: none; }
+[data-skin="material"] .mini-card { background: var(--surface-2); border: none; border-radius: var(--r-sm); }
+
+/* — Navegación: indicador de píldora rellena — */
+[data-skin="material"] .nav-btn {
+  border-radius: 999px;
+  padding: 13px 18px;
+  font-weight: 500;
+  transition: background var(--sp-1), color var(--sp-1);
+}
+[data-skin="material"] .nav-btn:hover { background: color-mix(in oklab, var(--ink-1) 8%, transparent); }
+[data-skin="material"] .nav-btn[aria-current="page"] {
+  background: var(--cont-sec);
+  color: var(--ink-1);
+  animation: mdIndicator 460ms var(--spring) both;
+}
+[data-skin="material"] .nav-btn[aria-current="page"]::before { display: none; }
+@keyframes mdIndicator {
+  from { transform: scaleX(0.78); border-radius: 999px; opacity: 0.4; }
+  to   { transform: none; opacity: 1; }
+}
+[data-skin="material"] .nav-btn kbd { background: transparent; border: none; color: var(--ink-4); }
+
+/* — Botones: píldora con capa de estado y deformación al pulsar — */
+[data-skin="material"] .btn {
+  position: relative;
+  border-radius: 999px;
+  border: none;
+  background: var(--surface-3);
+  color: var(--ink-1);
+  padding: 11px 22px;
+  font-weight: 600;
+  overflow: hidden;
+  transition: border-radius 220ms var(--spring), background var(--sp-1), transform 120ms var(--spring);
+}
+[data-skin="material"] .btn::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--ink-1);
+  opacity: 0;
+  transition: opacity var(--sp-1);
+}
+[data-skin="material"] .btn:hover::after { opacity: 0.08; }
+[data-skin="material"] .btn:active {
+  border-radius: 14px;          /* la forma se deforma: sello de M3 Expressive */
+  transform: scale(0.97);
+}
+[data-skin="material"] .btn:active::after { opacity: 0.12; }
+[data-skin="material"] .btn.primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: none;
+}
+[data-skin="material"] .btn.ghost { background: transparent; box-shadow: inset 0 0 0 1px var(--outline); }
+[data-skin="material"] .btn.danger { background: color-mix(in oklab, var(--bad) 24%, var(--surface-2)); color: #ffd9de; }
+
+[data-skin="material"] .icon-btn {
+  border: none;
+  background: var(--surface-2);
+  border-radius: 999px;
+  transition: border-radius 220ms var(--spring), background var(--sp-1), transform 120ms var(--spring);
+}
+[data-skin="material"] .icon-btn:hover { background: var(--surface-3); box-shadow: none; }
+[data-skin="material"] .icon-btn:active { border-radius: 13px; transform: scale(0.92); }
+
+/* — Chips y etiquetas: contenedores tonales — */
+[data-skin="material"] .chip {
+  border-radius: 999px;
+  border: 1px solid var(--outline);
+  background: transparent;
+  padding: 8px 16px;
+  transition: background var(--sp-1), border-radius 220ms var(--spring);
+}
+[data-skin="material"] .chip[aria-pressed="true"], [data-skin="material"] .chip.on {
+  background: color-mix(in oklab, var(--c, var(--accent)) 26%, var(--surface-1));
+  border-color: transparent;
+  box-shadow: none;
+}
+[data-skin="material"] .chip:active { border-radius: 12px; }
+[data-skin="material"] .tag {
+  border-radius: 999px;
+  border: none;
+  padding: 5px 12px;
+  background: color-mix(in oklab, var(--c, var(--accent)) 26%, var(--surface-1));
+  color: color-mix(in oklab, var(--c, var(--accent)) 60%, #ffffff);
+}
+
+/* — Campos: relleno tonal, esquina baja recta — */
+[data-skin="material"] .input,
+[data-skin="material"] .select,
+[data-skin="material"] .textarea {
+  background-color: var(--surface-2);
+  border: none;
+  border-bottom: 2px solid var(--outline);
+  border-radius: var(--r-xs) var(--r-xs) 4px 4px;
+  padding: 14px 16px;
+}
+[data-skin="material"] .input:focus,
+[data-skin="material"] .select:focus,
+[data-skin="material"] .textarea:focus {
+  border-bottom-color: var(--accent);
+  box-shadow: none;
+  background-color: var(--surface-3);
+}
+[data-skin="material"] .switch .track { border-radius: 999px; height: 30px; width: 52px; border: 2px solid var(--outline); background: var(--surface-2); }
+[data-skin="material"] .switch .track::after { width: 18px; height: 18px; top: 4px; left: 5px; transition: all 260ms var(--spring); }
+[data-skin="material"] .switch input:checked + .track { background: var(--accent); border-color: var(--accent); box-shadow: none; }
+[data-skin="material"] .switch input:checked + .track::after { left: 26px; width: 22px; height: 22px; top: 2px; background: var(--accent-ink); }
+
+/* — Listas y tarjetas — */
+[data-skin="material"] .item {
+  background: var(--surface-2);
+  border: none;
+  border-radius: var(--r-sm);
+  transition: background var(--sp-1), border-radius 240ms var(--spring), transform var(--sp-1);
+}
+[data-skin="material"] .item:hover { background: var(--surface-3); border-radius: var(--r-md); }
+[data-skin="material"] .item.accented { border-left: 6px solid var(--c, var(--accent)); }
+[data-skin="material"] .check { border-radius: 8px; border-width: 2px; }
+[data-skin="material"] .check[aria-checked="true"] { box-shadow: none; }
+
+[data-skin="material"] .stat {
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  box-shadow: none;
+}
+[data-skin="material"] .stat:nth-child(1) { background: var(--cont-pri); }
+[data-skin="material"] .stat:nth-child(2) { background: var(--cont-sec); }
+[data-skin="material"] .stat:nth-child(3) { background: var(--cont-ter); }
+[data-skin="material"] .stat:nth-child(4) { background: var(--surface-3); }
+
+/* — Progreso ondulado: el indicador característico de M3 Expressive — */
+[data-skin="material"] .meter {
+  height: 12px;
+  background: transparent;
+  overflow: visible;
+  position: relative;
+}
+[data-skin="material"] .meter::before {
+  content: '';
+  position: absolute; inset: 0 0 0 0;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--ink-1) 14%, transparent);
+  height: 4px; top: 4px;
+}
+[data-skin="material"] .meter i {
+  position: relative;
+  height: 12px;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 20px, transparent 20px 20px);
+  box-shadow: none;
+  overflow: visible;
+}
+[data-skin="material"] .meter i::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12'%3E%3Cpath d='M0 6 Q3 0 6 6 T12 6 T18 6 T24 6' fill='none' stroke='white' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-size: 24px 12px;
+  background-repeat: repeat-x;
+  background-color: transparent;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12'%3E%3Cpath d='M0 6 Q3 0 6 6 T12 6 T18 6 T24 6' fill='none' stroke='black' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12'%3E%3Cpath d='M0 6 Q3 0 6 6 T12 6 T18 6 T24 6' fill='none' stroke='black' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  -webkit-mask-size: 24px 12px; mask-size: 24px 12px;
+  -webkit-mask-repeat: repeat-x; mask-repeat: repeat-x;
+  background: var(--accent);
+  animation: mdWave 1.6s linear infinite;
+}
+[data-skin="material"] .meter i::after {
+  content: '';
+  position: absolute; right: -8px; top: 3px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent);
+}
+@keyframes mdWave { to { -webkit-mask-position: -24px 0; mask-position: -24px 0; } }
+
+/* — Horario: tarjetas tonales, sin borde ni brillo — */
+[data-skin="material"] .cell {
+  background: color-mix(in oklab, var(--c) 30%, var(--surface-1));
+  border: none;
+  border-radius: var(--r-md);
+  backdrop-filter: none;
+  box-shadow: none;
+  transition: border-radius 260ms var(--spring), transform 180ms var(--spring), background var(--sp-1);
+}
+[data-skin="material"] .cell::before { display: none; }
+[data-skin="material"] .cell:hover {
+  border-radius: var(--r-lg);
+  background: color-mix(in oklab, var(--c) 40%, var(--surface-1));
+  box-shadow: 0 8px 20px -10px rgba(0, 0, 0, 0.8);
+}
+[data-skin="material"] .cell[data-state="now"] {
+  background: color-mix(in oklab, var(--c) 42%, var(--surface-1));
+  animation: none;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--c) 45%, transparent);
+}
+[data-skin="material"] .cell[data-state="next"] { border: 2px dashed color-mix(in oklab, var(--c) 45%, transparent); }
+[data-skin="material"] .cell-code { text-shadow: none; color: color-mix(in oklab, var(--c) 62%, #ffffff); }
+[data-skin="material"] .badge-now { border-radius: 999px; }
+[data-skin="material"] .day-head { background: var(--surface-2); border: none; border-radius: var(--r-sm); }
+[data-skin="material"] .day-head[data-today="true"] { background: var(--cont-pri); box-shadow: none; }
+[data-skin="material"] .break-cell { background: var(--surface-1); border: none; border-radius: 999px; }
+[data-skin="material"] .today-glow { background: color-mix(in oklab, var(--accent) 7%, transparent); border: none; border-radius: var(--r-lg); }
+[data-skin="material"] .now-line { box-shadow: none; height: 3px; border-radius: 999px; }
+
+/* — Héroe y anillo — */
+[data-skin="material"] .hero {
+  background: color-mix(in oklab, var(--c, var(--accent)) 26%, var(--surface-1));
+  border-radius: var(--r-xl);
+}
+[data-skin="material"] .card { background: var(--surface-2); }
+[data-skin="material"] .subject-body .slot-pill { background: color-mix(in oklab, var(--c) 18%, var(--surface-3)); }
+[data-skin="material"] .hero-code { text-shadow: none; color: color-mix(in oklab, var(--c) 45%, #ffffff); }
+[data-skin="material"] .ring::after { display: none; }
+[data-skin="material"] .ring::before { background: var(--surface-1); }
+[data-skin="material"] .tl-item { background: var(--surface-2); border: none; border-radius: var(--r-sm); }
+[data-skin="material"] .tl-item:hover { background: var(--surface-3); border-radius: var(--r-md); }
+[data-skin="material"] .tl-rail { border-radius: 999px; box-shadow: none; }
+
+/* — Barra inferior: indicador de píldora que se estira — */
+[data-skin="material"] .tabbar { background: var(--surface-2) !important; border: none; border-radius: var(--r-xl); }
+[data-skin="material"] .tab { border-radius: 999px; isolation: isolate; }   /* contiene el indicador */
+[data-skin="material"] .day-picker { background: var(--surface-2) !important; }
+[data-skin="material"] .day-pick { border-radius: 999px; }
+[data-skin="material"] .day-pick[aria-pressed="true"] {
+  background: var(--cont-sec);
+  color: var(--ink-1);
+  box-shadow: none;
+}
+[data-skin="material"] .tab[aria-current="page"] { background: none; color: var(--accent); }
+[data-skin="material"] .tab[aria-current="page"]::after {
+  content: '';
+  top: 4px; height: 30px; width: 62px; border-radius: 999px;
+  background: var(--cont-sec);
+  box-shadow: none;
+  z-index: -1;
+  animation: mdPill 420ms var(--spring) both;
+}
+@keyframes mdPill { from { transform: translateX(-50%) scaleX(0.4); opacity: 0; } to { transform: translateX(-50%) scaleX(1); opacity: 1; } }
+[data-skin="material"] .fab {
+  border-radius: 20px;
+  background: var(--cont-pri);
+  color: var(--accent);
+  box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.7);
+  transition: border-radius 260ms var(--spring), transform 180ms var(--spring);
+}
+[data-skin="material"] .fab:hover { border-radius: 28px; }
+[data-skin="material"] .fab:active { border-radius: 14px; transform: scale(0.9); }
+
+/* — Materias y exámenes — */
+[data-skin="material"] .subject-card { border-radius: var(--r-lg); background: var(--surface-1); }
+[data-skin="material"] .subject-top { background: color-mix(in oklab, var(--c) 24%, var(--surface-1)); border: none; }
+[data-skin="material"] .subject-code { text-shadow: none; }
+[data-skin="material"] .slot-pill { border-radius: 999px; border: none; background: var(--surface-3); }
+[data-skin="material"] .exam-card { border-radius: var(--r-lg); background: var(--surface-1); }
+[data-skin="material"] .modal { border-radius: var(--r-xl); }
+[data-skin="material"] .empty { border-radius: var(--r-lg); border-style: solid; border-color: var(--outline); }
+
+/* — Entrada con muelle: el sello del lenguaje — */
+[data-skin="material"] .stagger > * { animation: mdRise 520ms var(--spring) both; }
+@keyframes mdRise {
+  from { opacity: 0; transform: translateY(22px) scale(0.94); }
+  60%  { opacity: 1; transform: translateY(-3px) scale(1.01); }
+  to   { opacity: 1; transform: none; }
+}
+[data-skin="material"] .view-in { animation: mdViewIn 340ms var(--spring) both; }
+@keyframes mdViewIn { from { opacity: 0; transform: translateY(22px) scale(0.985); } }

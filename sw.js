@@ -1,7 +1,7 @@
 /* ===========================================================================
    Service worker — la app funciona sin conexión
    =========================================================================== */
-var VERSION = 'horario-v1.0.3';
+var VERSION = 'horario-v1.1.0';
 var CORE = [
   './',
   'index.html',
@@ -11,8 +11,12 @@ var CORE = [
   'css/layout.css',
   'css/components.css',
   'css/views.css',
+  'css/skin-material.css',
+  'css/skin-hud.css',
+  'css/skin-paper.css',
   'js/data.js',
   'js/store.js',
+  'js/skins.js',
   'js/ui.js',
   'js/fx.js',
   'js/time.js',
