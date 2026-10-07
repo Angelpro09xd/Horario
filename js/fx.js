@@ -329,7 +329,7 @@
     var skin = HX.skins.byId(s.skin || 'glass');
     root.setAttribute('data-skin', skin.id);
     root.setAttribute('data-theme', s.theme || 'aurora');
-    root.style.colorScheme = skin.light ? 'light' : 'dark';
+    root.style.colorScheme = skin.light === 'system' ? 'light dark' : (skin.light ? 'light' : 'dark');
     if (s.accent) root.style.setProperty('--accent', s.accent); else root.style.removeProperty('--accent');
     root.style.setProperty('--blur', (s.blur || 22) + 'px');
     root.style.setProperty('--glow', String(s.glow == null ? 1 : s.glow));
@@ -362,6 +362,17 @@
     initCursor();
     initTilt();
     global.addEventListener('resize', function () { resize(); seed(); }, { passive: true });
+    if (global.matchMedia) {
+      var consulta = global.matchMedia('(prefers-color-scheme: light)');
+      var alCambiar = function () {
+        if (HX.skins.current().light !== 'system') return;
+        applySettings();
+        if (HX.app && HX.app.refresh) HX.app.refresh();   /* la tinta de cada materia cambia */
+      };
+      if (consulta.addEventListener) consulta.addEventListener('change', alCambiar);
+      else if (consulta.addListener) consulta.addListener(alCambiar);
+    }
+
     document.addEventListener('visibilitychange', function () {
       if (document.hidden) stopBG();
       else if (store.get('settings.particles') && !store.get('settings.reduceMotion')) startBG();

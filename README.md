@@ -24,19 +24,20 @@ apuntes por materia.
 | **Exámenes** | Cuenta atrás en días, notas del temario y creación de una tarea de repaso en un toque. |
 | **Notas** | Media ponderada por materia y media global, con la línea del aprobado. |
 | **Materias** | Ficha de cada módulo: profesorado, horas semanales, dónde cae en el horario y apuntes propios. |
-| **Ajustes** | Cuatro lenguajes visuales, doce paletas, acento personalizado, control del cristal, efectos, avisos y exportación de datos. |
+| **Ajustes** | Cinco lenguajes visuales, doce paletas, acento personalizado, control del cristal, efectos, avisos y exportación de datos. |
 
-### Cuatro lenguajes visuales
+### Cinco lenguajes visuales
 
 La piel no es un cambio de color: cambia la **forma, la materia, la tipografía y
 el movimiento**. El color va aparte, así que cualquiera de las doce paletas
-funciona con cualquiera de las cuatro pieles.
+funciona con cualquiera de las cinco pieles.
 
 | Piel | De qué va |
 |---|---|
 | **Liquid Glass** | Capas translúcidas con desenfoque, bordes luminosos, auroras de fondo y una constelación de puntos. Lo que había. |
 | **Material Expressive** | El lenguaje de Google recreado: superficies tonales sin desenfoque, esquinas muy generosas que **se deforman al pulsar**, capas de estado en vez de sombras, indicador de píldora en la navegación, progreso **ondulado** con su punto final, y movimiento con muelle. |
 | **Telemetría** | Lenguaje propio. Nada es redondo: las esquinas se cortan en chaflán. Todo se mide, con retículas y reglillas de cotas en los bordes de cada panel. Tipografía monoespaciada en versalitas. El color no rellena, señala: cada materia es un testigo luminoso y un raíl de 3 px. El movimiento es de máquina: barridos de escaneo, parpadeos y revelados por cortina. |
+| **Apple HIG** | Las *Human Interface Guidelines* aplicadas de verdad, no imitadas: el cristal líquido vive **solo en la capa funcional** (barras, carril, hojas) y la capa de contenido es opaca — poner cristal en tarjetas y filas es, según su propia lista de revisión, un defecto. Claro u oscuro **lo decide el sistema**, nunca un ajuste de la app. Escala Dynamic Type con San Francisco. El acento se reserva a la acción principal, y el color de las materias vive en el contenido, que es donde las guías dicen que debe estar. Movimiento breve y preciso. |
 | **Papel Riso** | Lenguaje propio, y el único en claro. Es papel: fondo crema, trama de semitono y fibra. Tinta plana, sin degradados ni brillos. La profundidad se dibuja con sombras duras desplazadas. El registro es imperfecto, cada pieza se imprime un par de píxeles desviada, y las tarjetas caen con un grado de más o de menos. |
 
 Paletas: Aurora, Synth, Toxic, Solar, Ice, Vapor, Carbon, Nebulosa, Menta,
@@ -54,6 +55,8 @@ Cobalto, Brasa y Sakura.
 - **Las tarjetas se inclinan** hacia el cursor en las pieles con profundidad, y cada
   lenguaje tiene su propia animación de entrada: muelle, cortina o caída sobre el papel.
 - **Movimiento reducido** desactiva de golpe partículas, inclinación y animaciones.
+- **Ajustes sinceros**: cada piel solo muestra los controles que de verdad usa.
+  En Apple HIG no hay deslizador de cristal, porque la materia la fija el lenguaje.
 
 ### Atajos
 
@@ -102,6 +105,7 @@ css/
   layout.css               armazón PC / Android
   components.css           botones, campos, listas, modales, gráficos
   views.css                rejilla del horario, panel de ahora, foco
+  skin-apple.css           lenguaje Apple HIG
   skin-material.css        lenguaje Material Expressive
   skin-hud.css             lenguaje Telemetría
   skin-paper.css           lenguaje Papel Riso
@@ -138,3 +142,29 @@ Transcrito del parte oficial «Grupos de alumnos · 2º GM» (Peñalara, 14/09/2
 Tramos: 8:30–9:30 · 9:30–10:30 · 10:30–11:30 · **recreo 11:30–12:00** · 12:00–13:00 · 13:00–14:00 · 14:00–15:00.
 
 Si cambia algo del horario, se edita `js/data.js` (`TIMETABLE`, `SUBJECTS`, `CALENDAR`) y listo.
+
+
+---
+
+## Sobre la piel Apple HIG
+
+Está escrita contra el espejo de las *Human Interface Guidelines* de
+[dickwu/apple-design-skill](https://github.com/dickwu/apple-design-skill), citando
+sus páginas:
+
+| Regla | De dónde sale |
+|---|---|
+| El cristal solo en la capa funcional; el contenido, opaco | `liquid-glass.md › The two layers` y su lista de revisión, punto 1 |
+| Claro y oscuro los decide el sistema | `dark-mode.md › Best practices` |
+| Acento para la acción principal y los indicadores de estado; etiquetas monocromas | `color.md › Liquid Glass color` |
+| El color de marca se lleva al contenido, y el cristal lo recoge | `branding.md › Best practices` |
+| Borde difuminado donde el contenido se encuentra con una barra | `layout.md › Visual hierarchy` |
+| Escala Dynamic Type «Large»: 34/28/22/20/17/17/16/15/13/12/11 | `typography.md › iOS, iPadOS Dynamic Type sizes` |
+| Desenfoque de 20–40 px, saturación ×1,2–1,5, filo de medio píxel | `liquid-glass.md › Cross-platform translation` |
+| Movimiento breve, sin animar lo que se repite mucho | `motion.md › Best practices` |
+| Respuesta a transparencia reducida, contraste alto y movimiento reducido | lista de revisión, punto 5 |
+
+Dos consecuencias que se notan: la piel **Liquid Glass** de esta app no cumple esa
+primera regla (pone cristal en tarjetas y celdas, que es el defecto que la guía
+describe), y la piel **Apple HIG** es la única sin ajuste propio de apariencia,
+porque las guías piden obedecer al sistema.

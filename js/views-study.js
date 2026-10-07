@@ -594,21 +594,25 @@
           } })
         ])
       ]),
-      rangeRow('Desenfoque del cristal', 'settings.blur', 0, 40, 1, function (v) { return v + ' px'; }),
-      rangeRow('Intensidad del neón', 'settings.glow', 0, 2, 0.1, function (v) { return Math.round(v * 100) + '%'; })
-    ]));
+      HX.skins.hasKnob('blur') ? rangeRow('Desenfoque del cristal', 'settings.blur', 0, 40, 1, function (v) { return v + ' px'; }) : null,
+      HX.skins.hasKnob('glow') ? rangeRow('Intensidad del neón', 'settings.glow', 0, 2, 0.1, function (v) { return Math.round(v * 100) + '%'; }) : null,
+      (!HX.skins.hasKnob('blur') && !HX.skins.hasKnob('glow'))
+        ? el('p', { class: 'view-sub', style: { marginTop: '12px', lineHeight: '1.5' },
+            text: 'Esta piel define su propia materia: el cristal y el brillo los fija su lenguaje, no un deslizador.' })
+        : null
+    ].filter(Boolean)));
 
     /* Efectos */
     grid.appendChild(settingsCard('Efectos', 'zap', [
-      U.switchRow('Partículas de fondo', 'Red de puntos animada', s.particles, function (v) { store.set('settings.particles', v); HX.fx.applySettings(); }),
-      U.switchRow('Grano de película', 'Textura sutil sobre todo', s.grain, function (v) { store.set('settings.grain', v); HX.fx.applySettings(); }),
-      U.switchRow('Líneas de escaneo', 'Modo CRT retrofuturista', s.scanlines, function (v) { store.set('settings.scanlines', v); HX.fx.applySettings(); }),
+      HX.skins.hasFx('particles') ? U.switchRow('Partículas de fondo', 'Red de puntos animada', s.particles, function (v) { store.set('settings.particles', v); HX.fx.applySettings(); }) : null,
+      HX.skins.hasFx('grain') ? U.switchRow('Grano de película', 'Textura sutil sobre todo', s.grain, function (v) { store.set('settings.grain', v); HX.fx.applySettings(); }) : null,
+      HX.skins.hasFx('scanlines') ? U.switchRow('Líneas de escaneo', 'Modo CRT retrofuturista', s.scanlines, function (v) { store.set('settings.scanlines', v); HX.fx.applySettings(); }) : null,
       U.switchRow('Halo del cursor', 'Solo en ordenador', s.cursorGlow, function (v) { store.set('settings.cursorGlow', v); HX.fx.applySettings(); }),
       U.switchRow('Inclinar tarjetas', 'Siguen al cursor en 3D', s.tilt, function (v) { store.set('settings.tilt', v); HX.fx.applySettings(); }),
       U.switchRow('Sonido', 'Pitidos al interactuar', s.sound, function (v) { store.set('settings.sound', v); if (v) HX.fx.play('ok'); }),
       U.switchRow('Vibración', 'En móviles compatibles', s.haptics, function (v) { store.set('settings.haptics', v); if (v) HX.fx.buzz(20); }),
       U.switchRow('Reducir movimiento', 'Menos animación, más batería', s.reduceMotion, function (v) { store.set('settings.reduceMotion', v); HX.fx.applySettings(); })
-    ]));
+    ].filter(Boolean)));
 
     /* Avisos */
     var notifyState = el('div', { class: 'view-sub', style: { marginTop: '6px' },

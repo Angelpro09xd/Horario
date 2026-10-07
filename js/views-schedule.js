@@ -50,8 +50,12 @@
         style: { gridColumn: String(idx + 2), gridRow: '1' }
       }, [
         el('div', { class: 'n', text: d.name }),
-        el('div', { class: 'd', text: holiday ? holiday.name
-          : T.pad(date.getDate()) + '.' + T.pad(date.getMonth() + 1) + (isToday ? ' · hoy' : '') })
+        /* El número del día va suelto: algunas pieles lo marcan aparte. */
+        el('div', { class: 'd' }, holiday ? [el('span', { text: holiday.name })] : [
+          el('span', { class: 'dnum', text: T.pad(date.getDate()) }),
+          el('span', { class: 'dmes', text: '.' + T.pad(date.getMonth() + 1) }),
+          isToday ? el('span', { class: 'dhoy', text: ' · hoy' }) : null
+        ])
       ]));
     });
 

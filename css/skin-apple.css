@@ -1,0 +1,583 @@
+/* ===========================================================================
+   PIEL · APPLE HIG
+   -----------------------------------------------------------------------
+   Escrita contra las Human Interface Guidelines (espejo de
+   github.com/dickwu/apple-design-skill). Las reglas que la gobiernan:
+
+   1. Dos capas (liquid-glass.md › The two layers). El cristal líquido vive
+      SOLO en la capa funcional: barras, carril, hojas y diálogos. La capa de
+      contenido —tarjetas, filas, celdas del horario— es opaca. Poner cristal
+      ahí es un defecto según su propia lista de revisión.
+   2. Claro y oscuro los decide el sistema (dark-mode.md › Best practices:
+      «evita un ajuste de apariencia propio de la app»). Es la única piel que
+      no elige: obedece.
+   3. Presupuesto de color (color.md › Liquid Glass color). El acento se
+      reserva a la acción principal y a los indicadores de estado; las
+      etiquetas van monocromas. El color de marca se lleva a la capa de
+      contenido —aquí, las materias del horario— y el cristal lo recoge al
+      pasar por detrás (branding.md › Best practices).
+   4. Efecto de borde al desplazar (layout.md › Visual hierarchy): el
+      contenido se difumina al encontrarse con una barra, en vez de pintar un
+      fondo sólido debajo.
+   5. Tipografía: escala Dynamic Type «Large» (typography.md › iOS, iPadOS
+      Dynamic Type sizes) con la familia del sistema, que en un Apple es
+      literalmente San Francisco.
+   6. Movimiento breve y preciso (motion.md): nada de rebotes largos ni
+      animación en interacciones frecuentes.
+   7. Estados de accesibilidad: transparencia reducida, contraste alto y
+      movimiento reducido tienen su propia respuesta.
+   =========================================================================== */
+
+:root[data-skin="apple"] {
+  /* San Francisco en Apple; Inter como suplente en el resto */
+  --font-ui: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
+             'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-display: var(--font-ui);
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+
+  /* Escala Dynamic Type (tamaño Large) */
+  --t-large-title: 34px;  --l-large-title: 41px;
+  --t-title1: 28px;       --l-title1: 34px;
+  --t-title2: 22px;       --l-title2: 28px;
+  --t-title3: 20px;       --l-title3: 25px;
+  --t-headline: 17px;     --l-headline: 22px;
+  --t-body: 17px;         --l-body: 22px;
+  --t-callout: 16px;      --l-callout: 21px;
+  --t-subhead: 15px;      --l-subhead: 20px;
+  --t-footnote: 13px;     --l-footnote: 18px;
+  --t-caption1: 12px;     --l-caption1: 16px;
+  --t-caption2: 11px;     --l-caption2: 13px;
+
+  /* Radios: rectángulo redondeado continuo, nada de píldoras salvo controles */
+  --r-xs: 8px;
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 18px;
+  --r-xl: 22px;
+
+  --glow: 0;
+
+  /* Movimiento breve */
+  --sp-1: 120ms cubic-bezier(.25, .1, .25, 1);
+  --sp-2: 240ms cubic-bezier(.25, .1, .25, 1);
+  --sp-3: 320ms cubic-bezier(.25, .1, .25, 1);
+
+  /* Cristal de la capa funcional (liquid-glass.md › Cross-platform) */
+  --glass-blur: 28px;
+  --glass-sat: 1.4;
+}
+
+/* — Apariencia oscura (por defecto, y la que pide el sistema) — */
+:root[data-skin="apple"] {
+  --bg-0: #000000;
+  --surface: #1c1c1e;          /* secondarySystemBackground */
+  --surface-2: #2c2c2e;        /* tertiarySystemBackground */
+  --surface-3: #3a3a3c;
+  --fill: rgba(120, 120, 128, 0.36);
+  --fill-2: rgba(120, 120, 128, 0.24);
+  --separator: rgba(84, 84, 88, 0.65);
+  --ink-1: #ffffff;
+  --ink-2: rgba(235, 235, 245, 0.6);
+  --ink-3: rgba(235, 235, 245, 0.45);
+  --ink-4: rgba(235, 235, 245, 0.28);
+  --glass-fill: rgba(30, 30, 32, 0.72);
+  --glass-edge: rgba(255, 255, 255, 0.12);
+  --glass-edge-hi: rgba(255, 255, 255, 0.16);
+  --accent-ink: #ffffff;
+  --accent-src: var(--accent);
+}
+
+@media (prefers-color-scheme: light) {
+  :root[data-skin="apple"] {
+    --bg-0: #f2f2f7;           /* systemGroupedBackground */
+    --surface: #ffffff;
+    --surface-2: #f2f2f7;
+    --surface-3: #e5e5ea;
+    --fill: rgba(120, 120, 128, 0.2);
+    --fill-2: rgba(120, 120, 128, 0.12);
+    --separator: rgba(60, 60, 67, 0.29);
+    --ink-1: #000000;
+    --ink-2: rgba(60, 60, 67, 0.6);
+    --ink-3: rgba(60, 60, 67, 0.45);
+    --ink-4: rgba(60, 60, 67, 0.3);
+    --glass-fill: rgba(249, 249, 252, 0.72);
+    --glass-edge: rgba(0, 0, 0, 0.08);
+    --glass-edge-hi: rgba(255, 255, 255, 0.9);
+    --accent-ink: #ffffff;
+  }
+}
+
+/* El acento del tema se adapta a la apariencia sin perder su identidad.
+   (Una propiedad personalizada no puede referenciarse a sí misma: por eso
+   --accent-src.) */
+[data-skin="apple"] body {
+  --accent: color-mix(in oklab, var(--accent-src) 86%, #ffffff);
+  color: var(--ink-1);
+  font-size: var(--t-body);
+  line-height: var(--l-body);
+}
+@media (prefers-color-scheme: light) {
+  [data-skin="apple"] body {
+    --accent: color-mix(in oklab, var(--accent-src) 58%, #10243f);
+  }
+}
+
+/* ===========================  CAPA DE CONTENIDO  ===========================
+   Opaca. Ni desenfoque, ni resplandor, ni degradados de cristal.            */
+
+[data-skin="apple"] .bg {
+  background:
+    radial-gradient(120% 80% at 10% -10%, color-mix(in oklab, var(--accent) 14%, transparent), transparent 55%),
+    radial-gradient(90% 70% at 100% 100%, color-mix(in oklab, var(--accent-2) 10%, transparent), transparent 60%),
+    var(--bg-0);
+}
+[data-skin="apple"] .bg-canvas,
+[data-skin="apple"] .bg-grid,
+[data-skin="apple"] .grain,
+[data-skin="apple"] .scanlines,
+[data-skin="apple"] .cursor-glow { display: none; }
+/* Dos manchas muy suaves: el cristal necesita algo que recoger
+   (sidebars.md: «extiende el contenido rico por debajo del carril»). */
+[data-skin="apple"] .orb { opacity: 0.16; filter: blur(110px); mix-blend-mode: normal; }
+[data-skin="apple"] .orb-3 { display: none; }
+
+[data-skin="apple"] .card,
+[data-skin="apple"] .stat,
+[data-skin="apple"] .item,
+[data-skin="apple"] .tl-item,
+[data-skin="apple"] .subject-card,
+[data-skin="apple"] .exam-card,
+[data-skin="apple"] .mini-card,
+[data-skin="apple"] .empty {
+  background: var(--surface);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  border-radius: var(--r-lg);
+  box-shadow: none;
+}
+[data-skin="apple"] .glass::before,
+[data-skin="apple"] .glass.sheen::after { display: none; }
+[data-skin="apple"] .mini-card { background: var(--surface-2); border-radius: var(--r-md); }
+[data-skin="apple"] .empty { border: 1px solid var(--separator); color: var(--ink-2); }
+
+/* Listas agrupadas con filo de pelo, al estilo inset grouped */
+[data-skin="apple"] .list { gap: 0; background: var(--surface); border-radius: var(--r-lg); overflow: hidden; }
+[data-skin="apple"] .list > .item { border-radius: 0; }
+[data-skin="apple"] .list > .item + .item { box-shadow: inset 0 0.5px 0 var(--separator); }
+[data-skin="apple"] .item:hover { background: var(--fill-2); transform: none; }
+[data-skin="apple"] .item.accented { border-left: none; }
+[data-skin="apple"] .item.accented::before {
+  content: '';
+  width: 4px; height: 26px; flex: none;
+  border-radius: 2px;
+  background: var(--c, var(--accent));
+}
+[data-skin="apple"] .item-title { font-size: var(--t-body); font-weight: 400; }
+[data-skin="apple"] .item-sub { font-size: var(--t-footnote); color: var(--ink-2); }
+
+/* ===========================  CAPA FUNCIONAL  =============================
+   Aquí, y solo aquí, vive el cristal líquido.                               */
+
+[data-skin="apple"] .topbar,
+[data-skin="apple"] .rail,
+[data-skin="apple"] .tabbar,
+[data-skin="apple"] .modal,
+[data-skin="apple"] .palette,
+[data-skin="apple"] .toast,
+[data-skin="apple"] .day-picker {
+  background: var(--glass-fill) !important;
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  border: 0.5px solid var(--glass-edge);
+  box-shadow: inset 0 0.5px 0 var(--glass-edge-hi);
+}
+/* El carril es un elemento grande: más opaco, para que el contenido de su
+   superficie siga legible (color.md › Liquid Glass color). */
+[data-skin="apple"] .rail {
+  background: color-mix(in oklab, var(--glass-fill) 100%, var(--surface) 22%) !important;
+  border-radius: var(--r-xl);
+}
+[data-skin="apple"] .topbar { border-radius: var(--r-xl); }
+
+/* Efecto de borde al desplazar: el contenido se desvanece contra la barra,
+   nunca un fondo sólido debajo (layout.md › Visual hierarchy). */
+[data-skin="apple"] #app::before {
+  background: linear-gradient(to bottom,
+    color-mix(in oklab, var(--bg-0) 92%, transparent),
+    transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  height: calc(env(safe-area-inset-top) + 22px);
+}
+
+/* — Carril: selección en pastilla teñida, no en barra de neón — */
+[data-skin="apple"] .nav-btn {
+  border-radius: var(--r-sm);
+  font-size: var(--t-callout);
+  font-weight: 400;
+  padding: 10px 12px;
+  min-height: 36px;
+}
+[data-skin="apple"] .nav-btn:hover { background: var(--fill-2); }
+[data-skin="apple"] .nav-btn[aria-current="page"] {
+  background: color-mix(in oklab, var(--accent) 20%, transparent);
+  color: var(--ink-1);
+  font-weight: 600;
+}
+[data-skin="apple"] .nav-btn[aria-current="page"]::before { display: none; }
+[data-skin="apple"] .nav-btn[aria-current="page"] .ico { color: var(--accent); opacity: 1; }
+[data-skin="apple"] .nav-btn kbd { background: none; border: none; color: var(--ink-4); }
+[data-skin="apple"] .brand-mark {
+  background: var(--accent);
+  border: none;
+  box-shadow: none;
+  border-radius: 11px;
+}
+[data-skin="apple"] .brand-mark svg { color: #fff !important; }
+[data-skin="apple"] .brand-title { font-size: var(--t-headline); font-weight: 600; letter-spacing: -0.01em; text-transform: none; }
+[data-skin="apple"] .brand-sub { font-size: var(--t-caption2); letter-spacing: 0; text-transform: none; color: var(--ink-2); }
+
+/* — Botones: uno destacado por vista; el resto, texto en el acento —
+   (buttons.md: «de uno a dos botones prominentes por vista») */
+[data-skin="apple"] .btn {
+  border-radius: 999px;
+  border: none;
+  background: var(--fill-2);
+  color: var(--accent);
+  font-size: var(--t-callout);
+  font-weight: 500;
+  padding: 9px 16px;
+  min-height: 34px;
+  transition: opacity var(--sp-1), transform var(--sp-1), background var(--sp-1);
+}
+[data-skin="apple"] .btn:hover { background: var(--fill); box-shadow: none; }
+[data-skin="apple"] .btn:active { transform: scale(0.96); opacity: 0.75; }
+[data-skin="apple"] .btn.primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+  box-shadow: none;
+}
+[data-skin="apple"] .btn.ghost { background: transparent; }
+[data-skin="apple"] .btn.danger { background: transparent; color: var(--bad); }
+[data-skin="apple"] .btn.sm { padding: 6px 12px; min-height: 28px; font-size: var(--t-footnote); }
+[data-skin="apple"] .icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  border-radius: 999px;
+  min-width: 34px; min-height: 34px;
+}
+[data-skin="apple"] .icon-btn:hover { background: var(--fill-2); box-shadow: none; }
+[data-skin="apple"] .icon-btn:active { transform: scale(0.92); }
+
+/* — Controles — */
+[data-skin="apple"] .chip {
+  border-radius: 999px;
+  border: none;
+  background: var(--fill-2);
+  color: var(--ink-1);
+  font-size: var(--t-footnote);
+  font-weight: 500;
+  min-height: 32px;
+}
+[data-skin="apple"] .chip[aria-pressed="true"], [data-skin="apple"] .chip.on {
+  background: color-mix(in oklab, var(--c, var(--accent)) 24%, transparent);
+  box-shadow: none;
+}
+[data-skin="apple"] .tag {
+  border-radius: 999px;
+  border: none;
+  background: color-mix(in oklab, var(--c, var(--accent)) 18%, transparent);
+  color: var(--c, var(--accent));
+  font-size: var(--t-caption2);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 4px 9px;
+}
+[data-skin="apple"] .input,
+[data-skin="apple"] .select,
+[data-skin="apple"] .textarea {
+  background-color: var(--surface-2);
+  border: 0.5px solid var(--separator);
+  border-radius: var(--r-sm);
+  font-size: var(--t-body);
+  min-height: 38px;
+}
+[data-skin="apple"] .input:focus,
+[data-skin="apple"] .select:focus,
+[data-skin="apple"] .textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 22%, transparent);
+}
+[data-skin="apple"] .field > label {
+  font-size: var(--t-footnote);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-2);
+  font-weight: 400;
+}
+/* Interruptor del sistema */
+[data-skin="apple"] .switch .track {
+  width: 51px; height: 31px; border-radius: 999px;
+  background: var(--fill); border: none;
+  transition: background 200ms cubic-bezier(.25, .1, .25, 1);
+}
+[data-skin="apple"] .switch .track::after {
+  width: 27px; height: 27px; top: 2px; left: 2px;
+  background: #fff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18), 0 1px 1px rgba(0, 0, 0, 0.12);
+  transition: left 200ms cubic-bezier(.25, .1, .25, 1);
+}
+[data-skin="apple"] .switch input:checked + .track { background: var(--accent); box-shadow: none; }
+[data-skin="apple"] .switch input:checked + .track::after { left: 22px; background: #fff; }
+[data-skin="apple"] .switch .label { font-size: var(--t-body); }
+[data-skin="apple"] .switch .hint { font-size: var(--t-footnote); color: var(--ink-2); }
+[data-skin="apple"] .check { border-radius: 50%; border-width: 1.5px; border-color: var(--ink-4); }
+[data-skin="apple"] .check[aria-checked="true"] { background: var(--accent); border-color: var(--accent); box-shadow: none; }
+[data-skin="apple"] .check[aria-checked="true"] svg { color: #fff; }
+[data-skin="apple"] .check[aria-checked="true"]::after { display: none; }   /* motion.md: sin adornos en lo frecuente */
+
+/* — Tipografía de las vistas — */
+[data-skin="apple"] .view-title {
+  font-size: var(--t-large-title);
+  line-height: var(--l-large-title);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+[data-skin="apple"] .view-sub { font-size: var(--t-subhead); color: var(--ink-2); }
+[data-skin="apple"] .view-head .eyebrow {
+  font-size: var(--t-caption1);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-3);
+  font-weight: 400;
+}
+[data-skin="apple"] .card-title { font-size: var(--t-headline); font-weight: 600; letter-spacing: -0.01em; }
+[data-skin="apple"] .group-title {
+  font-size: var(--t-footnote);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--ink-2);
+  font-weight: 400;
+}
+[data-skin="apple"] .eyebrow { letter-spacing: 0.01em; }
+
+/* — Horario: bloques de calendario, opacos y teñidos por la materia —
+   (El color de marca vive en la capa de contenido: branding.md) */
+[data-skin="apple"] .cell {
+  background: color-mix(in oklab, var(--c) 16%, var(--surface));
+  border: none;
+  border-radius: var(--r-md);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  padding: 10px 12px 10px 14px;
+  transition: background var(--sp-1), transform var(--sp-1);
+}
+[data-skin="apple"] .cell::before {
+  content: '';
+  position: absolute; left: 5px; top: 8px; bottom: 8px;
+  width: 3px; border-radius: 2px;
+  background: var(--c);
+  opacity: 1;
+}
+[data-skin="apple"] .cell:hover { transform: none; background: color-mix(in oklab, var(--c) 24%, var(--surface)); box-shadow: none; }
+[data-skin="apple"] .cell:active { transform: scale(0.985); }
+[data-skin="apple"] .cell[data-state="now"] {
+  background: color-mix(in oklab, var(--c) 26%, var(--surface));
+  box-shadow: inset 0 0 0 2px var(--c);
+  animation: none;                      /* motion.md: nada de latidos continuos */
+}
+[data-skin="apple"] .cell[data-state="next"] { border: none; box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--c) 45%, transparent); }
+[data-skin="apple"] .cell[data-state="past"] { opacity: 0.45; filter: none; }
+[data-skin="apple"] .cell-code {
+  font-size: var(--t-subhead);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--c);
+  text-shadow: none;
+}
+[data-skin="apple"] .cell-name { font-size: var(--t-caption1); color: var(--ink-2); }
+[data-skin="apple"] .cell-foot { font-size: var(--t-caption2); color: var(--ink-3); }
+[data-skin="apple"] .cell-len { font-size: var(--t-caption2); color: var(--ink-3); }
+[data-skin="apple"] .cell-mid { color: var(--ink-3); letter-spacing: 0; text-transform: none; font-size: var(--t-caption2); }
+[data-skin="apple"] .cell-mid::before, [data-skin="apple"] .cell-mid::after { background: var(--separator); }
+[data-skin="apple"] .badge-now {
+  background: var(--c);
+  color: #fff;
+  border-radius: 999px;
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: var(--t-caption2);
+  font-weight: 600;
+  box-shadow: none;
+}
+[data-skin="apple"] .badge-now i { background: #fff; animation: none; }
+[data-skin="apple"] .cell-live { background: var(--fill-2); }
+[data-skin="apple"] .cell-live i { background: var(--c); box-shadow: none; }
+
+[data-skin="apple"] .day-head {
+  background: transparent;
+  border: none;
+  border-bottom: 0.5px solid var(--separator);
+  border-radius: 0;
+  padding: 8px 4px;
+}
+[data-skin="apple"] .day-head .n { font-size: var(--t-footnote); font-weight: 600; color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.02em; }
+[data-skin="apple"] .day-head .d { font-size: var(--t-title3); font-weight: 400; color: var(--ink-1); font-family: var(--font-ui); }
+[data-skin="apple"] .day-head[data-today="true"] { background: transparent; box-shadow: none; }
+/* Hoy: el número en un círculo relleno, como en Calendario */
+[data-skin="apple"] .day-head .d { display: flex; align-items: center; gap: 2px; }
+[data-skin="apple"] .day-head .dmes { color: var(--ink-3); font-size: var(--t-footnote); }
+[data-skin="apple"] .day-head .dhoy { display: none; }
+[data-skin="apple"] .day-head[data-today="true"] .dnum {
+  color: #fff;
+  background: var(--accent);
+  border-radius: 999px;
+  min-width: 30px; height: 30px;
+  display: inline-grid; place-items: center;
+  font-weight: 600;
+}
+[data-skin="apple"] .day-head[data-today="true"] .dmes { color: var(--accent); }
+[data-skin="apple"] .day-head[data-today="true"] .n { color: var(--accent); }
+[data-skin="apple"] .time-cell { border-right: 0.5px solid var(--separator); color: var(--ink-3); font-family: var(--font-ui); }
+[data-skin="apple"] .time-cell .s { font-size: var(--t-footnote); color: var(--ink-2); font-weight: 400; }
+[data-skin="apple"] .time-cell .e { font-size: var(--t-caption2); color: var(--ink-4); }
+[data-skin="apple"] .time-cell[data-live="true"] .s { color: var(--accent); text-shadow: none; }
+[data-skin="apple"] .break-cell {
+  background: var(--fill-2);
+  border: none;
+  border-radius: var(--r-sm);
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: var(--t-footnote);
+  color: var(--ink-2);
+}
+[data-skin="apple"] .today-glow { background: var(--fill-2); border: none; border-radius: var(--r-md); }
+[data-skin="apple"] .now-line { height: 2px; background: var(--bad); box-shadow: none; border-radius: 2px; }
+[data-skin="apple"] .now-line::before { background: var(--bad); box-shadow: none; width: 8px; height: 8px; }
+[data-skin="apple"] .legend-item { background: var(--surface); border: none; border-radius: 999px; font-size: var(--t-footnote); }
+[data-skin="apple"] .legend-item .dot { border-radius: 50%; box-shadow: none; }
+
+/* — Ahora — */
+[data-skin="apple"] .hero {
+  background: var(--surface);
+  border-radius: var(--r-xl);
+}
+[data-skin="apple"] .hero-code {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--c, var(--accent));
+  text-shadow: none;
+}
+[data-skin="apple"] .hero-name { font-size: var(--t-title3); color: var(--ink-1); font-weight: 400; }
+[data-skin="apple"] .hero-meta { font-size: var(--t-subhead); color: var(--ink-2); }
+[data-skin="apple"] .ring::after { display: none; }
+[data-skin="apple"] .ring::before { background: var(--surface); }
+[data-skin="apple"] .ring { background: conic-gradient(var(--c, var(--accent)) calc(var(--p, 0) * 360deg), var(--fill-2) 0); }
+[data-skin="apple"] .ring .big { font-size: var(--t-title2); font-weight: 600; font-variant-numeric: tabular-nums; }
+[data-skin="apple"] .ring .lbl { font-size: var(--t-caption2); letter-spacing: 0; text-transform: none; color: var(--ink-2); }
+[data-skin="apple"] .meter { background: var(--fill-2); border-radius: 999px; height: 6px; }
+[data-skin="apple"] .meter i { background: var(--accent); box-shadow: none; }
+[data-skin="apple"] .tl-rail { box-shadow: none; border-radius: 2px; }
+[data-skin="apple"] .tl-item { border-radius: 0; background: var(--surface); }
+[data-skin="apple"] .timeline { background: var(--surface); border-radius: var(--r-lg); overflow: hidden; }
+[data-skin="apple"] .timeline .tl-item + .tl-item { box-shadow: inset 0 0.5px 0 var(--separator); }
+[data-skin="apple"] .tl-item:hover { background: var(--fill-2); transform: none; }
+[data-skin="apple"] .stat .k { font-size: var(--t-footnote); letter-spacing: 0; text-transform: none; color: var(--ink-2); font-weight: 400; }
+/* Presupuesto de color (color.md): una fila de cifras teñidas de cuatro
+   colores distintos es justo lo que las guías desaconsejan. Las cifras van
+   en tinta primaria; el color se queda en el horario y en los avisos. */
+[data-skin="apple"] .stat .v {
+  font-size: var(--t-title1);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-1) !important;
+}
+[data-skin="apple"] .stat .u { font-size: var(--t-caption1); color: var(--ink-3); }
+
+/* — Materias y exámenes — */
+[data-skin="apple"] .subject-top { background: color-mix(in oklab, var(--c) 14%, var(--surface)); border-bottom: 0.5px solid var(--separator); }
+[data-skin="apple"] .subject-code { font-size: var(--t-title3); font-weight: 600; letter-spacing: -0.01em; color: var(--c); text-shadow: none; }
+[data-skin="apple"] .subject-name { font-size: var(--t-subhead); color: var(--ink-2); }
+[data-skin="apple"] .slot-pill { background: var(--fill-2); border: none; border-radius: 999px; font-size: var(--t-caption2); font-family: var(--font-ui); }
+[data-skin="apple"] .bar-track { background: var(--fill-2); border-radius: 999px; }
+[data-skin="apple"] .bar-fill { background: var(--c); box-shadow: none; border-radius: 999px; }
+[data-skin="apple"] .bar-mark { background: var(--ink-4); }
+
+/* — Hojas y diálogos: se presentan desde abajo con tirador — */
+[data-skin="apple"] .modal { border-radius: var(--r-xl); }
+[data-skin="apple"] .modal-title { font-size: var(--t-title3); font-weight: 600; letter-spacing: -0.01em; }
+[data-skin="apple"] .scrim { background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(2px); }
+@media (max-width: 860px) {
+  [data-skin="apple"] .modal { border-radius: 14px 14px 0 0; }
+}
+
+/* — Barra de pestañas: el acento solo marca la seleccionada — */
+[data-skin="apple"] .tab { border-radius: var(--r-sm); min-height: 48px; }
+[data-skin="apple"] .tab span:last-child { font-size: 10px; letter-spacing: 0; font-weight: 500; }
+[data-skin="apple"] .tab[aria-current="page"] { background: none; color: var(--accent); }
+[data-skin="apple"] .tab[aria-current="page"]::after { display: none; }
+[data-skin="apple"] .fab {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 6px 16px -6px rgba(0, 0, 0, 0.45);
+}
+[data-skin="apple"] .fab:active { transform: scale(0.92); }
+[data-skin="apple"] .day-pick { border-radius: var(--r-sm); }
+[data-skin="apple"] .day-pick[aria-pressed="true"] {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: none;
+}
+[data-skin="apple"] .day-picker::before { background: transparent; }
+
+/* — Foco — */
+[data-skin="apple"] .focus { background: color-mix(in oklab, var(--bg-0) 94%, transparent); backdrop-filter: blur(30px) saturate(1.4); }
+[data-skin="apple"] .focus-code { font-weight: 700; letter-spacing: -0.03em; text-shadow: none; color: var(--c, var(--accent)); }
+[data-skin="apple"] .focus-count { font-weight: 600; letter-spacing: -0.03em; text-shadow: none; font-variant-numeric: tabular-nums; }
+[data-skin="apple"] .focus-sub { font-size: var(--t-callout); color: var(--ink-2); }
+
+/* — Avisos y arranque — */
+[data-skin="apple"] .toast { border-radius: var(--r-md); font-size: var(--t-footnote); }
+[data-skin="apple"] #boot { background: var(--bg-0); }
+[data-skin="apple"] .boot-mark { background: var(--accent); border: none; box-shadow: none; border-radius: 22px; }
+[data-skin="apple"] .boot-mark svg { color: #fff !important; }
+[data-skin="apple"] .status-dot { box-shadow: none !important; animation: none; }
+[data-skin="apple"] .status-main { font-size: var(--t-footnote); font-weight: 600; }
+[data-skin="apple"] .status-sub { font-size: var(--t-caption1); color: var(--ink-2); }
+[data-skin="apple"] .topbar-clock .t { font-weight: 500; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+[data-skin="apple"] .about-line { border-bottom-color: var(--separator); font-size: var(--t-subhead); }
+[data-skin="apple"] .neon-text { text-shadow: none; }
+
+/* — Movimiento: breve y preciso (motion.md) — */
+[data-skin="apple"] .stagger > * { animation: appleRise 300ms cubic-bezier(.25, .1, .25, 1) both; }
+@keyframes appleRise { from { opacity: 0; transform: translateY(8px); } }
+[data-skin="apple"] .view-in { animation: appleRise 260ms cubic-bezier(.25, .1, .25, 1) both; }
+[data-skin="apple"] .pulse-tick { animation: none; }
+
+/* — Estados de accesibilidad (lista de revisión, punto 5) — */
+@media (prefers-reduced-transparency: reduce) {
+  [data-skin="apple"] .topbar,
+  [data-skin="apple"] .rail,
+  [data-skin="apple"] .tabbar,
+  [data-skin="apple"] .modal,
+  [data-skin="apple"] .palette,
+  [data-skin="apple"] .toast,
+  [data-skin="apple"] .day-picker {
+    background: var(--surface) !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  [data-skin="apple"] #app::before { backdrop-filter: none; background: var(--bg-0); }
+}
+@media (prefers-contrast: more) {
+  [data-skin="apple"] { --separator: currentColor; --ink-2: var(--ink-1); }
+  [data-skin="apple"] .cell { box-shadow: inset 0 0 0 1px var(--c); }
+  [data-skin="apple"] .btn { box-shadow: inset 0 0 0 1px currentColor; }
+}

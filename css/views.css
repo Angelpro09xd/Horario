@@ -553,3 +553,30 @@
 [data-preview="paper"] .d1 { left: 8px; top: 9px; right: 8px; height: 15px; border: 2px solid #1b1712; border-radius: 3px; background: #fff; box-shadow: 2px 2px 0 rgba(27,23,18,.35); }
 [data-preview="paper"] .d2 { left: 8px; bottom: 10px; width: 50%; height: 22px; border: 2px solid #1b1712; border-radius: 3px; background: #7fd4e8; box-shadow: 3px 3px 0 #1b1712; }
 [data-preview="paper"] .d3 { right: 9px; bottom: 10px; width: 26px; height: 22px; border: 2px solid #1b1712; border-radius: 999px; background: #ef9ab0; box-shadow: 3px 3px 0 rgba(27,23,18,.4); }
+
+/* Apple HIG: barra de cristal arriba, contenido opaco debajo */
+[data-preview="apple"] .skin-demo {
+  background: linear-gradient(160deg, #e8f0fb, #f2f2f7 60%);
+}
+[data-preview="apple"] .d1 {
+  left: 6px; top: 6px; right: 6px; height: 16px; border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(6px);
+  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.9), 0 0 0 0.5px rgba(0, 0, 0, 0.07);
+}
+[data-preview="apple"] .d2 {
+  left: 6px; bottom: 8px; width: 56%; height: 26px; border-radius: 7px;
+  background: #dceafb;
+  box-shadow: inset 3px 0 0 #0a84ff;
+}
+[data-preview="apple"] .d3 {
+  right: 6px; bottom: 8px; width: 28px; height: 26px; border-radius: 7px;
+  background: #e6f7ec;
+  box-shadow: inset 3px 0 0 #30d158;
+}
+@media (prefers-color-scheme: dark) {
+  [data-preview="apple"] .skin-demo { background: linear-gradient(160deg, #15202e, #000 60%); }
+  [data-preview="apple"] .d1 { background: rgba(40, 40, 44, 0.72); box-shadow: inset 0 0.5px 0 rgba(255,255,255,.14), 0 0 0 0.5px rgba(255,255,255,.08); }
+  [data-preview="apple"] .d2 { background: #10324f; }
+  [data-preview="apple"] .d3 { background: #10351f; }
+}
