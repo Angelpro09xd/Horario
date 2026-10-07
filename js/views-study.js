@@ -604,6 +604,29 @@
 
     /* Efectos */
     grid.appendChild(settingsCard('Efectos', 'zap', [
+      HX.skins.hasFx('refraction') ? el('div', { class: 'field', style: { margin: '6px 0 14px' } }, [
+        el('label', { text: 'Refracción del cristal' }),
+        el('div', { class: 'hint', style: { fontSize: '11.5px', color: 'var(--ink-3)', marginBottom: '8px', lineHeight: '1.45' },
+          text: HX.glass.soportado
+            ? 'El bisel desvía el fondo, como el cristal de verdad. Cuesta más de pintar que un desenfoque normal.'
+            : 'Tu navegador no la admite: hoy solo funciona en Chromium.' }),
+        el('div', { class: 'segmented' }, [
+          { v: 'completa', t: 'Toda la interfaz' },
+          { v: 'barras', t: 'Solo barras' },
+          { v: 'apagada', t: 'Apagada' }
+        ].map(function (o) {
+          return el('button', {
+            type: 'button',
+            'aria-pressed': String(HX.glass.nivel() === o.v),
+            disabled: !HX.glass.soportado,
+            onclick: function () {
+              store.set('settings.refraction', o.v);
+              HX.glass.reset();
+              HX.app.refresh();
+            }
+          }, o.t);
+        }))
+      ]) : null,
       HX.skins.hasFx('particles') ? U.switchRow('Partículas de fondo', 'Red de puntos animada', s.particles, function (v) { store.set('settings.particles', v); HX.fx.applySettings(); }) : null,
       HX.skins.hasFx('grain') ? U.switchRow('Grano de película', 'Textura sutil sobre todo', s.grain, function (v) { store.set('settings.grain', v); HX.fx.applySettings(); }) : null,
       HX.skins.hasFx('scanlines') ? U.switchRow('Líneas de escaneo', 'Modo CRT retrofuturista', s.scanlines, function (v) { store.set('settings.scanlines', v); HX.fx.applySettings(); }) : null,

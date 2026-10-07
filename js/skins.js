@@ -18,7 +18,7 @@
       particles: 'constellation',
       light: false,
       knobs: ['blur', 'glow'],
-      fx: ['particles', 'grain', 'scanlines']
+      fx: ['particles', 'grain', 'scanlines', 'refraction']
     },
     {
       id: 'material',
@@ -51,7 +51,7 @@
       particles: 'none',
       light: 'system',
       knobs: [],
-      fx: []
+      fx: ['refraction']
     },
     {
       id: 'paper',

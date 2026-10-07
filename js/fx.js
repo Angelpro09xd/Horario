@@ -351,6 +351,8 @@
     refreshBG();
     if (running) seed();
 
+    if (HX.glass) HX.glass.reset();
+
     var meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute('content', getComputedStyle(root).getPropertyValue('--bg-0').trim() || '#04050b');
   }

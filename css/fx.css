@@ -6,7 +6,7 @@
 .bg {
   position: fixed;
   inset: 0;
-  z-index: -5;
+  z-index: 0;
   background:
     radial-gradient(140% 100% at 50% -20%, color-mix(in oklab, var(--accent-3) 22%, transparent), transparent 62%),
     radial-gradient(90% 70% at 100% 100%, color-mix(in oklab, var(--accent-2) 16%, transparent), transparent 65%),
@@ -16,14 +16,14 @@
 .bg-canvas {
   position: fixed;
   inset: 0;
-  z-index: -4;
+  z-index: 0;
   opacity: 0.6;
   pointer-events: none;
 }
 
 .orb {
   position: fixed;
-  z-index: -3;
+  z-index: 0;
   border-radius: 50%;
   filter: blur(90px);
   opacity: 0.32;
@@ -43,7 +43,7 @@
 .bg-grid {
   position: fixed;
   inset: 40% -50% -30% -50%;
-  z-index: -3;
+  z-index: 0;
   background-image:
     linear-gradient(color-mix(in oklab, var(--accent) 22%, transparent) 1px, transparent 1px),
     linear-gradient(90deg, color-mix(in oklab, var(--accent) 22%, transparent) 1px, transparent 1px);
@@ -116,8 +116,10 @@ body.has-pointer .cursor-glow { opacity: 1; }
 .glass {
   position: relative;
   background: linear-gradient(160deg, var(--glass-a), var(--glass-b));
-  backdrop-filter: blur(var(--blur)) saturate(165%);
-  -webkit-backdrop-filter: blur(var(--blur)) saturate(165%);
+  /* --lg-filtro lo inyecta js/glass.js: desvía el fondo por el bisel.
+     Sin él, el valor de reserva no hace nada. */
+  backdrop-filter: blur(var(--blur)) saturate(165%) var(--lg-filtro, blur(0px));
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(165%) var(--lg-filtro, blur(0px));
   border: 1px solid var(--glass-edge);
   border-radius: var(--r-lg);
   box-shadow:

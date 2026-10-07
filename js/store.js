@@ -19,6 +19,7 @@
       scanlines: false,
       cursorGlow: true,
       tilt: true,
+      refraction: 'auto',   /* auto | completa | barras | apagada */
       sound: false,
       haptics: true,
       reduceMotion: false,

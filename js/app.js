@@ -179,7 +179,23 @@
     measureChrome();
     viewHost._body = body;
     if (v.tick) v.tick(body);
+    soltarAnimaciones(body);
+    if (HX.glass) HX.glass.scan();      /* las piezas nuevas piden su filtro */
     if (after) after();
+  }
+
+  /* Una animación de entrada que se queda «rellenando» mantiene el elemento
+     compuesto, y eso convierte a su contenedor en raíz de fondo: el cristal
+     de dentro deja de ver lo que hay detrás de la vista. En cuanto termina,
+     se le quita la clase. */
+  function soltarAnimaciones(body) {
+    var soltar = function () {
+      body.classList.remove('view-in');
+      var escalonados = body.querySelectorAll('.stagger');
+      for (var i = 0; i < escalonados.length; i++) escalonados[i].classList.remove('stagger');
+      if (HX.glass) HX.glass.scan(20);
+    };
+    setTimeout(soltar, 1100);
   }
 
   function viewActions() {
@@ -512,6 +528,7 @@
     viewHost = U.qs('#view');
 
     HX.fx.init();
+    HX.glass.init();
     buildShell();
     bindKeys();
     bindSwipe();

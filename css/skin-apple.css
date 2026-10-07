@@ -187,8 +187,8 @@
 [data-skin="apple"] .toast,
 [data-skin="apple"] .day-picker {
   background: var(--glass-fill) !important;
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat)) var(--lg-filtro, blur(0px));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat)) var(--lg-filtro, blur(0px));
   border: 0.5px solid var(--glass-edge);
   box-shadow: inset 0 0.5px 0 var(--glass-edge-hi);
 }

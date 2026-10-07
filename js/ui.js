@@ -103,6 +103,7 @@
       el('span', { class: 'grow', text: message })
     ]);
     host.appendChild(node);
+    if (HX.glass) HX.glass.scan(30);
     var t = setTimeout(hide, ms || 3200);
     if (onClick) {
       node.style.cursor = 'pointer';
@@ -167,6 +168,7 @@
       (opts.actions && opts.actions.length) ? foot : null
     ]);
     document.body.appendChild(node);
+    if (HX.glass) HX.glass.scan(30);
     ensureScrim().classList.add('open');
     requestAnimationFrame(function () { node.classList.add('open'); });
     openModal = node;

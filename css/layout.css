@@ -4,6 +4,10 @@
 
 #app {
   position: relative;
+  z-index: 1;                 /* por encima de las capas de fondo, que ahora
+                                 sí forman parte del fondo que captura el
+                                 cristal (antes, en z-index negativo, el
+                                 navegador las dejaba fuera) */
   min-height: 100dvh;
   display: grid;
   grid-template-columns: var(--rail-w) minmax(0, 1fr);

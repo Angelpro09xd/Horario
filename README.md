@@ -52,6 +52,9 @@ Cobalto, Brasa y Sakura.
 - **Paleta de comandos** (`Ctrl/⌘ + K` o `K`) para ir a cualquier sitio o cambiar de tema.
 - **Gestos**: desliza a los lados para cambiar de día o de sección en el móvil.
 - **Sin servidores**: nada de cuentas, nada de nube. Tus datos se exportan e importan en JSON.
+- **Refracción de verdad**: el bisel del cristal no solo empaña el fondo, lo *desvía*.
+  Un mapa de desplazamiento calculado con la ley de Snell dobla la imagen de detrás en
+  el borde de cada pieza, con su reflejo especular. Ajustable en tres niveles.
 - **Las tarjetas se inclinan** hacia el cursor en las pieles con profundidad, y cada
   lenguaje tiene su propia animación de entrada: muelle, cortina o caída sobre el papel.
 - **Movimiento reducido** desactiva de golpe partículas, inclinación y animaciones.
@@ -113,6 +116,7 @@ js/
   data.js                  horario, materias, profesorado y calendario
   store.js                 estado y persistencia local
   skins.js                 lenguajes visuales y color de materia por piel
+  glass.js                 refracción del cristal (mapas de desplazamiento y filtro SVG)
   time.js                  qué toca ahora, bloques y cuentas atrás
   ui.js                    helpers de DOM, iconos, modales y avisos
   fx.js                    fondo animado, sonido y vibración
@@ -168,3 +172,45 @@ Dos consecuencias que se notan: la piel **Liquid Glass** de esta app no cumple e
 primera regla (pone cristal en tarjetas y celdas, que es el defecto que la guía
 describe), y la piel **Apple HIG** es la única sin ajuste propio de apariencia,
 porque las guías piden obedecer al sistema.
+
+
+---
+
+## Sobre la refracción del cristal
+
+Un `backdrop-filter: blur()` solo empaña lo que hay detrás. El cristal de verdad
+además lo **desvía**: la luz se dobla al entrar y salir del bisel, así que el borde
+de cada pieza arrastra y estira la imagen del fondo, y un reflejo especular recorre
+ese mismo bisel.
+
+`js/glass.js` lo hace así, con la técnica de
+[archisvaze/liquid-glass](https://github.com/archisvaze/liquid-glass) reescrita para
+esta app:
+
+1. Se calcula el perfil de refracción del bisel con la **ley de Snell**, a partir del
+   grosor del cristal, el ancho del bisel y el índice de refracción (1,48).
+2. Ese perfil se pinta en un **mapa de desplazamiento**: en cada píxel del bisel, los
+   canales R y G codifican cuánto se desvía la imagen en x e y.
+3. Un segundo mapa pinta el **brillo especular** del bisel según el ángulo de la luz.
+4. Un filtro SVG encadena `feImage` → `feDisplacementMap` → especular, y se aplica
+   con `backdrop-filter: url(#filtro)`.
+
+Detalles que importan:
+
+- **Solo Chromium** admite `backdrop-filter: url()`. En Firefox y Safari no se toca
+  nada y queda el desenfoque de siempre.
+- Los filtros **se comparten por tamaño**: todas las celdas del horario que miden lo
+  mismo usan uno solo. Las piezas grandes se calculan a media resolución.
+- Cuesta alrededor de un **27 % más** que un desenfoque normal, así que hay tres
+  niveles en Ajustes — *toda la interfaz*, *solo barras*, *apagada* — y en equipos
+  modestos o en el móvil arranca en «solo barras».
+- Se apaga sola con *movimiento reducido* o *transparencia reducida*.
+
+Para que esto funcione hubo que arreglar algo que llevaba oculto desde el principio:
+las capas de fondo (aurora, orbes, partículas) estaban en `z-index` negativo, y el
+navegador **no las captura** como fondo de un `backdrop-filter`. Es decir, el cristal
+nunca había desenfocado la aurora, solo el contenido. Ahora están en el flujo normal,
+por debajo de la app, y el cristal por fin las recoge. Por el mismo motivo, las
+animaciones de entrada sueltan su clase al terminar: una animación que se queda
+«rellenando» sobre `opacity` mantiene compuesto a su contenedor y lo convierte en
+raíz de fondo, dejando al cristal de dentro sin nada que ver.
